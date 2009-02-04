@@ -11,7 +11,7 @@ determin the list of files.
 
 setup(
     name="setuptools_hg",
-    version='0.1',
+    version='0.1.1',
     author="Jannis Leidel",
     author_email="jannis@leidel.info",
     url="http://bitbucket.org/jezdez/setuptools_hg/",
