@@ -14,7 +14,7 @@ setup(
     version='0.1',
     author="Jannis Leidel",
     author_email="jannis@leidel.info",
-    url="http://bitbucket.org/jezdez/",
+    url="http://bitbucket.org/jezdez/setuptools_hg/",
     description="Setuptools plugin for finding files under Mercurial version control.",
     long_desciption=long_desciption,
     license="BSD License",
