@@ -13,7 +13,7 @@ import subprocess
 try:
     from mercurial import hg, ui, cmdutil
     from mercurial.repo import RepoError
-except ImportError:
+except:
     hg = None
 
 if os.getenv('HG_SETUPTOOLS_FORCE_CMD'):
