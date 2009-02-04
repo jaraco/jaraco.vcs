@@ -1,6 +1,6 @@
 from setuptools import setup
 
-long_desciption = """
+long_description = """
 A plugin for setuptools to find files under Mercurial version control to be
 automatically included as package data.
 
@@ -16,7 +16,7 @@ setup(
     author_email="jannis@leidel.info",
     url="http://bitbucket.org/jezdez/setuptools_hg/",
     description="Setuptools plugin for finding files under Mercurial version control.",
-    long_desciption=long_desciption,
+    long_description=long_description,
     license="BSD License",
     classifiers=[
         "Development Status :: 4 - Beta",
