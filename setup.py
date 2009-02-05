@@ -11,19 +11,19 @@ determin the list of files.
 
 setup(
     name="setuptools_hg",
-    version='0.1.1',
+    version='0.1.2',
     author="Jannis Leidel",
     author_email="jannis@leidel.info",
     url="http://bitbucket.org/jezdez/setuptools_hg/",
     description="Setuptools plugin for finding files under Mercurial version control.",
     long_description=long_description,
-    license="BSD License",
+    license="GPL2",
     classifiers=[
         "Development Status :: 4 - Beta",
         "Programming Language :: Python",
         "Intended Audience :: Developers",
         "Operating System :: OS Independent",
-        "License :: OSI Approved :: BSD License",
+        "License :: OSI Approved :: GNU General Public License (GPL)",
         "Topic :: Software Development :: Version Control"
     ],
     py_modules=["setuptools_hg"],
