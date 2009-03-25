@@ -3,13 +3,12 @@ A plugin for setuptools to find files under the Mercurial version control
 system which uses the Python library by default and falls back to use the
 command line programm hg(1).
 """
-__version__ = '0.1.3'
+__version__ = '0.1.4'
 __author__ = 'Jannis Leidel'
 __all__ = ['hg_file_finder']
 
 import os
 import subprocess
-from distutils.errors import DistutilsSetupError
 
 try:
     from mercurial import hg, ui, cmdutil
