@@ -9,6 +9,7 @@ __all__ = ['hg_file_finder']
 
 import os
 import subprocess
+from distutils.errors import DistutilsSetupError
 
 try:
     from mercurial import hg, ui, cmdutil
@@ -24,12 +25,16 @@ def find_files_with_cmd(dirname="."):
     """
     Use the hg command to recursively find versioned files in dirname.
     """
-    proc = subprocess.Popen(['hg', 'locate'],
-                            stdin=subprocess.PIPE,
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE,
-                            cwd=dirname)
-    stdout, stderr = proc.communicate()
+    try:
+        proc = subprocess.Popen(['hg', 'locate'],
+                                stdin=subprocess.PIPE,
+                                stderr=subprocess.PIPE,
+                                stdout=subprocess.PIPE,
+                                cwd=dirname)
+        stdout, stderr = proc.communicate()
+    except Exception, e:
+        # Let's behave a bit nicer and return nothing if something fails.
+        return []
     return stdout.splitlines()
 
 def find_files_with_lib(dirname):
@@ -85,15 +90,3 @@ def hg_file_finder(dirname="."):
     if hg is None:
         return find_files_with_cmd(dirname)
     return find_files_with_lib(dirname)
-
-def main():
-    import sys
-    from pprint import pprint
-    try:
-        dirname = sys.argv[1]
-    except IndexError:
-        dirname = "."
-    pprint(list(hg_file_finder(dirname)))
-
-if __name__ == '__main__':
-    main()
