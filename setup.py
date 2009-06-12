@@ -49,10 +49,11 @@ setup.py if you want to enforce the use of the hg command.
 
 setup(
     name="setuptools_hg",
-    version='0.1.4',
+    version='0.1.5',
     author="Jannis Leidel",
     author_email="jannis@leidel.info",
     url="http://bitbucket.org/jezdez/setuptools_hg/",
+    download_url="http://bitbucket.org/jezdez/setuptools_hg/downloads/",
     description="Setuptools plugin for finding files under Mercurial version control.",
     long_description=long_description,
     license="GPL2",
