@@ -3,7 +3,7 @@ A plugin for setuptools to find files under the Mercurial version control
 system which uses the Python library by default and falls back to use the
 command line programm hg(1).
 """
-__version__ = '0.1.5'
+__version__ = '0.2'
 __author__ = 'Jannis Leidel'
 __all__ = ['hg_file_finder']
 
@@ -13,15 +13,18 @@ import subprocess
 try:
     from mercurial.__version__ import version
     from mercurial import hg, ui, cmdutil
-except Exception, e:
+except:
     hg = None
-
-OLD_VERSIONS = ('1.0', '1.0.1', '1.0.2')
 
 try:
     from mercurial.repo import RepoError
 except:
-    from mercurial.error import RepoError
+    try:
+        from mercurial.error import RepoError
+    except:
+        pass
+
+OLD_VERSIONS = ('1.0', '1.0.1', '1.0.2')
 
 if os.environ.get('HG_SETUPTOOLS_FORCE_CMD', False):
     hg = None
@@ -47,7 +50,10 @@ def find_files_with_lib(dirname):
     Use the Mercurial library to recursively find versioned files in dirname.
     """
     try:
-        repo = hg.repository(ui.ui(), path=dirname)
+        try:
+            repo = hg.repository(ui.ui(), path=dirname)
+        except RepoError:
+            return
         # tuple of (modified, added, removed, deleted, unknown, ignored, clean)
         modified, added, removed, deleted, unknown = repo.status()[:5]
 
