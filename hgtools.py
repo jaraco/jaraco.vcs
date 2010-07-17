@@ -140,7 +140,7 @@ class LegacyLibraryManager(LibraryManager):
 			and abs not in excluded
 			)
 
-def hg_file_finder(dirname="."):
+def file_finder_plugin(dirname="."):
 	"""
 	Find the files in ``dirname`` under Mercurial version control
 	according to the setuptools spec (see

@@ -1,20 +1,26 @@
 from setuptools import setup
 
 long_description = """
-setuptools_hg
-=============
+hgtools
+=======
 
-setuptools_hg is a plugin for setuptools that enables setuptools to find files
-under the Mercurial version control system.
+hgtools builds on the setuptools_hg plugin for setuptools. hgtools
+provides classes for inspecting and working with repositories in the
+Mercurial version control system.
 
-It uses the Mercurial Python library by default and falls back to use the
-command line programm ``hg(1)``. That's especially useful inside virtualenvs
-that don't have access to the system wide installed Mercurial lib (e.g. when
-created with ``--no-site-packages``).
+hgtools provides a plugin for setuptools that enables setuptools to find
+files under the Mercurial version control system.
+
+The classes provided by hgtools are designed to work natively with the
+Mercurial Python libraries (in process) or fall back to using the
+command-line program ``hg(1)`` if available. The command-line support is
+especially useful inside virtualenvs
+that don't have access to a system-wide installed Mercurial lib (i.e. when
+the virtualenv was created with ``--no-site-packages``).
 
 .. note:: The setuptools feature
 
-  You can read about the hooks used by setuptool_hg in the
+  You can read about the setuptools plugin provided by hgtools in the
   `setuptools documentation`_. It basically returns a list of files that are
   under Mercurial version control when running the ``setup`` function, e.g. if
   you create a source and binary distribution. It's a simple yet effective way
@@ -26,17 +32,17 @@ created with ``--no-site-packages``).
 Usage
 *****
 
-Here's an example of a setup.py that uses setuptools_hg::
+Here's an example of a setup.py that uses hgtools::
 
     from setuptools import setup, find_packages
     setup(
         name="HelloWorld",
         version="0.1",
         packages=find_packages(),
-        setup_requires=["setuptools_hg"],
+        setup_requires=["hgtools"],
     )
 
-If you run this setup.py setuptools will automatically download setuptools_hg
+If you run the setup.py above, setuptools will automatically download setuptools_hg
 to the directory where the setup.py is located at (and won't install it
 anywhere else) to get all package data files from the Mercurial repository.
 
@@ -44,17 +50,19 @@ Options
 *******
 
 Set the ``HG_SETUPTOOLS_FORCE_CMD`` environment variable before running
-setup.py if you want to enforce the use of the hg command.
+setup.py if you want to enforce the use of the hg command (though it
+will then fall back to the native libraries if the command is not
+available or fails to run).
 """
 
 setup(
-    name="setuptools_hg",
+    name="hgtools",
     version='0.3',
-    author="Jannis Leidel",
-    author_email="jannis@leidel.info",
-    url="http://bitbucket.org/jezdez/setuptools_hg/",
-    download_url="http://bitbucket.org/jezdez/setuptools_hg/downloads/",
-    description="Setuptools plugin for finding files under Mercurial version control.",
+    author="Jannis Leidel/Jason R. Coombs",
+    author_email="jaraco@jaraco.com",
+    url="http://bitbucket.org/jaraco/hgtools/",
+    download_url="http://bitbucket.org/jaraco/hgtools/downloads/",
+    description="Classes and setuptools plugin for Mercurial repositories",
     long_description=long_description,
     license="GPL2",
     classifiers=[
@@ -66,10 +74,10 @@ setup(
         "Topic :: Software Development :: Version Control",
         "Framework :: Setuptools Plugin",
     ],
-    py_modules=["setuptools_hg"],
+    py_modules=["hgtools"],
     entry_points = {
         "setuptools.file_finders": [
-            "hg = setuptools_hg:hg_file_finder"
+            "hg = hgtools:file_finder_plugin"
         ]
     }
 )
