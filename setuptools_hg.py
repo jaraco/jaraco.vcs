@@ -60,14 +60,14 @@ class SubprocessManager(HGRepoManager):
 		"""
 		Find versioned files in self.location
 		"""
-		return self._run_cmd(['hg', 'locate']).splitlines()
+		return self._run_cmd([self.exe, 'locate']).splitlines()
 
 	@staticmethod
 	def _get_devnull():
 		return open(os.path.devnull, 'w')
 
 	def get_tag(self):
-		return self._run_cmd(['hg', 'identify', '-t']).strip() or None
+		return self._run_cmd([self.exe, 'identify', '-t']).strip() or None
 
 class LibraryManager(HGRepoManager):
 	OLD_VERSIONS = ('1.0', '1.0.1', '1.0.2')
