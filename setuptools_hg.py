@@ -12,7 +12,7 @@ import subprocess
 
 next = lambda iter: iter.next()
 
-class HGRepoManager(object);
+class HGRepoManager(object):
 	def __init__(self, location='.'):
 		self.location = location
 		self.do_imports()
@@ -52,7 +52,7 @@ class SubprocessManager(HGRepoManager):
 		return stdout.splitlines()
 
 
-class LibraryManager(HGManager):
+class LibraryManager(HGRepoManager):
 	OLD_VERSIONS = ('1.0', '1.0.1', '1.0.2')
 
 	def do_imports(self):
@@ -70,10 +70,10 @@ class LibraryManager(HGManager):
 		RepoError = error.RepoError
 		del self
 		del error
-		globals.update(vars())
+		globals().update(vars())
 
 	def is_valid(self):
-		os.environ.get('HG_SETUPTOOLS_FORCE_CMD', False)
+		force_cmd = os.environ.get('HG_SETUPTOOLS_FORCE_CMD', False)
 		return not force_cmd and 'hg' in globals() and self.version_match()
 
 	def version_match(self):
@@ -122,12 +122,13 @@ class LegacyLibraryManager(LibraryManager):
 			)
 
 def hg_file_finder(dirname="."):
-    """
-    Find the files in ``dirname`` under Mercurial version control.
-    """
-    dirname = dirname or '.'
-    for mgr in HGRepoManager.get_valid_managers(dirname):
+	"""
+	Find the files in ``dirname`` under Mercurial version control.
+	"""
+	dirname = dirname or '.'
+	for mgr in HGRepoManager.get_valid_managers(dirname):
 		try:
 			return mgr.find_files()
 		except:
 			pass
+	return []
