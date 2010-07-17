@@ -49,7 +49,7 @@ setup.py if you want to enforce the use of the hg command.
 
 setup(
     name="setuptools_hg",
-    version='0.2',
+    version='0.3',
     author="Jannis Leidel",
     author_email="jannis@leidel.info",
     url="http://bitbucket.org/jezdez/setuptools_hg/",
