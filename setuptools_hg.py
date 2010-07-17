@@ -38,6 +38,9 @@ class HGRepoManager(object):
 		loc = self.location
 		return '%(class_name)s(%(loc)r)' % vars()
 
+	def get_tag(self):
+		raise NotImplementedError()
+
 class SubprocessManager(HGRepoManager):
 	exe = 'hg'
 
@@ -47,26 +50,24 @@ class SubprocessManager(HGRepoManager):
 			stdout=self._get_devnull(),
 			)
 
+	def _run_cmd(self, cmd):
+		proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+			cwd=self.location)
+		stdout, stderr = proc.communicate()
+		return stdout
+
 	def find_files(self):
 		"""
-		Use the hg command to recursively find versioned files in dirname.
+		Find versioned files in self.location
 		"""
-		try:
-			proc = subprocess.Popen(
-				['hg', 'locate'],
-				stdout=subprocess.PIPE,
-				cwd=self.location,
-				)
-			stdout, stderr = proc.communicate()
-		except:
-			# Let's behave a bit nicer and return nothing if something fails.
-			return []
-		return stdout.splitlines()
+		return self_run_cmd(['hg', 'locate']).splitlines()
 
 	@staticmethod
 	def _get_devnull():
 		return open(os.path.devnull, 'w')
 
+	def get_tag(self):
+		return self._run_cmd(['hg', 'identify', '-t']).strip() or None
 
 class LibraryManager(HGRepoManager):
 	OLD_VERSIONS = ('1.0', '1.0.1', '1.0.2')
