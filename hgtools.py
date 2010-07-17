@@ -149,9 +149,12 @@ def file_finder_plugin(dirname="."):
 	"""
 	import distutils.log
 	dirname = dirname or '.'
-	for mgr in HGRepoManager.get_valid_managers(dirname):
-		try:
-			return mgr.find_files()
-		except BaseException, e:
-			distutils.log.warn("Error in %s: %s", mgr, e)
+	try:
+		for mgr in HGRepoManager.get_valid_managers(dirname):
+			try:
+				return mgr.find_files()
+			except BaseException, e:
+				distutils.log.warn("Error in hgtools.%s: %s", mgr, e)
+	except BaseException, e:
+		distutils.log.warn("Error getting managers in hgtools.file_finder_plugin: %s", e)
 	return []
