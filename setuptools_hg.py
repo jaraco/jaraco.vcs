@@ -27,6 +27,9 @@ class HGRepoManager(object):
 	@staticmethod
 	def get_valid_managers(location):
 		classes = (LibraryManager, LegacyLibraryManager, SubprocessManager)
+		force_cmd = os.environ.get('HG_SETUPTOOLS_FORCE_CMD', False)
+		if force_cmd:
+			classes = (SubprocessManager, LibraryManager, LegacyLibraryManager)
 		managers = (cls(location) for cls in classes)
 		return (mgr for mgr in managers if mgr.is_valid())
 
@@ -84,8 +87,7 @@ class LibraryManager(HGRepoManager):
 		globals().update(vars())
 
 	def is_valid(self):
-		force_cmd = os.environ.get('HG_SETUPTOOLS_FORCE_CMD', False)
-		return not force_cmd and 'hg' in globals() and self.version_match()
+		return 'hg' in globals() and self.version_match()
 
 	def version_match(self):
 		return version not in self.OLD_VERSIONS
