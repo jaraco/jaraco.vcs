@@ -60,7 +60,7 @@ class SubprocessManager(HGRepoManager):
 		"""
 		Find versioned files in self.location
 		"""
-		return self_run_cmd(['hg', 'locate']).splitlines()
+		return self._run_cmd(['hg', 'locate']).splitlines()
 
 	@staticmethod
 	def _get_devnull():
