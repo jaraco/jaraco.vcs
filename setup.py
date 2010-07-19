@@ -57,7 +57,7 @@ available or fails to run).
 
 setup(
     name="hgtools",
-    version='0.3',
+    version='0.4',
     author="Jannis Leidel/Jason R. Coombs",
     author_email="jaraco@jaraco.com",
     url="http://bitbucket.org/jaraco/hgtools/",
