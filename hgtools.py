@@ -27,7 +27,10 @@ class HGRepoManager(object):
 	@staticmethod
 	def get_valid_managers(location):
 		classes = (LibraryManager, LegacyLibraryManager, SubprocessManager)
-		force_cmd = os.environ.get('HG_SETUPTOOLS_FORCE_CMD', False)
+		force_cmd = os.environ.get('HGTOOLS_FORCE_CMD',
+			os.environ.get('HG_SETUPTOOLS_FORCE_CMD', False))
+		if 'HG_SETUPTOOLS_FORCE_CMD' in os.environ:
+			warnings.warn('environment variable HG_SETUPTOOLS_FORCE_CMD will be removed in 0.4, use HGTOOLS_FORCE_CMD instead.')
 		if force_cmd:
 			classes = (SubprocessManager, LibraryManager, LegacyLibraryManager)
 		managers = (cls(location) for cls in classes)
@@ -158,3 +161,6 @@ def file_finder_plugin(dirname="."):
 	except BaseException, e:
 		distutils.log.warn("Error getting managers in hgtools.file_finder_plugin: %s", e)
 	return []
+
+def get_manager(location='.'):
+	return next(HGRepoManager.get_valid_managers(location))
