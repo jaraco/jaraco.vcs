@@ -49,7 +49,7 @@ anywhere else) to get all package data files from the Mercurial repository.
 Options
 *******
 
-Set the ``HG_SETUPTOOLS_FORCE_CMD`` environment variable before running
+Set the ``HGTOOLS_FORCE_CMD`` environment variable before running
 setup.py if you want to enforce the use of the hg command (though it
 will then fall back to the native libraries if the command is not
 available or fails to run).

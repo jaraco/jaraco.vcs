@@ -6,8 +6,8 @@ by the version control system.
 Classes support using the native Python library interfaces or using the
 hg(1) command as a subprocess.
 """
-__version__ = '0.3'
-__author__ = 'Jannis Leidel'
+__version__ = '0.4'
+__author__ = 'Jannis Leidel/Jason R. Coombs'
 __all__ = ['hg_file_finder']
 
 import os
@@ -27,10 +27,7 @@ class HGRepoManager(object):
 	@staticmethod
 	def get_valid_managers(location):
 		classes = (LibraryManager, LegacyLibraryManager, SubprocessManager)
-		force_cmd = os.environ.get('HGTOOLS_FORCE_CMD',
-			os.environ.get('HG_SETUPTOOLS_FORCE_CMD', False))
-		if 'HG_SETUPTOOLS_FORCE_CMD' in os.environ:
-			warnings.warn('environment variable HG_SETUPTOOLS_FORCE_CMD will be removed in 0.4, use HGTOOLS_FORCE_CMD instead.')
+		force_cmd = os.environ.get('HGTOOLS_FORCE_CMD', False)
 		if force_cmd:
 			classes = (SubprocessManager, LibraryManager, LegacyLibraryManager)
 		managers = (cls(location) for cls in classes)
