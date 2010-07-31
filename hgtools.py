@@ -22,6 +22,15 @@ class SummableVersion(StrictVersion):
 		result.version = tuple(map(operator.add, self.version, other.version))
 		return result
 
+	def as_number(self):
+		"""
+		>>> str(SummableVersion('1.9.3').as_number())
+		'1.93'
+		"""
+		def combine(subver, ver):
+			return subver/10.0 + ver
+		return reduce(combine, reversed(self.version))
+
 class HGRepoManager(object):
 	def __init__(self, location='.'):
 		self.location = location
@@ -54,15 +63,30 @@ class HGRepoManager(object):
 	def infer_next_version(last_version, increment='0.0.1'):
 		"""
 		Given a simple application version (as a StrictVersion),
-		and an increment (0.1 or 0.0.1), guess the next version.
+		and an increment (1, 0.1, or 0.0.1), guess the next version.
 		>>> HGRepoManager.infer_next_version('3.2')
+		'3.2.1'
+		>>> HGRepoManager.infer_next_version(StrictVersion('3.2'))
 		'3.2.1'
 		>>> HGRepoManager.infer_next_version('3.2.3', '0.1')
 		'3.3'
+		>>> HGRepoManager.infer_next_version('3.1.2', '1.0')
+		'4.0'
+		>>> HGRepoManager.infer_next_version('3.0.9')
+		'3.1'
+		
+		If it's a prerelease version, just remove the prerelease.
+		>>> HGRepoManager.infer_next_version('3.1a1')
+		'3.1'
 		"""
-		last_version = SummableVersion(last_version)
+		last_version = SummableVersion(str(last_version))
+		if last_version.prerelease:
+			last_version.prerelease = None
+			return str(last_version)
 		increment = SummableVersion(increment)
-		return str(last_version + increment)
+		sum = last_version + increment
+		
+		return str(sum)
 
 class SubprocessManager(HGRepoManager):
 	exe = 'hg'
