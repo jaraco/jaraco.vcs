@@ -16,11 +16,51 @@ from collections import namedtuple
 from distutils.version import StrictVersion
 import operator
 
+def find(pred, items):
+	"""
+	Find the index of the first element in items for which pred returns
+	True
+	>>> find(lambda x: x > 3, range(100))
+	4
+	>>> find(lambda x: x < -3, range(100)) is None
+	True
+	"""
+	for i, item in enumerate(items):
+		if pred(item): return i
+
+def rfind(pred, items):
+	"""
+	Find the index of the last element in items for which pred returns
+	True. Returns a negative number useful for indexing from the end
+	of a list or tuple.
+	
+	>>> rfind(lambda x: x > 3, [5,4,3,2,1])
+	-4
+	"""
+	return -find(pred, reversed(items))-1
+
 class SummableVersion(StrictVersion):
 	def __add__(self, other):
 		result = SummableVersion(str(self))
 		result.version = tuple(map(operator.add, self.version, other.version))
 		return result
+
+	def reset_less_significant(self, significant_version):
+		"""
+		Reset to zero all version info less significant than the
+		indicated version.
+		>>> ver = SummableVersion('3.1.2')
+		>>> ver.reset_less_significant(SummableVersion('0.1'))
+		>>> str(ver)
+		'3.1'
+		"""
+		nonzero = lambda x: x != 0
+		version_len = 3 # strict versions are always a tuple of 3
+		significant_pos = rfind(nonzero, significant_version.version)
+		significant_pos = version_len + significant_pos + 1
+		self.version = (self.version[:significant_pos]
+			+ (0,)*(version_len - significant_pos) )
+
 
 	def as_number(self):
 		"""
@@ -63,7 +103,7 @@ class HGRepoManager(object):
 	def infer_next_version(last_version, increment='0.0.1'):
 		"""
 		Given a simple application version (as a StrictVersion),
-		and an increment (1, 0.1, or 0.0.1), guess the next version.
+		and an increment (1.0, 0.1, or 0.0.1), guess the next version.
 		>>> HGRepoManager.infer_next_version('3.2')
 		'3.2.1'
 		>>> HGRepoManager.infer_next_version(StrictVersion('3.2'))
@@ -72,8 +112,10 @@ class HGRepoManager(object):
 		'3.3'
 		>>> HGRepoManager.infer_next_version('3.1.2', '1.0')
 		'4.0'
+		
+		Subversions never increment parent versions
 		>>> HGRepoManager.infer_next_version('3.0.9')
-		'3.1'
+		'3.0.10'
 		
 		If it's a prerelease version, just remove the prerelease.
 		>>> HGRepoManager.infer_next_version('3.1a1')
@@ -85,7 +127,7 @@ class HGRepoManager(object):
 			return str(last_version)
 		increment = SummableVersion(increment)
 		sum = last_version + increment
-		
+		sum.reset_less_significant(increment)
 		return str(sum)
 
 class SubprocessManager(HGRepoManager):
