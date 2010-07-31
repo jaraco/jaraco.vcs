@@ -99,6 +99,27 @@ class HGRepoManager(object):
 	def get_tag(self):
 		raise NotImplementedError()
 
+	def get_tags(self):
+		raise NotImplementedError()
+
+	def get_strict_versions(self):
+		"""
+		Return all version tags that can be represented by a
+		StrictVersion.
+		"""
+		for tag in self.get_tags():
+			try:
+				yield StrictVersion(tag.tag)
+			except ValueError:
+				pass
+
+	def get_latest_version(self):
+		versions = sorted(self.get_strict_versions(), reverse=True)
+		return next(iter(versions))
+
+	def get_next_version(self, increment='0.0.1'):
+		return self.infer_next_version(self.get_latest_version(), increment)
+
 	@staticmethod
 	def infer_next_version(last_version, increment='0.0.1'):
 		"""
