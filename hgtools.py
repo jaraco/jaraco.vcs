@@ -12,6 +12,15 @@ __all__ = ['hg_file_finder']
 
 import os
 import subprocess
+from collections import namedtuple
+from distutils.version import StrictVersion
+import operator
+
+class SummableVersion(StrictVersion):
+	def __add__(self, other):
+		result = SummableVersion(str(self))
+		result.version = tuple(map(operator.add, self.version, other.version))
+		return result
 
 class HGRepoManager(object):
 	def __init__(self, location='.'):
@@ -41,6 +50,20 @@ class HGRepoManager(object):
 	def get_tag(self):
 		raise NotImplementedError()
 
+	@staticmethod
+	def infer_next_version(last_version, increment='0.0.1'):
+		"""
+		Given a simple application version (as a StrictVersion),
+		and an increment (0.1 or 0.0.1), guess the next version.
+		>>> HGRepoManager.infer_next_version('3.2')
+		'3.2.1'
+		>>> HGRepoManager.infer_next_version('3.2.3', '0.1')
+		'3.3'
+		"""
+		last_version = SummableVersion(last_version)
+		increment = SummableVersion(increment)
+		return str(last_version + increment)
+
 class SubprocessManager(HGRepoManager):
 	exe = 'hg'
 
@@ -68,6 +91,11 @@ class SubprocessManager(HGRepoManager):
 
 	def get_tag(self):
 		return self._run_cmd([self.exe, 'identify', '-t']).strip() or None
+
+	def get_tags(self):
+		tagged_revision = namedtuple('tagged_revision', 'tag revision')
+		lines = self._run_cmd([self.exe, 'tags']).splitlines()
+		return (tagged_revision(*line.split()) for line in lines if line)			
 
 class LibraryManager(HGRepoManager):
 	OLD_VERSIONS = ('1.0', '1.0.1', '1.0.2')
