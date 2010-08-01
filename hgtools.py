@@ -40,6 +40,13 @@ def rfind(pred, items):
 	return -find(pred, reversed(items))-1
 
 class SummableVersion(StrictVersion):
+	"""
+	A special version of a StrictVersion which can be added to another
+	StrictVersion.
+	
+	>>> SummableVersion('1.1') + StrictVersion('2.3')
+	SummableVersion ('3.4')
+	"""
 	def __add__(self, other):
 		result = SummableVersion(str(self))
 		result.version = tuple(map(operator.add, self.version, other.version))
@@ -60,7 +67,6 @@ class SummableVersion(StrictVersion):
 		significant_pos = version_len + significant_pos + 1
 		self.version = (self.version[:significant_pos]
 			+ (0,)*(version_len - significant_pos) )
-
 
 	def as_number(self):
 		"""
@@ -156,6 +162,10 @@ class VersionManagement(object):
 
 
 class HGRepoManager(VersionManagement, object):
+	"""
+	An abstract class defining some interfaces for working with
+	Mercurial repositories.
+	"""
 	def __init__(self, location='.'):
 		self.location = location
 		self.setup()
@@ -179,6 +189,9 @@ class HGRepoManager(VersionManagement, object):
 		class_name = self.__class__.__name__
 		loc = self.location
 		return '%(class_name)s(%(loc)r)' % vars()
+
+	def find_files(self):
+		raise NotImplementedError()
 
 	def get_tag(self):
 		raise NotImplementedError()
