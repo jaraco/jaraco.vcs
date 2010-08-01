@@ -8,7 +8,7 @@ hg(1) command as a subprocess.
 """
 __version__ = '0.4'
 __author__ = 'Jannis Leidel/Jason R. Coombs'
-__all__ = ['hg_file_finder']
+__all__ = ['file_finder_plugin', 'get_manager', 'HGRepoManager']
 
 import os
 import subprocess
@@ -185,6 +185,10 @@ class HGRepoManager(VersionManagement, object):
 		managers = (cls(location) for cls in classes)
 		return (mgr for mgr in managers if mgr.is_valid())
 
+	@staticmethod
+	def get_first_valid_manager(location='.'):
+		return next(HGRepoManager.get_valid_managers(location))
+
 	def __repr__(self):
 		class_name = self.__class__.__name__
 		loc = self.location
@@ -200,6 +204,10 @@ class HGRepoManager(VersionManagement, object):
 		raise NotImplementedError()
 
 class SubprocessManager(HGRepoManager):
+	"""
+	An HGRepoManager implemented by calling into the 'hg' command-line
+	as a subprocess.
+	"""
 	exe = 'hg'
 
 	def is_valid(self):
@@ -233,6 +241,10 @@ class SubprocessManager(HGRepoManager):
 		return (tagged_revision(*line.split()) for line in lines if line)			
 
 class LibraryManager(HGRepoManager):
+	"""
+	An HGRepoManager implemented by exercising the mercurial Python APIs
+	directly.
+	"""
 	OLD_VERSIONS = ('1.0', '1.0.1', '1.0.2')
 
 	def setup(self):
@@ -288,6 +300,10 @@ class LibraryManager(HGRepoManager):
 			)
 
 class LegacyLibraryManager(LibraryManager):
+	"""
+	A special subclass of LibraryManager which works with older versions
+	of the Mercurial libraries.
+	"""
 	def version_match(self):
 		return version in self.OLD_VERSIONS
 
@@ -322,5 +338,5 @@ def file_finder_plugin(dirname="."):
 		distutils.log.warn("Error getting managers in hgtools.file_finder_plugin: %s", e)
 	return []
 
-def get_manager(location='.'):
-	return next(HGRepoManager.get_valid_managers(location))
+# kept for backward-compatibility
+get_manager = HGRepoManager.get_first_valid_manager
