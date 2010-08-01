@@ -151,6 +151,15 @@ class HGRepoManager(object):
 		sum.reset_less_significant(increment)
 		return str(sum)
 
+	def get_tagged_version(self):
+		try:
+			return StrictVersion(self.get_tag())
+		except ValueError:
+			pass
+
+	def get_current_version(self):
+		return self.get_tagged_version() or self.get_next_version()
+
 class SubprocessManager(HGRepoManager):
 	exe = 'hg'
 

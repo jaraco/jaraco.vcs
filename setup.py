@@ -1,5 +1,5 @@
 from setuptools import setup
-
+from hg_egg_info import EggInfo as egg_info
 long_description = """
 hgtools
 =======
@@ -55,9 +55,13 @@ will then fall back to the native libraries if the command is not
 available or fails to run).
 """
 
+import os; os.environ['HGTOOLS_FORCE_CMD'] = 'yes'
+from hgtools import get_manager
+mgr = get_manager()
+
 setup(
     name="hgtools",
-    version='0.4',
+    version=mgr.get_current_version(),
     author="Jannis Leidel/Jason R. Coombs",
     author_email="jaraco@jaraco.com",
     url="http://bitbucket.org/jaraco/hgtools/",
@@ -79,5 +83,6 @@ setup(
         "setuptools.file_finders": [
             "hg = hgtools:file_finder_plugin"
         ]
-    }
+    },
+    cmdclass=dict(egg_info=egg_info),
 )
