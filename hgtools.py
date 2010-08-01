@@ -120,7 +120,7 @@ class VersionManagement(object):
 		tagged version, if present, or the next version based on prior
 		tagged releases.
 		"""
-		return self.get_tagged_version() or self.get_next_version(increment)
+		return str(self.get_tagged_version()) or self.get_next_version(increment)
 
 	def get_next_version(self, increment=None):
 		"""
