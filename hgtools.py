@@ -116,11 +116,12 @@ class VersionManagement(object):
 
 	def get_current_version(self, increment=None):
 		"""
-		Retrun the version of the current state of the repository -- a
-		tagged version, if present, or the next version based on prior
-		tagged releases.
+		Return as a string the version of the current state of the
+		repository -- a tagged version, if present, or the next version
+		based on prior tagged releases.
 		"""
-		return str(self.get_tagged_version()) or self.get_next_version(increment)
+		ver = self.get_tagged_version() or self.get_next_version(increment)
+		return str(ver)
 
 	def get_next_version(self, increment=None):
 		"""
@@ -134,21 +135,25 @@ class VersionManagement(object):
 		"""
 		Given a simple application version (as a StrictVersion),
 		and an increment (1.0, 0.1, or 0.0.1), guess the next version.
-		>>> VersionManagement.infer_next_version('3.2', '0.0.1')
+		
+		# set up a shorthand for examples
+		>>> VM_infer = lambda *params: str(VersionManagement.infer_next_version(*params))
+		
+		>>> VM_infer('3.2', '0.0.1')
 		'3.2.1'
-		>>> VersionManagement.infer_next_version(StrictVersion('3.2'), '0.0.1')
+		>>> VM_infer(StrictVersion('3.2'), '0.0.1')
 		'3.2.1'
-		>>> VersionManagement.infer_next_version('3.2.3', '0.1')
+		>>> VM_infer('3.2.3', '0.1')
 		'3.3'
-		>>> VersionManagement.infer_next_version('3.1.2', '1.0')
+		>>> VM_infer('3.1.2', '1.0')
 		'4.0'
 		
 		Subversions never increment parent versions
-		>>> VersionManagement.infer_next_version('3.0.9', '0.0.1')
+		>>> VM_infer('3.0.9', '0.0.1')
 		'3.0.10'
 		
 		If it's a prerelease version, just remove the prerelease.
-		>>> VersionManagement.infer_next_version('3.1a1', '0.0.1')
+		>>> VM_infer('3.1a1', '0.0.1')
 		'3.1'
 		"""
 		last_version = SummableVersion(str(last_version))
@@ -158,7 +163,7 @@ class VersionManagement(object):
 		increment = SummableVersion(increment)
 		sum = last_version + increment
 		sum.reset_less_significant(increment)
-		return str(sum)
+		return sum
 
 
 class HGRepoManager(VersionManagement, object):
