@@ -71,7 +71,91 @@ class SummableVersion(StrictVersion):
 			return subver/10.0 + ver
 		return reduce(combine, reversed(self.version))
 
-class HGRepoManager(object):
+class VersionManagement(object):
+	"""
+	Version functions for HGRepoManager classes
+	"""
+	
+	increment = '0.0.1'
+
+	def get_strict_versions(self):
+		"""
+		Return all version tags that can be represented by a
+		StrictVersion.
+		"""
+		for tag in self.get_tags():
+			try:
+				yield StrictVersion(tag.tag)
+			except ValueError:
+				pass
+
+	def get_tagged_version(self):
+		"""
+		Get the version of the local repository as a StrictVersion or
+		None if no viable tag exists.
+		"""
+		try:
+			# use 'xxx' because StrictVersion(None) is apparently ok
+			return StrictVersion(self.get_tag() or 'xxx')
+		except ValueError:
+			pass
+
+	def get_latest_version(self):
+		"""
+		Determine the latest version ever released of the project in
+		the repo (based on tags).
+		"""
+		versions = sorted(self.get_strict_versions(), reverse=True)
+		return next(iter(versions))
+
+	def get_current_version(self, increment=None):
+		"""
+		Retrun the version of the current state of the repository -- a
+		tagged version, if present, or the next version based on prior
+		tagged releases.
+		"""
+		return self.get_tagged_version() or self.get_next_version(increment)
+
+	def get_next_version(self, increment=None):
+		"""
+		Return the next version based on prior tagged releases.
+		"""
+		increment = increment or self.increment
+		return self.infer_next_version(self.get_latest_version(), increment)
+
+	@staticmethod
+	def infer_next_version(last_version, increment):
+		"""
+		Given a simple application version (as a StrictVersion),
+		and an increment (1.0, 0.1, or 0.0.1), guess the next version.
+		>>> VersionManagement.infer_next_version('3.2', '0.0.1')
+		'3.2.1'
+		>>> VersionManagement.infer_next_version(StrictVersion('3.2'), '0.0.1')
+		'3.2.1'
+		>>> VersionManagement.infer_next_version('3.2.3', '0.1')
+		'3.3'
+		>>> VersionManagement.infer_next_version('3.1.2', '1.0')
+		'4.0'
+		
+		Subversions never increment parent versions
+		>>> VersionManagement.infer_next_version('3.0.9', '0.0.1')
+		'3.0.10'
+		
+		If it's a prerelease version, just remove the prerelease.
+		>>> VersionManagement.infer_next_version('3.1a1', '0.0.1')
+		'3.1'
+		"""
+		last_version = SummableVersion(str(last_version))
+		if last_version.prerelease:
+			last_version.prerelease = None
+			return str(last_version)
+		increment = SummableVersion(increment)
+		sum = last_version + increment
+		sum.reset_less_significant(increment)
+		return str(sum)
+
+
+class HGRepoManager(VersionManagement, object):
 	def __init__(self, location='.'):
 		self.location = location
 		self.setup()
@@ -101,64 +185,6 @@ class HGRepoManager(object):
 
 	def get_tags(self):
 		raise NotImplementedError()
-
-	def get_strict_versions(self):
-		"""
-		Return all version tags that can be represented by a
-		StrictVersion.
-		"""
-		for tag in self.get_tags():
-			try:
-				yield StrictVersion(tag.tag)
-			except ValueError:
-				pass
-
-	def get_latest_version(self):
-		versions = sorted(self.get_strict_versions(), reverse=True)
-		return next(iter(versions))
-
-	def get_next_version(self, increment='0.0.1'):
-		return self.infer_next_version(self.get_latest_version(), increment)
-
-	@staticmethod
-	def infer_next_version(last_version, increment='0.0.1'):
-		"""
-		Given a simple application version (as a StrictVersion),
-		and an increment (1.0, 0.1, or 0.0.1), guess the next version.
-		>>> HGRepoManager.infer_next_version('3.2')
-		'3.2.1'
-		>>> HGRepoManager.infer_next_version(StrictVersion('3.2'))
-		'3.2.1'
-		>>> HGRepoManager.infer_next_version('3.2.3', '0.1')
-		'3.3'
-		>>> HGRepoManager.infer_next_version('3.1.2', '1.0')
-		'4.0'
-		
-		Subversions never increment parent versions
-		>>> HGRepoManager.infer_next_version('3.0.9')
-		'3.0.10'
-		
-		If it's a prerelease version, just remove the prerelease.
-		>>> HGRepoManager.infer_next_version('3.1a1')
-		'3.1'
-		"""
-		last_version = SummableVersion(str(last_version))
-		if last_version.prerelease:
-			last_version.prerelease = None
-			return str(last_version)
-		increment = SummableVersion(increment)
-		sum = last_version + increment
-		sum.reset_less_significant(increment)
-		return str(sum)
-
-	def get_tagged_version(self):
-		try:
-			return StrictVersion(self.get_tag())
-		except ValueError:
-			pass
-
-	def get_current_version(self):
-		return self.get_tagged_version() or self.get_next_version()
 
 class SubprocessManager(HGRepoManager):
 	exe = 'hg'
