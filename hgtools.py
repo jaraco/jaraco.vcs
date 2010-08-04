@@ -357,23 +357,37 @@ def patch_egg_info():
 	@functools.wraps(orig_ver)
 	def tagged_version(self):
 		if self.distribution.use_hg_version:
-			return safe_version(self.distribution.get_version())
-		return orig_ver(self)
+			result = safe_version(self.distribution.get_version())
+		else:
+			result = orig_ver(self)
+		self.tag_build = result
+		return result
 	egg_info.tagged_version = tagged_version
 
 def version_calc_plugin(dist, attr, value):
+	"""
+	Handler for parameter to setup(use_hg_version=value)
+	"""
 	if not value: return
+	# we cache the version in the tag_build value in setup.cfg (so that
+	#  sdist versions will have a copy of the version as determined at
+	#  the build environment).
 	from ConfigParser import ConfigParser
 	parser = ConfigParser()
 	parser.read('setup.cfg')
 	has_tag_build = (parser.has_section('egg_info')
 		and 'tag_build' in parser.options('egg_info'))
 	if has_tag_build:
+		# a cached version is available, so use it.
 		version = parser.get('egg_info', 'tag_build')
 	else:
+		# for now, force the CMD version, because the library version
+		#  is not implemented.
 		os.environ['HGTOOLS_FORCE_CMD'] = 'True'
 		mgr = HGRepoManager.get_first_valid_manager()
-		version = mgr.get_current_version()
+		# if the user indicates an increment, use it
+		increment = value if 'increment' in attr else None
+		version = mgr.get_current_version(increment)
 	dist.metadata.version = version
 	patch_egg_info()
 

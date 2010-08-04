@@ -86,7 +86,7 @@ available or fails to run).
 
 setup(
     name="hgtools",
-    use_hg_version=True,
+    use_hg_version_increment='0.1',
     author="Jannis Leidel/Jason R. Coombs",
     author_email="jaraco@jaraco.com",
     url="http://bitbucket.org/jaraco/hgtools/",
@@ -110,6 +110,7 @@ setup(
         ],
         "distutils.setup_keywords": [
             "use_hg_version = hgtools:version_calc_plugin",
+            "use_hg_version_increment = hgtools:version_calc_plugin",
         ],
     },
 )
