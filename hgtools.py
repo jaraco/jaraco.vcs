@@ -12,7 +12,11 @@ __all__ = ['file_finder_plugin', 'get_manager', 'HGRepoManager']
 
 import os
 import subprocess
-from collections import namedtuple
+try:
+	from collections import namedtuple
+except ImportError:
+	# Python 2.5 compat
+	from namedtuple_backport import namedtuple
 from distutils.version import StrictVersion
 import operator
 
@@ -112,6 +116,7 @@ class VersionManagement(object):
 		the repo (based on tags).
 		"""
 		versions = sorted(self.get_strict_versions(), reverse=True)
+		next = lambda i: i.next()
 		return next(iter(versions))
 
 	def get_current_version(self, increment=None):
@@ -192,6 +197,7 @@ class HGRepoManager(VersionManagement, object):
 
 	@staticmethod
 	def get_first_valid_manager(location='.'):
+		next = lambda i: i.next()
 		return next(HGRepoManager.get_valid_managers(location))
 
 	def __repr__(self):
