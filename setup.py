@@ -84,21 +84,9 @@ will then fall back to the native libraries if the command is not
 available or fails to run).
 """
 
-try:
-	# force cmd for now because some of the methods are not yet implemented
-	#  in the library manager.
-	import os; os.environ['HGTOOLS_FORCE_CMD'] = 'yes'
-	from hgtools import get_manager
-	mgr = get_manager()
-	version = mgr.get_current_version(increment='0.1')
-	tag_build = '' if mgr.get_tagged_version() else 'dev'
-except Exception:
-	version = None
-	tag_build = None
-
 setup(
     name="hgtools",
-    version=version,
+    use_hg_version=True,
     author="Jannis Leidel/Jason R. Coombs",
     author_email="jaraco@jaraco.com",
     url="http://bitbucket.org/jaraco/hgtools/",
@@ -124,9 +112,4 @@ setup(
             "use_hg_version = hgtools:version_calc_plugin",
         ],
     },
-    options = dict(
-		egg_info = dict(
-			tag_build = tag_build,
-			),
-		),
 )
