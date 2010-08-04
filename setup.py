@@ -119,7 +119,10 @@ setup(
     entry_points = {
         "setuptools.file_finders": [
             "hg = hgtools:file_finder_plugin"
-        ]
+        ],
+        "distutils.setup_keywords": [
+            "use_hg_version = hgtools:version_calc_plugin",
+        ],
     },
     options = dict(
 		egg_info = dict(

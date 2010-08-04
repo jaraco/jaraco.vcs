@@ -120,7 +120,7 @@ class VersionManagement(object):
 		repository -- a tagged version, if present, or the next version
 		based on prior tagged releases.
 		"""
-		ver = self.get_tagged_version() or self.get_next_version(increment)
+		ver = self.get_tagged_version() or str(self.get_next_version(increment))+'dev'
 		return str(ver)
 
 	def get_next_version(self, increment=None):
@@ -342,6 +342,35 @@ def file_finder_plugin(dirname="."):
 	except BaseException, e:
 		distutils.log.warn("Error getting managers in hgtools.file_finder_plugin: %s", e)
 	return []
+
+def patch_egg_info():
+	from setuptools.command.egg_info import egg_info
+	from pkg_resources import safe_version
+	import functools
+	orig_ver = egg_info.tagged_version
+	@functools.wraps(orig_ver)
+	def tagged_version(self):
+		if self.distribution.use_hg_version:
+			return safe_version(self.distribution.get_version())
+		return orig_ver(self)
+	egg_info.tagged_version = tagged_version
+
+def version_calc_plugin(dist, attr, value):
+	if not value: return
+	from ConfigParser import ConfigParser
+	parser = ConfigParser()
+	parser.read('setup.cfg')
+	has_tag_build = (parser.has_section('egg_info')
+		and 'tag_build' in parser.options('egg_info'))
+	if has_tag_build:
+		version = parser.get('egg_info', 'tag_build')
+	else:
+		os.environ['HGTOOLS_FORCE_CMD'] = 'True'
+		mgr = HGRepoManager.get_first_valid_manager()
+		version = mgr.get_current_version()
+	dist.metadata.version = version
+	patch_egg_info()
+
 
 # kept for backward-compatibility
 get_manager = HGRepoManager.get_first_valid_manager
