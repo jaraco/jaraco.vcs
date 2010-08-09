@@ -102,6 +102,10 @@ available or fails to run).
 Changes
 *******
 
+0.4.2
+~~~~~
+ * Fixed formatting errors in documentation.
+
 0.4.1
 ~~~~~
 
