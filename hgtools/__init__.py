@@ -16,7 +16,7 @@ try:
 	from collections import namedtuple
 except ImportError:
 	# Python 2.5 compat
-	from namedtuple_backport import namedtuple
+	from hgtools.namedtuple_backport import namedtuple
 from distutils.version import StrictVersion
 import operator
 

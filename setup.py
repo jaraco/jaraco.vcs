@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 long_description = """
 hgtools
 =======
@@ -73,6 +73,24 @@ repo is not on any of those tags, get_current_version will return
 '0.3.1dev' and get_current_version(increment='0.1') will return
 '0.4dev'.
 
+A distutils hook has been created to hack setuptools to use this version
+information automatically. To use this functionality, just use the
+`use_hg_version` or `use_hg_version_increment` parameters to setup. For
+example:
+
+    from setuptools import setup, find_packages
+    setup(
+        name="HelloWorld",
+        use_hg_version=True,
+        packages=find_packages(),
+        setup_requires=["hgtools"],
+    )
+
+hgtools will use the mercurial version to determine the version of the
+package (based on get_current_version). If an sdist is created, hgtools
+will store the calculated version in the tag_build of the setup.cfg and
+will use that version when deploying remotely.
+
 See the hgtools setup.py for an example of this technique.
 
 Options
@@ -82,6 +100,20 @@ Set the ``HGTOOLS_FORCE_CMD`` environment variable before running
 setup.py if you want to enforce the use of the hg command (though it
 will then fall back to the native libraries if the command is not
 available or fails to run).
+
+Changes
+*******
+
+0.4.1
+~~~~~
+
+ * Reformatted package layout so that other modules can be included.
+ * Restored missing namedtuple_backport (provides Python 2.5 support).
+
+0.4
+~~~
+
+ * First release supporting automatic versioning using mercurial tags.
 """
 
 setup(
@@ -103,7 +135,7 @@ setup(
         "Topic :: Software Development :: Version Control",
         "Framework :: Setuptools Plugin",
     ],
-    py_modules=["hgtools"],
+    packages=find_packages(),
     entry_points = {
         "setuptools.file_finders": [
             "hg = hgtools:file_finder_plugin"
