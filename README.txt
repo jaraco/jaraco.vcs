@@ -73,8 +73,8 @@ repo is not on any of those tags, get_current_version will return
 
 A distutils hook has been created to hack setuptools to use this version
 information automatically. To use this functionality, just use the
-`use_hg_version` or `use_hg_version_increment` parameters to setup. For
-example:
+``use_hg_version`` or ``use_hg_version_increment`` parameters to setup.
+For example::
 
     from setuptools import setup, find_packages
     setup(
