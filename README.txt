@@ -102,6 +102,10 @@ available or fails to run).
 Changes
 *******
 
+0.4.4
+~~~~~
+ * Fixed issue where use_hg_version_increment wasn't recognized
+
 0.4.3
 ~~~~~
  * Using a fixed version number for hgtools, because often hgtools isn't

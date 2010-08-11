@@ -356,7 +356,11 @@ def patch_egg_info():
 	orig_ver = egg_info.tagged_version
 	@functools.wraps(orig_ver)
 	def tagged_version(self):
-		if self.distribution.use_hg_version:
+		using_hg_version = (
+			self.distribution.use_hg_version
+			or self.distribution.use_hg_version_increment
+			)
+		if using_hg_version:
 			result = safe_version(self.distribution.get_version())
 		else:
 			result = orig_ver(self)
