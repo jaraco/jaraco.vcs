@@ -102,6 +102,11 @@ available or fails to run).
 Changes
 *******
 
+0.4.7
+~~~~~
+ * Fixed issue where patch_egg_info would not be patched unless
+   the plugin had set the appropriate attributes on the distribution.
+
 0.4.6
 ~~~~~
  * Fixed hgtools version tagging (again)
