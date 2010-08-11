@@ -1,7 +1,8 @@
 from setuptools import setup, find_packages
 long_description = open('README.txt').read()
 
-from hgtools import calculate_version
+from hgtools import calculate_version, patch_egg_info
+patch_egg_info()
 
 setup(
     name="hgtools",

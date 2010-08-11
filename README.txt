@@ -89,7 +89,7 @@ package (based on get_current_version). If an sdist is created, hgtools
 will store the calculated version in the tag_build of the setup.cfg and
 will use that version when deploying remotely.
 
-See the hgtools setup.py for an example of this technique.
+See the jaraco.util setup.py for an example of this technique.
 
 Options
 *******
@@ -101,6 +101,10 @@ available or fails to run).
 
 Changes
 *******
+
+0.4.6
+~~~~~
+ * Fixed hgtools version tagging (again)
 
 0.4.5
 ~~~~~
