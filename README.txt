@@ -102,9 +102,13 @@ available or fails to run).
 Changes
 *******
 
+0.4.5
+~~~~~
+ * Restored calculated versioning for the hgtools project itself.
+
 0.4.4
 ~~~~~
- * Fixed issue where use_hg_version_increment wasn't recognized
+ * Fixed issue where use_hg_version_increment wasn't recognized.
 
 0.4.3
 ~~~~~

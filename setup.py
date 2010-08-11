@@ -1,9 +1,11 @@
 from setuptools import setup, find_packages
 long_description = open('README.txt').read()
 
+from hgtools import calculate_version
+
 setup(
     name="hgtools",
-    version='0.4.5',
+    version=calculate_version(),
     author="Jannis Leidel/Jason R. Coombs",
     author_email="jaraco@jaraco.com",
     url="http://bitbucket.org/jaraco/hgtools/",
