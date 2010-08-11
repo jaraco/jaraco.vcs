@@ -349,7 +349,7 @@ def file_finder_plugin(dirname="."):
 		distutils.log.warn("Error getting managers in hgtools.file_finder_plugin: %s", e)
 	return []
 
-def patch_egg_info():
+def patch_egg_info(force_hg_version=False):
 	from setuptools.command.egg_info import egg_info
 	from pkg_resources import safe_version
 	import functools
@@ -357,7 +357,8 @@ def patch_egg_info():
 	@functools.wraps(orig_ver)
 	def tagged_version(self):
 		using_hg_version = (
-			self.distribution.use_hg_version
+			force_hg_version
+			or self.distribution.use_hg_version
 			or self.distribution.use_hg_version_increment
 			)
 		if using_hg_version:
