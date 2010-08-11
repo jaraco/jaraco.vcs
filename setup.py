@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 long_description = open('README.txt').read()
 
 from hgtools import calculate_version, patch_egg_info
-patch_egg_info()
+patch_egg_info(force_hg_version=True)
 
 setup(
     name="hgtools",
