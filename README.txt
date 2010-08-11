@@ -102,6 +102,11 @@ available or fails to run).
 Changes
 *******
 
+0.4.3
+~~~~~
+ * Added empty version to setup script so that sdist will use the version
+   calculated by hgtools.
+
 0.4.2
 ~~~~~
  * Fixed formatting errors in documentation.
