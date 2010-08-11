@@ -3,10 +3,7 @@ long_description = open('README.txt').read()
 
 setup(
     name="hgtools",
-    use_hg_version=True,
-    # this is a little hack to make sure that hgtools doesn't default to
-    #  version 0.0.0 and only uses the tag in the sdist.
-    version = '', 
+    version='0.4.3',
     author="Jannis Leidel/Jason R. Coombs",
     author_email="jaraco@jaraco.com",
     url="http://bitbucket.org/jaraco/hgtools/",

@@ -104,8 +104,9 @@ Changes
 
 0.4.3
 ~~~~~
- * Added empty version to setup script so that sdist will use the version
-   calculated by hgtools.
+ * Using a fixed version number for hgtools, because often hgtools isn't
+   available when hgtools is being installed, resulting in versions like
+   ``0.0.00.4.3``.
 
 0.4.2
 ~~~~~
