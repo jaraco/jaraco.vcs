@@ -6,7 +6,7 @@ by the version control system.
 Classes support using the native Python library interfaces or using the
 hg(1) command as a subprocess.
 """
-__version__ = '0.4'
+__version__ = '0.4.8'
 __author__ = 'Jannis Leidel/Jason R. Coombs'
 __all__ = ['file_finder_plugin', 'get_manager', 'HGRepoManager']
 
@@ -19,6 +19,19 @@ except ImportError:
 	from hgtools.namedtuple_backport import namedtuple
 from distutils.version import StrictVersion
 import operator
+
+# next statement from jaraco.compat.py25compat
+try:
+	next
+except NameError:
+	class __NotSupplied(object): pass
+	def next(iterable, default=__NotSupplied):
+		try:
+			return iterable.next()
+		except StopIteration:
+			if default is __NotSupplied:
+				raise
+			return default
 
 def find(pred, items):
 	"""
@@ -116,8 +129,7 @@ class VersionManagement(object):
 		the repo (based on tags).
 		"""
 		versions = sorted(self.get_strict_versions(), reverse=True)
-		next = lambda i: i.next()
-		return next(iter(versions))
+		return next(iter(versions), None)
 
 	def get_current_version(self, increment=None):
 		"""
@@ -160,7 +172,13 @@ class VersionManagement(object):
 		If it's a prerelease version, just remove the prerelease.
 		>>> VM_infer('3.1a1', '0.0.1')
 		'3.1'
+		
+		If there is no last version, use the increment itself
+		>>> VM_infer(None, '0.1')
+		'0.1'
 		"""
+		if last_version is None:
+			return increment
 		last_version = SummableVersion(str(last_version))
 		if last_version.prerelease:
 			last_version.prerelease = None

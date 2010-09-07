@@ -87,7 +87,8 @@ For example::
 hgtools will use the mercurial version to determine the version of the
 package (based on get_current_version). If an sdist is created, hgtools
 will store the calculated version in the tag_build of the setup.cfg and
-will use that version when deploying remotely.
+will use that version when deploying remotely. Therefore, if you are
+using auto-versioning, you should not tag builds explicitly.
 
 See the jaraco.util setup.py for an example of this technique.
 
@@ -101,6 +102,11 @@ available or fails to run).
 
 Changes
 *******
+
+0.4.8
+~~~~~
+ * Auto versioning now provides a reasonable default when no version
+   tags are yet present.
 
 0.4.3-0.4.7
 ~~~~~~~~~~~
