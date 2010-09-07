@@ -102,28 +102,9 @@ available or fails to run).
 Changes
 *******
 
-0.4.7
-~~~~~
- * Fixed issue where patch_egg_info would not be patched unless
-   the plugin had set the appropriate attributes on the distribution.
-
-0.4.6
-~~~~~
- * Fixed hgtools version tagging (again)
-
-0.4.5
-~~~~~
- * Restored calculated versioning for the hgtools project itself.
-
-0.4.4
-~~~~~
- * Fixed issue where use_hg_version_increment wasn't recognized.
-
-0.4.3
-~~~~~
- * Using a fixed version number for hgtools, because often hgtools isn't
-   available when hgtools is being installed, resulting in versions like
-   ``0.0.00.4.3``.
+0.4.3-0.4.7
+~~~~~~~~~~~
+ * Fixes for versions handling of hgtools itself.
 
 0.4.2
 ~~~~~
