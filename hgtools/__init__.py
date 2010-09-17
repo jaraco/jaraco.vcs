@@ -267,7 +267,10 @@ class SubprocessManager(HGRepoManager):
 	def get_tags(self):
 		tagged_revision = namedtuple('tagged_revision', 'tag revision')
 		lines = self._run_cmd([self.exe, 'tags']).splitlines()
-		return (tagged_revision(*line.split()) for line in lines if line)			
+		return (
+			tagged_revision(*line.rsplit(None, 1))
+			for line in lines if line
+		)
 
 class LibraryManager(HGRepoManager):
 	"""

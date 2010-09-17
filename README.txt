@@ -103,6 +103,11 @@ available or fails to run).
 Changes
 *******
 
+0.4.9
+~~~~~
+ * Fixed issue where version calculation would fail if tags contained
+   spaces.
+
 0.4.8
 ~~~~~
  * Auto versioning now provides a reasonable default when no version
