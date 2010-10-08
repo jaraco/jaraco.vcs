@@ -283,14 +283,16 @@ class LibraryManager(HGRepoManager):
 		try:
 			from mercurial.__version__ import version
 			from mercurial import hg, ui, cmdutil
+			from mercurial.error import RepoError
 		except ImportError:
 			pass
 
 		try:
-			from mercurial.error import RepoError
-		except ImportError:
 			# mercurial < 1.2
 			from mercurial.repo import RepoError
+		except ImportError:
+			pass
+
 		del self
 		globals().update(vars())
 
@@ -364,9 +366,9 @@ def file_finder_plugin(dirname="."):
 		for mgr in HGRepoManager.get_valid_managers(dirname):
 			try:
 				return mgr.find_files()
-			except BaseException, e:
+			except Exception, e:
 				distutils.log.warn("Error in hgtools.%s: %s", mgr, e)
-	except BaseException, e:
+	except Exception, e:
 		distutils.log.warn("Error getting managers in hgtools.file_finder_plugin: %s", e)
 	return []
 
