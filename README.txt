@@ -103,6 +103,12 @@ available or fails to run).
 Changes
 *******
 
+0.5
+~~~
+ * Fixed issue in file_finder_plugin where searching for an
+   appropriate manager would fail if mercurial was not installed in
+   the Python instance (ImportErrors weren't trapped properly).
+
 0.4.9
 ~~~~~
  * Fixed issue where version calculation would fail if tags contained
