@@ -382,6 +382,10 @@ def file_finder_plugin(dirname="."):
 	return []
 
 def patch_egg_info(force_hg_version=False):
+	"""
+	A hack to replace egg_info.tagged_version with a wrapped version
+	that will use the mercurial version if indicated.
+	"""
 	from setuptools.command.egg_info import egg_info
 	from pkg_resources import safe_version
 	import functools
@@ -390,8 +394,9 @@ def patch_egg_info(force_hg_version=False):
 	def tagged_version(self):
 		using_hg_version = (
 			force_hg_version
-			or self.distribution.use_hg_version
-			or self.distribution.use_hg_version_increment
+			or getattr(self.distribution, 'use_hg_version', False)
+			or getattr(self.distribution, 'use_hg_version_increment',
+				False)
 			)
 		if using_hg_version:
 			result = safe_version(self.distribution.get_version())
