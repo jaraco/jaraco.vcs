@@ -105,6 +105,13 @@ available or fails to run).
 Changes
 *******
 
+0.5.2
+~~~~~
+ * Yet another fix for #1. It appears that simply not activating the
+   function is not sufficient. It may be activated by previously-
+   installed packages, so it needs to be robust for non-hgtools
+   packages.
+
 0.5.1
 ~~~~~
  * Fix for issue #1 - version_calc_plugin is activated for projects that
