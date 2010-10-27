@@ -1,6 +1,6 @@
 # next statement from jaraco.compat.py25compat
 try:
-	next
+	next = next
 except NameError:
 	class __NotSupplied(object): pass
 	def next(iterable, default=__NotSupplied):
@@ -10,6 +10,7 @@ except NameError:
 			if default is __NotSupplied:
 				raise
 			return default
+
 
 # namedtuple
 try:
