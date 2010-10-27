@@ -63,7 +63,7 @@ To use this feature, your project must follow the following assumptions:
 	   Future releases may relax this restriction.
 
 Thereafter, you may use the HGToolsManager.get_current_version to
-determine the version of the product. If the current revision is tagged
+determine the version of your product. If the current revision is tagged
 with a valid version, that version will be used. Otherwise, the tags in
 the repo will be searched, the latest release will be found, and hgtools
 will infer the upcoming release version.
@@ -104,6 +104,11 @@ available or fails to run).
 
 Changes
 *******
+
+0.6
+~~~
+ * Refactored modules. Created ``managers``, ``versioning``, and
+   ``py25compat`` modules.
 
 0.5.2
 ~~~~~

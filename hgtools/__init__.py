@@ -8,7 +8,7 @@ hg(1) command as a subprocess.
 """
 __version__ = '0.6'
 __author__ = 'Jannis Leidel/Jason R. Coombs'
-__all__ = ['file_finder_plugin', 'get_manager']
+__all__ = ['file_finder_plugin']
 
 import os
 

@@ -1,8 +1,9 @@
 import os
 import subprocess
 from .py25compat import namedtuple, next
+from . import versioning
 
-class HGRepoManager(VersionManagement, object):
+class HGRepoManager(versioning.VersionManagement, object):
 	"""
 	An abstract class defining some interfaces for working with
 	Mercurial repositories.
