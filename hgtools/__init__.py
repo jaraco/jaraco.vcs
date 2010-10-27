@@ -6,7 +6,7 @@ by the version control system.
 Classes support using the native Python library interfaces or using the
 hg(1) command as a subprocess.
 """
-__version__ = '0.4.8'
+__version__ = '0.5.1'
 __author__ = 'Jannis Leidel/Jason R. Coombs'
 __all__ = ['file_finder_plugin', 'get_manager', 'HGRepoManager']
 
@@ -281,6 +281,13 @@ class LibraryManager(HGRepoManager):
 
 	def setup(self):
 		try:
+			self._update_globals()
+		except Exception:
+			pass
+
+	@staticmethod
+	def _update_globals():
+		try:
 			from mercurial.__version__ import version
 			from mercurial import hg, ui, cmdutil
 			from mercurial.error import RepoError
@@ -293,7 +300,6 @@ class LibraryManager(HGRepoManager):
 		except ImportError:
 			pass
 
-		del self
 		globals().update(vars())
 
 	def is_valid(self):
@@ -367,9 +373,9 @@ def file_finder_plugin(dirname="."):
 			try:
 				return mgr.find_files()
 			except Exception, e:
-				distutils.log.warn("Error in hgtools.%s: %s", mgr, e)
+				distutils.log.warn("Warning in hgtools.%s: %s", mgr, e)
 	except Exception, e:
-		distutils.log.warn("Error getting managers in hgtools.file_finder_plugin: %s", e)
+		distutils.log.warn("Unexpected error finding valid managers in hgtools.file_finder_plugin: %s", e)
 	return []
 
 def patch_egg_info(force_hg_version=False):
