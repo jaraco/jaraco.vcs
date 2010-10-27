@@ -206,11 +206,13 @@ class HGRepoManager(VersionManagement, object):
 
 	@staticmethod
 	def get_valid_managers(location):
-		classes = (LibraryManager, LegacyLibraryManager, SubprocessManager)
 		force_cmd = os.environ.get('HGTOOLS_FORCE_CMD', False)
-		if force_cmd:
-			classes = (SubprocessManager, LibraryManager, LegacyLibraryManager)
-		managers = (cls(location) for cls in classes)
+		class_order = (
+			(SubprocessManager, LibraryManager, LegacyLibraryManager)
+			if force_cmd else
+			(LibraryManager, LegacyLibraryManager, SubprocessManager)
+			)
+		managers = (cls(location) for cls in class_order)
 		return (mgr for mgr in managers if mgr.is_valid())
 
 	@staticmethod
