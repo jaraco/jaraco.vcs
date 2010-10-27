@@ -247,8 +247,11 @@ class SubprocessManager(HGRepoManager):
 
 	def _run_cmd(self, cmd):
 		proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+			stderr=subprocess.PIPE,
 			cwd=self.location)
 		stdout, stderr = proc.communicate()
+		if not proc.returncode == 0:
+			raise RuntimeError(stderr.strip() or stdout.strip())
 		return stdout
 
 	def find_files(self):
@@ -373,7 +376,7 @@ def file_finder_plugin(dirname="."):
 			try:
 				return mgr.find_files()
 			except Exception, e:
-				distutils.log.warn("Warning in hgtools.%s: %s", mgr, e)
+				distutils.log.warn("hgtools.%s could not find files: %s", mgr, e)
 	except Exception, e:
 		distutils.log.warn("Unexpected error finding valid managers in hgtools.file_finder_plugin: %s", e)
 	return []
