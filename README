@@ -105,6 +105,15 @@ available or fails to run).
 Changes
 *******
 
+0.5.1
+~~~~~
+ * Fix for issue #1 - version_calc_plugin is activated for projects that
+   never called for it.
+ * LibraryManagers no longer raise errors during the import step
+   (instead, they just report as being invalid).
+ * SubprocessManager now raises a RuntimeError if the executed command
+   does not complete with a success code.
+
 0.5
 ~~~
  * Fixed issue in file_finder_plugin where searching for an
