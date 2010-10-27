@@ -418,7 +418,7 @@ def version_calc_plugin(dist, attr, value):
 	"""
 	Handler for parameter to setup(use_hg_version=value)
 	"""
-	if not value: return
+	if not value or not 'hg_version' in attr: return
 	# if the user indicates an increment, use it
 	increment = value if 'increment' in attr else None
 	dist.metadata.version = calculate_version(increment)
