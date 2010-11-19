@@ -81,7 +81,17 @@ class SubprocessManager(HGRepoManager):
 		return open(os.path.devnull, 'w')
 
 	def get_tag(self):
-		return self._run_cmd([self.exe, 'identify', '-t']).strip() or None
+		tag = self._run_cmd([self.exe, 'identify', '-t']).strip() or None
+                if tag == "tip":
+                    # this is tip, check if the previous commit has a tag.
+                    out = self._run_cmd([self.exe, "parents", "-r", "tip"]).strip()
+                    if out.count("changeset:") == 1:
+                        # there cannot be 2 parents for a tag commit
+                        for line in out.splitlines():
+                            if line.startswith("tag:"):
+                                tag = line[4:].strip()
+
+                return tag
 
 	def get_tags(self):
 		tagged_revision = namedtuple('tagged_revision', 'tag revision')
