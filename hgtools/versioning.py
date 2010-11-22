@@ -89,7 +89,7 @@ class VersionManagement(object):
 		"""
 		tag = self.get_tag()
 		if tag == 'tip':
-			ptag = self.get_parent_tag()
+			ptag = self.get_parent_tag('tip')
 			if ptag:
 				tag = ptag
 		try:
