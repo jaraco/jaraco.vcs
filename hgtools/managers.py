@@ -1,5 +1,7 @@
 import os
 import subprocess
+import re
+
 from .py25compat import namedtuple, next
 from . import versioning
 
@@ -80,18 +82,25 @@ class SubprocessManager(HGRepoManager):
 	def _get_devnull():
 		return open(os.path.devnull, 'w')
 
-	def get_tag(self):
-		tag = self._run_cmd([self.exe, 'identify', '-t']).strip() or None
-                if tag == "tip":
-                    # this is tip, check if the previous commit has a tag.
-                    out = self._run_cmd([self.exe, "parents", "-r", "tip"]).strip()
-                    if out.count("changeset:") == 1:
-                        # there cannot be 2 parents for a tag commit
-                        for line in out.splitlines():
-                            if line.startswith("tag:"):
-                                tag = line[4:].strip()
+	def get_parent_tag(self, rev=None):
+		cmd = [self.exe, 'parents']
+		if rev:
+			cmd.extend(['--rev', str(rev)])
+		out = self._run_cmd(cmd)
+		cs_pat = '^changeset:\s+(?P<local>\d+):(?P<hash>[0-9a-zA-Z]+)'
+		matches = re.findall(cs_pat, out)
+		if not len(matches) == 1:
+			return
+		_, parent_rev = matches.pop()
+		return self.get_tag(parent_rev)
 
-                return tag
+	def get_tag(self, rev=None):
+		cmd = [self.exe, 'identify', '-t']
+		if rev:
+			cmd.extend(['--rev', str(rev)])
+		# workaround for #4
+		cmd.extend(['--config', 'defaults.identify='])
+		return self._run_cmd(cmd).strip() or None
 
 	def get_tags(self):
 		tagged_revision = namedtuple('tagged_revision', 'tag revision')

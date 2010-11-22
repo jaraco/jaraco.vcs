@@ -83,12 +83,18 @@ class VersionManagement(object):
 
 	def get_tagged_version(self):
 		"""
-		Get the version of the local repository as a StrictVersion or
-		None if no viable tag exists.
+		Get the version of the local working set as a StrictVersion or
+		None if no viable tag exists. If the local working set is itself
+		the tagged commit and the tip, use the tag on the parent changeset.
 		"""
+		tag = self.get_tag()
+		if tag == 'tip':
+			ptag = self.get_parent_tag()
+			if ptag:
+				tag = ptag
 		try:
 			# use 'xxx' because StrictVersion(None) is apparently ok
-			return StrictVersion(self.get_tag() or 'xxx')
+			return StrictVersion(tag or 'xxx')
 		except ValueError:
 			pass
 
