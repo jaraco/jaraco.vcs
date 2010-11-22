@@ -81,7 +81,10 @@ class SubprocessManager(HGRepoManager):
 		return open(os.path.devnull, 'w')
 
 	def get_tag(self):
-		return self._run_cmd([self.exe, 'identify', '-t']).strip() or None
+		params = ['identify', '-t']
+		# workaround for #4
+		params.extend(['--config', 'defaults.identify='])
+		return self._run_cmd([self.exe, *params]).strip() or None
 
 	def get_tags(self):
 		tagged_revision = namedtuple('tagged_revision', 'tag revision')
