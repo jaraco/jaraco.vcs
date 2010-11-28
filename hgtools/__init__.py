@@ -59,7 +59,8 @@ def patch_egg_info(force_hg_version=False):
 		return result
 	egg_info.tagged_version = tagged_version
 
-def calculate_version(default_increment=None):
+def calculate_version(options={}):
+	default_increment = options.get('increment')
 	# The version is cached in the tag_build value in setup.cfg (so that
 	#  sdist versions will have a copy of the version as determined at
 	#  the build environment).
@@ -87,6 +88,11 @@ def version_calc_plugin(dist, attr, value):
 	"""
 	if not value or not 'hg_version' in attr: return
 	# if the user indicates an increment, use it
-	increment = value if 'increment' in attr else None
-	dist.metadata.version = calculate_version(increment)
+	if 'increment' in attr:
+		distutils.log.warn(
+			"use_hg_version_increment is deprecated and will be removed in 0.7. "
+			"Instead, use `use_hg_version=dict(increment='0.0.1')`")
+		value = {'increment': value}
+	options = value if isinstance(value, dict) else {}
+	dist.metadata.version = calculate_version(options)
 	patch_egg_info()

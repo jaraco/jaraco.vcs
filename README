@@ -75,7 +75,7 @@ repo is not on any of those tags, get_current_version will return
 
 A distutils hook has been created to hack setuptools to use this version
 information automatically. To use this functionality, just use the
-``use_hg_version`` or ``use_hg_version_increment`` parameters to setup.
+``use_hg_version`` parameter to setup.
 For example::
 
     from setuptools import setup, find_packages
@@ -86,13 +86,24 @@ For example::
         setup_requires=["hgtools"],
     )
 
-hgtools will use the mercurial version to determine the version of the
+If the value supplied to use_hg_version resolves to True, hgtools will
+use the mercurial version to determine the version of the
 package (based on get_current_version). If an sdist is created, hgtools
 will store the calculated version in the tag_build of the setup.cfg and
 will use that version when deploying remotely. Therefore, if you are
-using auto-versioning, you should not tag builds explicitly.
+using auto-versioning, you should not use setuptools tags explicitly.
 
 See the jaraco.util setup.py for an example of this technique.
+
+It's also possible to send keyword parameters to use_hg_version to
+tweak how it generates version numbers. For example, if the default
+increment of 0.1 is not appropriate for your application, you may specify
+another::
+
+    use_hg_version = {'increment': '0.0.1'},
+
+The above configuration will indicate to hgtools to guess the next version
+of the application to be 0.0.1 greater than the last tagged release.
 
 Options
 *******
@@ -105,6 +116,10 @@ available or fails to run).
 Changes
 *******
 
+0.6.3
+~~~~~
+ * Deprecated use_hg_version_increment setup parameter in favor of
+   parameters to use_hg_version.
 0.6.2
 ~~~~~
  * From drakonen: hgtools will now utilize the parent changeset tag
