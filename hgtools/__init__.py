@@ -86,6 +86,7 @@ def version_calc_plugin(dist, attr, value):
 	"""
 	Handler for parameter to setup(use_hg_version=value)
 	"""
+	import distutils.log
 	if not value or not 'hg_version' in attr: return
 	# if the user indicates an increment, use it
 	if 'increment' in attr:

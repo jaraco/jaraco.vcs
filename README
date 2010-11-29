@@ -116,10 +116,15 @@ available or fails to run).
 Changes
 *******
 
+0.6.4
+~~~~~
+ * Fix for NameError created in 0.6.3.
+
 0.6.3
 ~~~~~
  * Deprecated use_hg_version_increment setup parameter in favor of
    parameters to use_hg_version.
+
 0.6.2
 ~~~~~
  * From drakonen: hgtools will now utilize the parent changeset tag
