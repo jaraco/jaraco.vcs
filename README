@@ -116,6 +116,11 @@ available or fails to run).
 Changes
 *******
 
+0.6.5
+~~~~~
+ * Test case and fix for error in SubprocessManager when 'hg'
+   executable doesn't exist.
+
 0.6.4
 ~~~~~
  * Fix for NameError created in 0.6.3.

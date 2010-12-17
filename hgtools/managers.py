@@ -58,10 +58,14 @@ class SubprocessManager(HGRepoManager):
 	exe = 'hg'
 
 	def is_valid(self):
-		return 0 == subprocess.call(
-			[self.exe, 'version'],
-			stdout=self._get_devnull(),
-			)
+		try:
+			res = subprocess.call(
+				[self.exe, 'version'],
+				stdout=self._get_devnull(),
+				)
+		except OSError:
+			return False
+		return res == 0
 
 	def _run_cmd(self, cmd):
 		proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
