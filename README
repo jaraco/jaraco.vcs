@@ -116,6 +116,12 @@ available or fails to run).
 Changes
 *******
 
+0.6.6
+~~~~~
+
+* Some minor refactoring - moved functions out of top-level `hgtools`
+  module into hgtools.plugins.
+
 0.6.5
 ~~~~~
  * Test case and fix for error in SubprocessManager when 'hg'
