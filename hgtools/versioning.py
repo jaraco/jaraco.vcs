@@ -85,10 +85,11 @@ class VersionManagement(object):
 		"""
 		Get the version of the local working set as a StrictVersion or
 		None if no viable tag exists. If the local working set is itself
-		the tagged commit and the tip, use the tag on the parent changeset.
+		the tagged commit and the tip and there are no local
+		modifications, use the tag on the parent changeset.
 		"""
 		tag = self.get_tag()
-		if tag == 'tip':
+		if tag == 'tip' and not self.is_modified():
 			ptag = self.get_parent_tag('tip')
 			if ptag:
 				tag = ptag
@@ -112,7 +113,10 @@ class VersionManagement(object):
 		repository -- a tagged version, if present, or the next version
 		based on prior tagged releases.
 		"""
-		ver = self.get_tagged_version() or str(self.get_next_version(increment))+'dev'
+		ver = (
+			self.get_tagged_version()
+			or str(self.get_next_version(increment))+'dev'
+			)
 		return str(ver)
 
 	def get_next_version(self, increment=None):

@@ -116,6 +116,12 @@ available or fails to run).
 Changes
 *******
 
+0.6.7
+~~~~~
+
+* Auto-versioning will no longer use the parent tag if the working
+  copy has modifications.
+
 0.6.6
 ~~~~~
 
