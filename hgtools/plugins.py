@@ -3,7 +3,7 @@ import os
 from . import managers
 from .py25compat import namedtuple
 
-__all__ = ['file_finder_plugin', 'version_calc_plugin']
+__all__ = ['file_finder', 'version_calc']
 
 def file_finder(dirname="."):
 	"""
@@ -52,7 +52,7 @@ def patch_egg_info(force_hg_version=False):
 def calculate_version(options={}):
 	default_increment = options.get('increment')
 	# The version is cached in the tag_build value in setup.cfg (so that
-	#  sdist versions will have a copy of the version as determined at
+	#  sdist packages will have a copy of the version as determined at
 	#  the build environment).
 	from ConfigParser import ConfigParser
 	parser = ConfigParser()
