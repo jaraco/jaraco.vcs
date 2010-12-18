@@ -50,6 +50,10 @@ class HGRepoManager(versioning.VersionManagement, object):
 	def get_tags(self):
 		raise NotImplementedError()
 
+	def is_modified(self):
+		'Does the current working copy have modifications'
+		raise NotImplementedError()
+
 class SubprocessManager(HGRepoManager):
 	"""
 	An HGRepoManager implemented by calling into the 'hg' command-line
@@ -113,6 +117,10 @@ class SubprocessManager(HGRepoManager):
 			tagged_revision(*line.rsplit(None, 1))
 			for line in lines if line
 		)
+
+	def is_modified(self):
+		out = self._run_cmd([self.exe, 'status', '-mard'])
+		return bool(out)
 
 class LibraryManager(HGRepoManager):
 	"""
