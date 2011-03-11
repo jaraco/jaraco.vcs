@@ -1,3 +1,11 @@
+# -*- coding: UTF-8 -*-
+
+"""
+Setup script for building hgtools distribution
+
+Copyright © 2010-2011 Jason R. Coombs
+"""
+
 from setuptools import setup, find_packages
 long_description = open('README').read()
 
@@ -7,6 +15,19 @@ long_description = open('README').read()
 #  directions in the README or see jaraco.util for an example.
 from hgtools.plugins import calculate_version, patch_egg_info
 patch_egg_info(force_hg_version=True)
+
+# set up distutils/setuptools to convert to Python 3 when
+#  appropriate
+try:
+    from distutils.command.build_py import build_py_2to3 as build_py
+    # exclude some fixers that break already compatible code
+    from lib2to3.refactor import get_fixers_from_package
+    fixers = get_fixers_from_package('lib2to3.fixes')
+    for skip_fixer in []:
+        fixers.remove('lib2to3.fixes.fix_' + skip_fixer)
+    build_py.fixer_names = fixers
+except ImportError:
+    from distutils.command.build_py import build_py
 
 setup(
     name="hgtools",
@@ -37,4 +58,5 @@ setup(
             "use_hg_version_increment = hgtools.plugins:version_calc",
         ],
     },
+    cmdclass=dict(build_py=build_py),
 )
