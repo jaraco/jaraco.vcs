@@ -116,6 +116,11 @@ available or fails to run).
 Changes
 *******
 
+1.0
+~~~
+
+* Python 3 support
+
 0.6.7
 ~~~~~
 

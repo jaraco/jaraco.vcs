@@ -33,7 +33,6 @@ class HGRepoManager(versioning.VersionManagement, object):
 
 	@staticmethod
 	def get_first_valid_manager(location='.'):
-		next = lambda i: i.next()
 		return next(HGRepoManager.get_valid_managers(location))
 
 	def __repr__(self):
@@ -78,7 +77,7 @@ class SubprocessManager(HGRepoManager):
 		stdout, stderr = proc.communicate()
 		if not proc.returncode == 0:
 			raise RuntimeError(stderr.strip() or stdout.strip())
-		return stdout
+		return stdout.decode('utf-8')
 
 	def find_files(self):
 		"""
