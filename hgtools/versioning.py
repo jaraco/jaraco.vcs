@@ -1,6 +1,6 @@
 from distutils.version import StrictVersion
 import operator
-from py25compat import next
+from .py25compat import next
 
 def find(pred, items):
 	"""
