@@ -1,4 +1,5 @@
 import os
+import sys
 
 from . import managers
 from .py25compat import namedtuple
@@ -18,9 +19,11 @@ def file_finder(dirname="."):
 		for mgr in managers.HGRepoManager.get_valid_managers(dirname):
 			try:
 				return mgr.find_files()
-			except Exception, e:
+			except Exception:
+				e = sys.exc_info()[1]
 				distutils.log.warn("hgtools.%s could not find files: %s", mgr, e)
-	except Exception, e:
+	except Exception:
+		e = sys.exc_info()[1]
 		distutils.log.warn("Unexpected error finding valid managers in hgtools.file_finder_plugin: %s", e)
 	return []
 
