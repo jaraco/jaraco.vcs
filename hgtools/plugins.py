@@ -57,7 +57,10 @@ def calculate_version(options={}):
 	# The version is cached in the tag_build value in setup.cfg (so that
 	#  sdist packages will have a copy of the version as determined at
 	#  the build environment).
-	from ConfigParser import ConfigParser
+	try:
+		from ConfigParser import ConfigParser
+	except ImportError:
+		from configparser import ConfigParser
 	parser = ConfigParser()
 	parser.read('setup.cfg')
 	has_tag_build = (parser.has_section('egg_info')
