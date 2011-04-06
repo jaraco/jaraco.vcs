@@ -102,12 +102,19 @@ class SubprocessManager(HGRepoManager):
 		return self.get_tag(parent_rev)
 
 	def get_tag(self, rev=None):
-		cmd = [self.exe, 'identify', '-t']
+		cmd = [self.exe, 'identify', '-v']
 		if rev:
 			cmd.extend(['--rev', str(rev)])
 		# workaround for #4
 		cmd.extend(['--config', 'defaults.identify='])
-		return self._run_cmd(cmd).strip() or None
+		res = self._run_cmd(cmd)
+		pat = re.compile(
+			'(?P<shorthash>\S+)'
+			'( \((?P<branch>.+)\))?'
+			'( (?P<tags>.*))?')
+		m = pat.match(res)
+		has_tags = m and m.group('tags')
+		return m.group('tags').split('/')[0] if has_tags else None
 
 	def get_tags(self):
 		tagged_revision = namedtuple('tagged_revision', 'tag revision')

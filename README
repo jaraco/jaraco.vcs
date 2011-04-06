@@ -120,6 +120,8 @@ Changes
 ~~~
 
 * Python 3 support
+* Now supports revisions with multiple tags (chooses the first, which
+  appears to be the latest).
 
 0.6.7
 ~~~~~
