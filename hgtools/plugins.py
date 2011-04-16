@@ -31,6 +31,8 @@ def patch_egg_info(force_hg_version=False):
 	"""
 	A hack to replace egg_info.tagged_version with a wrapped version
 	that will use the mercurial version if indicated.
+	
+	`force_hg_version` is used for hgtools itself.
 	"""
 	from setuptools.command.egg_info import egg_info
 	from pkg_resources import safe_version
@@ -41,9 +43,7 @@ def patch_egg_info(force_hg_version=False):
 		using_hg_version = (
 			force_hg_version
 			or getattr(self.distribution, 'use_hg_version', False)
-			or getattr(self.distribution, 'use_hg_version_increment',
-				False)
-			)
+		)
 		if using_hg_version:
 			result = safe_version(self.distribution.get_version())
 		else:
@@ -81,15 +81,12 @@ def calculate_version(options={}):
 def version_calc(dist, attr, value):
 	"""
 	Handler for parameter to setup(use_hg_version=value)
+	attr should be 'use_hg_version'
+	bool(value) should be true to invoke this plugin.
+	value may optionally be a dict and supply options to the plugin.
 	"""
 	import distutils.log
-	if not value or not 'hg_version' in attr: return
-	# if the user indicates an increment, use it
-	if 'increment' in attr:
-		distutils.log.warn(
-			"use_hg_version_increment is deprecated and will be removed in 0.7. "
-			"Instead, use `use_hg_version=dict(increment='0.0.1')`")
-		value = {'increment': value}
+	if not value or not attr=='use_hg_version': return
 	options = value if isinstance(value, dict) else {}
 	dist.metadata.version = calculate_version(options)
 	patch_egg_info()

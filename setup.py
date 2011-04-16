@@ -57,7 +57,6 @@ setup(
         ],
         "distutils.setup_keywords": [
             "use_hg_version = hgtools.plugins:version_calc",
-            "use_hg_version_increment = hgtools.plugins:version_calc",
         ],
     },
     cmdclass=dict(build_py=build_py),

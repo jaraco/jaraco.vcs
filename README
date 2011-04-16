@@ -122,6 +122,7 @@ Changes
 * Python 3 support
 * Now supports revisions with multiple tags (chooses the first, which
   appears to be the latest).
+* Removed support for deprecated use_hg_version_increment.
 
 0.6.7
 ~~~~~
