@@ -6,7 +6,7 @@ Setup script for building hgtools distribution
 Copyright © 2010-2011 Jason R. Coombs
 """
 
-from setuptools import setup, find_packages
+from setuptools import find_packages
 long_description = open('README').read()
 
 # HGTools uses a special technique for getting the version from
@@ -29,7 +29,7 @@ try:
 except ImportError:
     from distutils.command.build_py import build_py
 
-setup(
+setup_params = dict(
     name="hgtools",
     version=calculate_version(options=dict(increment='1.0')),
     author="Jannis Leidel/Jason R. Coombs",
@@ -61,3 +61,7 @@ setup(
     },
     cmdclass=dict(build_py=build_py),
 )
+
+if __name__ == '__main__':
+	from setuptools import setup
+	setup(**setup_params)
