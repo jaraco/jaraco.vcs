@@ -76,7 +76,7 @@ class SubprocessManager(HGRepoManager):
 
 	def is_valid(self):
 		try:
-			_run_cmd([self.exe, 'version'])
+			self._run_cmd([self.exe, 'version'])
 		except Exception:
 			return False
 		return super(SubprocessManager, self).is_valid()
