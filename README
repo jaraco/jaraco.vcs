@@ -126,6 +126,7 @@ Changes
 * Added HGRepoManager.existing_only to filter managers for only those
   which refer to an existing repo.
 * Employed HGRepoManager.existing_only in plugins. Fixes #2.
+* SubprocessManager no longer writes to /dev/null. Fixes #3.
 
 0.6.7
 ~~~~~

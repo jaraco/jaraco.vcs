@@ -102,10 +102,6 @@ class SubprocessManager(HGRepoManager):
 		"""
 		return self._run_cmd([self.exe, 'locate']).splitlines()
 
-	@staticmethod
-	def _get_devnull():
-		return open(os.path.devnull, 'w')
-
 	def get_parent_tag(self, rev=None):
 		cmd = [self.exe, 'parents']
 		if rev:
