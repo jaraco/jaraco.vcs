@@ -189,7 +189,10 @@ class LibraryManager(HGRepoManager):
 		return version not in self.OLD_VERSIONS
 
 	def _get_repo(self):
-		return hg.repository(ui.ui(), path=self.location)
+		class quiet_ui(ui.ui):
+			def write_err(self, *args, **kwargs):
+				pass
+		return hg.repository(quiet_ui(), path=self.location)
 
 	@property
 	def repo(self):
