@@ -123,6 +123,9 @@ Changes
 * Now supports revisions with multiple tags (chooses the first, which
   appears to be the latest).
 * Removed support for deprecated use_hg_version_increment.
+* Added HGRepoManager.existing_only to filter managers for only those
+  which refer to an existing repo.
+* Employed HGRepoManager.existing_only in plugins. Fixes #2.
 
 0.6.7
 ~~~~~

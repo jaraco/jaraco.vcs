@@ -15,6 +15,7 @@ class HGRepoManager(versioning.VersionManagement, object):
 		self.setup()
 
 	def is_valid(self):
+		"Return True if this is a valid manager for this location."
 		return True
 
 	def setup(self):
@@ -22,6 +23,9 @@ class HGRepoManager(versioning.VersionManagement, object):
 
 	@staticmethod
 	def get_valid_managers(location):
+		"""
+		Get the valid HGRepoManagers for this location.
+		"""
 		force_cmd = os.environ.get('HGTOOLS_FORCE_CMD', False)
 		class_order = (
 			(SubprocessManager, LibraryManager, LegacyLibraryManager)
@@ -35,10 +39,20 @@ class HGRepoManager(versioning.VersionManagement, object):
 	def get_first_valid_manager(location='.'):
 		return next(HGRepoManager.get_valid_managers(location))
 
+	@staticmethod
+	def existing_only(managers):
+		"""
+		Return only those managers that refer to an existing repo
+		"""
+		return (mgr for mgr in managers if mgr.find_root())
+
 	def __repr__(self):
 		class_name = self.__class__.__name__
 		loc = self.location
 		return '%(class_name)s(%(loc)r)' % vars()
+
+	def find_root(self):
+		raise NotImplementedError()
 
 	def find_files(self):
 		raise NotImplementedError()
@@ -62,13 +76,10 @@ class SubprocessManager(HGRepoManager):
 
 	def is_valid(self):
 		try:
-			res = subprocess.call(
-				[self.exe, 'version'],
-				stdout=self._get_devnull(),
-				)
-		except OSError:
+			_run_cmd([self.exe, 'version'])
+		except Exception:
 			return False
-		return res == 0
+		return super(SubprocessManager, self).is_valid()
 
 	def _run_cmd(self, cmd):
 		proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
@@ -78,6 +89,12 @@ class SubprocessManager(HGRepoManager):
 		if not proc.returncode == 0:
 			raise RuntimeError(stderr.strip() or stdout.strip())
 		return stdout.decode('utf-8')
+
+	def find_root(self):
+		try:
+			return self._run_cmd([self.exe, 'root']).strip()
+		except Exception:
+			pass
 
 	def find_files(self):
 		"""
@@ -159,7 +176,14 @@ class LibraryManager(HGRepoManager):
 		globals().update(vars())
 
 	def is_valid(self):
-		return 'hg' in globals() and self.version_match()
+		modules_present = 'hg' in globals() and self.version_match()
+		return modules_present and super(LibraryManager, self).is_valid()
+
+	def find_root(self):
+		try:
+			return self.repo.root
+		except Exception:
+			pass
 
 	def version_match(self):
 		return version not in self.OLD_VERSIONS

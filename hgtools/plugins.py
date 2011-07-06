@@ -16,7 +16,9 @@ def file_finder(dirname="."):
 	import distutils.log
 	dirname = dirname or '.'
 	try:
-		for mgr in managers.HGRepoManager.get_valid_managers(dirname):
+		valid_mgrs = managers.HGRepoManager.get_valid_managers(dirname)
+		valid_mgrs = managers.HGRepoManager.existing_only(valid_mgrs)
+		for mgr in valid_mgrs:
 			try:
 				return mgr.find_files()
 			except Exception:
@@ -31,7 +33,7 @@ def patch_egg_info(force_hg_version=False):
 	"""
 	A hack to replace egg_info.tagged_version with a wrapped version
 	that will use the mercurial version if indicated.
-	
+
 	`force_hg_version` is used for hgtools itself.
 	"""
 	from setuptools.command.egg_info import egg_info
@@ -75,7 +77,8 @@ def calculate_version(options={}):
 		#  is not implemented.
 		os.environ['HGTOOLS_FORCE_CMD'] = 'True'
 		mgr = managers.HGRepoManager.get_first_valid_manager()
-		version = mgr.get_current_version(default_increment)
+		repo_exists = bool(mgr.find_root())
+		version = mgr.get_current_version(default_increment) if repo_exists else default_increment
 	return version
 
 def version_calc(dist, attr, value):
