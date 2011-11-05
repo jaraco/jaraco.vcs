@@ -1,3 +1,8 @@
+"""
+hgtools implements several repo managers, each of which provides an interface
+to Mercurial functionality.
+"""
+
 import os
 import subprocess
 import re
