@@ -162,22 +162,25 @@ class LibraryManager(HGRepoManager):
 	@staticmethod
 	def _update_globals():
 		try:
-			from mercurial.__version__ import version
-			from mercurial import hg, ui, cmdutil
-			from mercurial.error import RepoError
+			import mercurial.__version__
+			import mercurial.hg
+			import mercurial.ui
+			import mercurial.cmdutil
+			import mercurial.util
+			import mercurial.error as repo_error
 		except ImportError:
 			pass
 
 		try:
 			# mercurial < 1.2
-			from mercurial.repo import RepoError
+			import mercurial.repo as repo_error
 		except ImportError:
 			pass
 
 		globals().update(vars())
 
 	def is_valid(self):
-		modules_present = 'hg' in globals() and self.version_match()
+		modules_present = 'mercurial' in globals() and self.version_match()
 		return modules_present and super(LibraryManager, self).is_valid()
 
 	def find_root(self):
@@ -187,13 +190,13 @@ class LibraryManager(HGRepoManager):
 			pass
 
 	def version_match(self):
-		return version not in self.OLD_VERSIONS
+		return mercurial.__version__.version not in self.OLD_VERSIONS
 
 	def _get_repo(self):
-		class quiet_ui(ui.ui):
+		class quiet_ui(mercurial.ui.ui):
 			def write_err(self, *args, **kwargs):
 				pass
-		return hg.repository(quiet_ui(), path=self.location)
+		return mercurial.hg.repository(quiet_ui(), path=self.location)
 
 	@property
 	def repo(self):
@@ -215,7 +218,7 @@ class LibraryManager(HGRepoManager):
 		"""
 		excluded = self._get_excluded()
 		rev = None
-		match = cmdutil.match(self.repo, [], {}, default='relglob')
+		match = mercurial.cmdutil.match(self.repo, [], {}, default='relglob')
 		match.bad = lambda x, y: False
 		return (abs
 			for abs in self.repo[rev].walk(match)
@@ -229,14 +232,13 @@ class LegacyLibraryManager(LibraryManager):
 	of the Mercurial libraries.
 	"""
 	def version_match(self):
-		return version in self.OLD_VERSIONS
+		return mercurial.__version__.version in self.OLD_VERSIONS
 
 	def find_files(self):
 		excluded = self._get_excluded()
-		from mercurial import util
 		node = None
-		walker = cmdutil.walk(self.repo, [], {}, node=node,
-			badmatch=util.always, default='relglob')
+		walker = mercurial.cmdutil.walk(self.repo, [], {}, node=node,
+			badmatch=mercurial.util.always, default='relglob')
 		return (abs
 			for src, abs, rel, exact in walker
 			if src != 'b' and (node or abs in repo.dirstate)
