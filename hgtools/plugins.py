@@ -46,6 +46,10 @@ def patch_egg_info(force_hg_version=False):
 			force_hg_version
 			or getattr(self.distribution, 'use_hg_version', False)
 		)
+		if force_hg_version:
+			# disable patched `tagged_version` to avoid affecting
+			#  subsequent installs in the same interpreter instance.
+			egg_info.tagged_version = orig_ver
 		if using_hg_version:
 			result = safe_version(self.distribution.get_version())
 		else:

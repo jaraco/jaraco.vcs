@@ -1,5 +1,3 @@
-.. -*- restructuredtext -*-
-
 hgtools
 =======
 
@@ -115,6 +113,12 @@ available or fails to run).
 
 Changes
 *******
+
+1.0.1
+~~~~~
+
+* Fix issue #6 where the force_hg_version flag was affecting installation
+  of tagged packages not employing hgtools.
 
 1.0
 ~~~
