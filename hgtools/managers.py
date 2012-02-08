@@ -4,8 +4,10 @@ to Mercurial functionality.
 """
 
 import os
+import posixpath
 import subprocess
 import re
+import itertools
 
 from .py25compat import namedtuple, next
 from . import versioning
@@ -71,6 +73,28 @@ class HGRepoManager(versioning.VersionManagement, object):
 	def is_modified(self):
 		'Does the current working copy have modifications'
 		raise NotImplementedError()
+
+	def find_all_files(self):
+		"""
+		Find files including those in subrepositories.
+		"""
+		files = self.find_files()
+		subrepo_files = (
+			posixpath.join(subrepo.location, filename)
+			for subrepo in self.subrepos()
+			for filename in subrepo.find_files()
+		)
+		return itertools.chain(files, subrepo_files)
+
+	def subrepos(self):
+		try:
+			with open(posixpath.join(self.location, '.hgsub')) as file:
+				subs = list(file)
+		except OSError:
+			subs = []
+
+		locs = [part.partition('=')[0].strip() for part in subs]
+		return [self.__class__(posixpath.join(self.location, loc)) for loc in locs]
 
 class SubprocessManager(HGRepoManager):
 	"""

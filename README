@@ -114,6 +114,12 @@ available or fails to run).
 Changes
 *******
 
+1.1
+~~~
+
+* Added support for subrepos. The setuptools plugin will now traverse
+  subrepos when finding files.
+
 1.0.1
 ~~~~~
 

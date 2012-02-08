@@ -20,7 +20,7 @@ def file_finder(dirname="."):
 		valid_mgrs = managers.HGRepoManager.existing_only(valid_mgrs)
 		for mgr in valid_mgrs:
 			try:
-				return mgr.find_files()
+				return mgr.find_all_files()
 			except Exception:
 				e = sys.exc_info()[1]
 				distutils.log.warn("hgtools.%s could not find files: %s", mgr, e)
