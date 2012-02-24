@@ -3,6 +3,8 @@ hgtools implements several repo managers, each of which provides an interface
 to Mercurial functionality.
 """
 
+from __future__ import with_statement
+
 import os
 import posixpath
 import subprocess

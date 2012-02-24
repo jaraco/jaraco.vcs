@@ -114,6 +114,11 @@ available or fails to run).
 Changes
 *******
 
+1.1.2
+~~~~~
+
+* Restored Python 2.5 compatibility.
+
 1.1
 ~~~
 
