@@ -58,8 +58,13 @@ def patch_egg_info(force_hg_version=False):
 		return result
 	egg_info.tagged_version = tagged_version
 
-def calculate_version(options={}):
+def _calculate_version(mgr, options):
 	default_increment = options.get('increment')
+	repo_exists = bool(mgr.find_root())
+	return (mgr.get_current_version(default_increment)
+		if repo_exists else default_increment)
+
+def calculate_version(options={}):
 	# The version is cached in the tag_build value in setup.cfg (so that
 	#  sdist packages will have a copy of the version as determined at
 	#  the build environment).
@@ -81,8 +86,7 @@ def calculate_version(options={}):
 		#  is not implemented.
 		os.environ['HGTOOLS_FORCE_CMD'] = 'True'
 		mgr = managers.HGRepoManager.get_first_valid_manager()
-		repo_exists = bool(mgr.find_root())
-		version = mgr.get_current_version(default_increment) if repo_exists else default_increment
+		version = _calculate_version(mgr, options)
 	return version
 
 def version_calc(dist, attr, value):
