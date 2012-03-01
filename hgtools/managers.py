@@ -113,9 +113,11 @@ class SubprocessManager(HGRepoManager):
 		return super(SubprocessManager, self).is_valid()
 
 	def _run_cmd(self, cmd):
+		# pass an explicit copy of the environ rather than letting the child
+		#  inherit the environment (which may differ). See #7 for details.
+		env = os.environ.copy()
 		proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
-			stderr=subprocess.PIPE,
-			cwd=self.location)
+			stderr=subprocess.PIPE, cwd=self.location, env=env)
 		stdout, stderr = proc.communicate()
 		if not proc.returncode == 0:
 			raise RuntimeError(stderr.strip() or stdout.strip())
@@ -270,4 +272,3 @@ class LegacyLibraryManager(LibraryManager):
 			if src != 'b' and (node or abs in repo.dirstate)
 			and abs not in excluded
 			)
-
