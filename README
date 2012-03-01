@@ -120,7 +120,7 @@ one or more of the following parameters:
    and the `options` is the dictionary passed to use_hg_version.
 
    Use this option, for example, to include the mercurial hash or local
-   revision ID in the version.
+   revision ID in the version::
 
        def id_as_version(mgr, options):
            "Always return the mercurial revision ID as the version"
@@ -128,7 +128,7 @@ one or more of the following parameters:
            return id_n
 
        setup(
-           ...
+           #...
            use_hg_version={'version_handler': id_as_version},
        )
 
