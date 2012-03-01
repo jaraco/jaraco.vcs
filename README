@@ -93,15 +93,55 @@ using auto-versioning, you should not use setuptools tags explicitly.
 
 See the jaraco.util setup.py for an example of this technique.
 
-It's also possible to send keyword parameters to use_hg_version to
-tweak how it generates version numbers. For example, if the default
-increment of 0.1 is not appropriate for your application, you may specify
-another::
+Versioning Parameters
+~~~~~~~~~~~~~~~~~~~~~
 
-    use_hg_version = {'increment': '0.0.1'},
+It's also possible to pass keyword parameters to use_hg_version to
+tweak how it generates version numbers. To pass parameters, instead of
+setting `use_hg_version = True`, set it to a non-empty dictionary with
+one or more of the following parameters:
 
-The above configuration will indicate to hgtools to guess the next version
-of the application to be 0.0.1 greater than the last tagged release.
+ - `increment`:
+   A string indicating the default version increment for the project.
+   By default, this value is '0.1', meaning hgtools will use the version
+   '1.1dev' for builds following the 1.0 release and '1.10dev' for builds
+   following a 1.9.3 release. Set this value to '1.0' or '0.0.1' for the
+   current tree to help hgtools guess the target version.
+
+ - `version_handler`:
+   A Python function with the following signature::
+
+       def calc_version(mgr, options):
+           return str('1.0')
+
+   hgtools will use this function instead of its default implementation
+   to customize the version number calculation. The `mgr` object is the
+   `hgtools.managers.HGRepoManager` object referencing the local repo
+   and the `options` is the dictionary passed to use_hg_version.
+
+   Use this option, for example, to include the mercurial hash or local
+   revision ID in the version.
+
+       def id_as_version(mgr, options):
+           "Always return the mercurial revision ID as the version"
+           id_n = mgr._run_cmd([mgr.exe, 'id', '-n']).strip()
+           return id_n
+
+       setup(
+           ...
+           use_hg_version={'version_handler': id_as_version},
+       )
+
+   The first thing to note is the mgr does not yet provide a nice
+   interface for getting anything but the tags for a revision, so the
+   example digs into the underlying API to extract the ID. hgtools should
+   provide better support in the HGRepoManager classes in future releases.
+
+   Use this feature with caution. If you have not already read the
+   `setuptools documentation on specifying a project version
+   <http://packages.python.org/distribute/setuptools.html#specifying-your-project-s-version>`_,
+   the author recommends you do read that.
+
 
 Options
 *******
@@ -113,6 +153,11 @@ available or fails to run).
 
 Changes
 *******
+
+1.2
+~~~
+
+* Implemented the `version_handler` version parameter. Fixes #5.
 
 1.1.3
 ~~~~~

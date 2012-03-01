@@ -86,7 +86,8 @@ def calculate_version(options={}):
 		#  is not implemented.
 		os.environ['HGTOOLS_FORCE_CMD'] = 'True'
 		mgr = managers.HGRepoManager.get_first_valid_manager()
-		version = _calculate_version(mgr, options)
+		version_handler = options.get('version_handler', _calculate_version)
+		version = version_handler(mgr, options)
 	return version
 
 def version_calc(dist, attr, value):
