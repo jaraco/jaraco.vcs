@@ -1,6 +1,10 @@
-from distutils.version import StrictVersion
+from __future__ import division
+
 import operator
+
 from .py25compat import next
+
+from distutils.version import StrictVersion
 
 def find(pred, items):
 	"""
@@ -19,17 +23,17 @@ def rfind(pred, items):
 	Find the index of the last element in items for which pred returns
 	True. Returns a negative number useful for indexing from the end
 	of a list or tuple.
-	
+
 	>>> rfind(lambda x: x > 3, [5,4,3,2,1])
 	-4
 	"""
-	return -find(pred, reversed(items))-1
+	return -find(pred, reversed(items)) - 1
 
 class SummableVersion(StrictVersion):
 	"""
 	A special version of a StrictVersion which can be added to another
 	StrictVersion.
-	
+
 	>>> SummableVersion('1.1') + StrictVersion('2.3')
 	SummableVersion ('3.4')
 	"""
@@ -48,11 +52,11 @@ class SummableVersion(StrictVersion):
 		'3.1'
 		"""
 		nonzero = lambda x: x != 0
-		version_len = 3 # strict versions are always a tuple of 3
+		version_len = 3  # strict versions are always a tuple of 3
 		significant_pos = rfind(nonzero, significant_version.version)
 		significant_pos = version_len + significant_pos + 1
 		self.version = (self.version[:significant_pos]
-			+ (0,)*(version_len - significant_pos) )
+			+ (0,) * (version_len - significant_pos))
 
 	def as_number(self):
 		"""
@@ -60,14 +64,14 @@ class SummableVersion(StrictVersion):
 		'1.93'
 		"""
 		def combine(subver, ver):
-			return subver/10.0 + ver
+			return subver / 10 + ver
 		return reduce(combine, reversed(self.version))
 
 class VersionManagement(object):
 	"""
 	Version functions for HGRepoManager classes
 	"""
-	
+
 	increment = '0.0.1'
 
 	def get_strict_versions(self):
@@ -115,7 +119,7 @@ class VersionManagement(object):
 		"""
 		ver = (
 			self.get_tagged_version()
-			or str(self.get_next_version(increment))+'dev'
+			or str(self.get_next_version(increment)) + 'dev'
 			)
 		return str(ver)
 
@@ -131,10 +135,10 @@ class VersionManagement(object):
 		"""
 		Given a simple application version (as a StrictVersion),
 		and an increment (1.0, 0.1, or 0.0.1), guess the next version.
-		
+
 		# set up a shorthand for examples
 		>>> VM_infer = lambda *params: str(VersionManagement.infer_next_version(*params))
-		
+
 		>>> VM_infer('3.2', '0.0.1')
 		'3.2.1'
 		>>> VM_infer(StrictVersion('3.2'), '0.0.1')
@@ -143,15 +147,15 @@ class VersionManagement(object):
 		'3.3'
 		>>> VM_infer('3.1.2', '1.0')
 		'4.0'
-		
+
 		Subversions never increment parent versions
 		>>> VM_infer('3.0.9', '0.0.1')
 		'3.0.10'
-		
+
 		If it's a prerelease version, just remove the prerelease.
 		>>> VM_infer('3.1a1', '0.0.1')
 		'3.1'
-		
+
 		If there is no last version, use the increment itself
 		>>> VM_infer(None, '0.1')
 		'0.1'
@@ -166,4 +170,3 @@ class VersionManagement(object):
 		sum = last_version + increment
 		sum.reset_less_significant(increment)
 		return sum
-

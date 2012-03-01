@@ -2,7 +2,6 @@ import os
 import sys
 
 from . import managers
-from .py25compat import namedtuple
 
 __all__ = ['file_finder', 'version_calc']
 
@@ -40,6 +39,7 @@ def patch_egg_info(force_hg_version=False):
 	from pkg_resources import safe_version
 	import functools
 	orig_ver = egg_info.tagged_version
+
 	@functools.wraps(orig_ver)
 	def tagged_version(self):
 		using_hg_version = (
@@ -64,10 +64,10 @@ def calculate_version(options={}):
 	#  sdist packages will have a copy of the version as determined at
 	#  the build environment).
 	try:
-		from ConfigParser import ConfigParser
+		import configparser
 	except ImportError:
-		from configparser import ConfigParser
-	parser = ConfigParser()
+		import ConfigParser as configparser
+	parser = configparser.ConfigParser()
 	parser.read('setup.cfg')
 	has_tag_build = (parser.has_section('egg_info')
 		and 'tag_build' in parser.options('egg_info'))
@@ -92,8 +92,7 @@ def version_calc(dist, attr, value):
 	bool(value) should be true to invoke this plugin.
 	value may optionally be a dict and supply options to the plugin.
 	"""
-	import distutils.log
-	if not value or not attr=='use_hg_version': return
+	if not value or not attr == 'use_hg_version': return
 	options = value if isinstance(value, dict) else {}
 	dist.metadata.version = calculate_version(options)
 	patch_egg_info()
