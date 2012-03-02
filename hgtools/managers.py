@@ -92,7 +92,7 @@ class HGRepoManager(versioning.VersionManagement, object):
 		try:
 			with open(posixpath.join(self.location, '.hgsub')) as file:
 				subs = list(file)
-		except OSError:
+		except Exception:
 			subs = []
 
 		locs = [part.partition('=')[0].strip() for part in subs]
