@@ -158,6 +158,8 @@ Changes
 ~~~
 
 * Implemented the `version_handler` version parameter. Fixes #5.
+* If multiple tags are given for a revision, the last tag is used instead
+  of the first.
 
 1.1.3
 ~~~~~

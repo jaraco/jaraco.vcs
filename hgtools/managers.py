@@ -160,7 +160,9 @@ class SubprocessManager(HGRepoManager):
 			'( (?P<tags>.*))?')
 		m = pat.match(res)
 		has_tags = m and m.group('tags')
-		return m.group('tags').split('/')[0] if has_tags else None
+		all_tags = m.group('tags').split('/') if has_tags else []
+		# if there are multiple tags, always use the last tag
+		return all_tags[-1] if all_tags else None
 
 	def get_tags(self):
 		tagged_revision = namedtuple('tagged_revision', 'tag revision')
