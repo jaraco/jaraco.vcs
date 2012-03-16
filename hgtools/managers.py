@@ -114,9 +114,27 @@ class SubprocessManager(HGRepoManager):
 		return super(SubprocessManager, self).is_valid()
 
 	def _run_cmd(self, cmd):
-		# pass an explicit copy of the environ rather than letting the child
-		#  inherit the environment (which may differ). See #7 for details.
+
+		# Work around a potential version conflict with hg.
+		# =================================================
+		# https://bitbucket.org/jaraco/hgtools/issue/7/
+		# 
+		# There's an environment variable called MACOSX_DEPLOYMENT_TARGET that
+		# affects hg's operation (I don't fully understand how; afaict it's a
+		# distutils thing). If it exists in our environment with a different
+		# value than that which hg expects, then hg fails with distutils.errors
+		# .DistutilsPlatformError. The first attempt at fixing this was to copy
+		# os.environ without explicitly deleting MACOSX_DEPLOYMENT_TARGET. This
+		# works in the case where os.putenv has changed the environment without
+		# changing os.environ (see also: the docs for os.putenv), but not in
+		# the case where the key ends up in os.environ truly and for real. I am
+		# now seeing the latter case in the wild, so I'm explicitly removing it
+		# if it exists.
+
 		env = os.environ.copy()
+		if 'MACOSX_DEPLOYMENT_TARGET' in env:
+			del env['MACOSX_DEPLOYMENT_TARGET']
+
 		proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
 			stderr=subprocess.PIPE, cwd=self.location, env=env)
 		stdout, stderr = proc.communicate()
