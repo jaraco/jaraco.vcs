@@ -10,6 +10,7 @@ import posixpath
 import subprocess
 import re
 import itertools
+import operator
 
 from .py25compat import namedtuple, next
 from . import versioning
@@ -148,21 +149,42 @@ class SubprocessManager(HGRepoManager):
 		return self.get_tag(parent_rev)
 
 	def get_tag(self, rev=None):
-		cmd = [self.exe, 'identify', '-v']
-		if rev:
-			cmd.extend(['--rev', str(rev)])
-		# workaround for #4
-		cmd.extend(['--config', 'defaults.identify='])
-		res = self._run_cmd(cmd)
-		pat = re.compile(
-			'(?P<shorthash>\S+)'
-			'( \((?P<branch>.+)\))?'
-			'( (?P<tags>.*))?')
-		m = pat.match(res)
-		has_tags = m and m.group('tags')
-		all_tags = m.group('tags').split('/') if has_tags else []
+		"""
+		Get the most recent tag for the given revision specifier (or the
+		current revision if not specified).
+		"""
+		rev_num = self._get_rev_num(rev)
+		# Note that id might end with '+', indicating local modifications,
+		# but it will fail to match any tag.
+		all_tags = self._get_tags_by_num().get(rev_num, [])
 		# if there are multiple tags, always use the last tag
 		return all_tags[-1] if all_tags else None
+
+	def _get_rev_num(self, rev=None):
+		"""
+		Determine the revision number for a given revision specifier.
+		"""
+		# first, determine the numeric ID
+		cmd = [self.exe, 'identify', '--num']
+		# workaround for #4
+		cmd.extend(['--config', 'defaults.identify='])
+		if rev:
+			cmd.extend(['--rev', rev])
+		res = self._run_cmd(cmd)
+		return res.strip()
+
+	def _get_tags_by_num(self):
+		"""
+		Return a dictionary mapping revision number to tags for that number.
+		"""
+		by_revision = operator.attrgetter('revision')
+		tags = sorted(self.get_tags(), key=by_revision)
+		revision_tags = itertools.groupby(tags, key=by_revision)
+		get_id = lambda rev: rev.split(':', 1)[0]
+		return dict(
+			(get_id(rev), [tr.tag for tr in tr_list])
+			for rev, tr_list in revision_tags
+		)
 
 	def get_tags(self):
 		tagged_revision = namedtuple('tagged_revision', 'tag revision')

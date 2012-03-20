@@ -161,6 +161,12 @@ Changes
 * If multiple tags are given for a revision, the last tag is used instead
   of the first.
 
+1.1.5
+~~~~~
+
+* Fix issue #8 - Re-wrote SubprocessManager.get_tag to extract the tag using
+  `hg tags` for more reliable tag resolution.
+
 1.1.3
 ~~~~~
 
