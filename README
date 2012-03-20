@@ -161,6 +161,12 @@ Changes
 * If multiple tags are given for a revision, the last tag is used instead
   of the first.
 
+1.1.6
+~~~~~
+
+* More aggressively construct a the environment when running `hg` in a
+  subprocess. Fixes another manifestation of #7. Thanks whit537.
+
 1.1.5
 ~~~~~
 

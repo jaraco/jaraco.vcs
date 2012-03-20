@@ -113,12 +113,23 @@ class SubprocessManager(HGRepoManager):
 			return False
 		return super(SubprocessManager, self).is_valid()
 
-	def _run_cmd(self, cmd):
-		# pass an explicit copy of the environ rather than letting the child
-		#  inherit the environment (which may differ). See #7 for details.
+	@staticmethod
+	def _safe_env():
+		"""
+		Return an environment safe for calling an `hg` subprocess.
+
+		Removes MACOSX_DEPLOYMENT_TARGET from the env, as if there's a
+		mismatch between the local Python environment and the environment
+		in which `hg` is installed, it will cause an exception. See
+		https://bitbucket.org/jaraco/hgtools/issue/7 for details.
+		"""
 		env = os.environ.copy()
+		env.pop('MACOSX_DEPLOYMENT_TARGET', None)
+		return env
+
+	def _run_cmd(self, cmd):
 		proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
-			stderr=subprocess.PIPE, cwd=self.location, env=env)
+			stderr=subprocess.PIPE, cwd=self.location, env=self._safe_env())
 		stdout, stderr = proc.communicate()
 		if not proc.returncode == 0:
 			raise RuntimeError(stderr.strip() or stdout.strip())
