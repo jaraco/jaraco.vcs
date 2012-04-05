@@ -145,7 +145,15 @@ class SubprocessManager(HGRepoManager):
 		"""
 		Find versioned files in self.location
 		"""
-		return self._run_cmd([self.exe, 'locate']).splitlines()
+		cmd = [self.exe, 'locate', '-I', '.']
+		all_files = self._run_cmd(cmd).splitlines()
+		# now we have a list of all files in self.location relative to
+		#  self.find_root()
+		# Remove the parent dirs from them.
+		from_root = os.path.relpath(self.location, self.find_root())
+		loc_rel_paths = [os.path.relpath(path, from_root)
+			for path in all_files]
+		return loc_rel_paths
 
 	def get_parent_tag(self, rev=None):
 		cmd = [self.exe, 'parents']

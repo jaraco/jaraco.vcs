@@ -154,6 +154,15 @@ available or fails to run).
 Changes
 *******
 
+1.2.1
+~~~~~
+
+* Fix issue #9 - The repo managers and thus the setuptools plugin will no
+  longer find files that aren't in the location specified. The
+  LibraryManagers already will throw an error in this case, but now the
+  SubprocessManager does what's best and only returns files relative
+  to the location.
+
 1.2
 ~~~
 
