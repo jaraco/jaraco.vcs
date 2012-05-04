@@ -113,3 +113,12 @@ class TestTags(object):
 		self.mgr._run_cmd([self.mgr.exe, 'tag', '-r', '1.0', '1.1'])
 		self.mgr._run_cmd([self.mgr.exe, 'update', '1.0'])
 		assert self.mgr.get_tag() == '1.1'
+
+	def test_two_tags_same_revision_lexicographically_earlier(self):
+		"""
+		Always return the latest tag for a given revision
+		"""
+		self.mgr._run_cmd([self.mgr.exe, 'tag', '1.9'])
+		self.mgr._run_cmd([self.mgr.exe, 'tag', '-r', '1.9', '1.10'])
+		self.mgr._run_cmd([self.mgr.exe, 'update', '1.9'])
+		assert self.mgr.get_tag() == '1.10'
