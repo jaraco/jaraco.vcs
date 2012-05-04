@@ -77,9 +77,30 @@ class TestRelativePaths(object):
 			assert test_mgr.find_files() == ['baz']
 
 class TestTags(object):
+	def setup_method(self, method):
+		self.context = test_repo()
+		self.context.__enter__()
+		self.mgr = managers.SubprocessManager('.')
+
+	def teardown_method(self, method):
+		del self.mgr
+		self.context.__exit__(None, None, None)
+		del self.context
+
 	def test_single_tag(self):
-		with test_repo():
-			test_mgr = managers.SubprocessManager('.')
-			test_mgr._run_cmd([test_mgr.exe, 'tag', '1.0'])
-			test_mgr._run_cmd([test_mgr.exe, 'update', '1.0'])
-			assert test_mgr.get_tag() == '1.0'
+		self.mgr._run_cmd([self.mgr.exe, 'tag', '1.0'])
+		assert self.mgr.get_tag() == 'tip'
+		self.mgr._run_cmd([self.mgr.exe, 'update', '1.0'])
+		assert self.mgr.get_tag() == '1.0'
+
+	def test_parent_tag(self):
+		self.mgr._run_cmd([self.mgr.exe, 'tag', '1.0'])
+		assert self.mgr.get_tag() == 'tip'
+		assert self.mgr.get_parent_tag() == 'tip'
+		assert self.mgr.get_parent_tag('.') == '1.0'
+		assert self.mgr.get_parent_tag('tip') == '1.0'
+		self.mgr._run_cmd([self.mgr.exe, 'tag', '1.1'])
+		assert self.mgr.get_tag() == 'tip'
+		assert self.mgr.get_parent_tag() == 'tip'
+		assert self.mgr.get_parent_tag('.') == '1.1'
+		assert self.mgr.get_parent_tag('tip') == '1.1'
