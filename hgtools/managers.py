@@ -176,8 +176,10 @@ class SubprocessManager(HGRepoManager):
 		# Note that id might end with '+', indicating local modifications,
 		# but it will fail to match any tag.
 		all_tags = self._get_tags_by_num().get(rev_num, [])
-		# if there are multiple tags, always use the last tag
-		return all_tags[-1] if all_tags else None
+		# mercurial returns tags for the same revision sorted
+		#  lexicographically (decreasing). Curse!!
+		# For now, assume the greatest is the latest.
+		return all_tags[0] if all_tags else None
 
 	def _get_rev_num(self, rev=None):
 		"""
