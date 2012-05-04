@@ -75,3 +75,11 @@ class TestRelativePaths(object):
 			os.chdir('bar')
 			test_mgr = managers.SubprocessManager('.')
 			assert test_mgr.find_files() == ['baz']
+
+class TestTags(object):
+	def test_single_tag(self):
+		with test_repo():
+			test_mgr = managers.SubprocessManager('.')
+			test_mgr._run_cmd([test_mgr.exe, 'tag', '1.0'])
+			test_mgr._run_cmd([test_mgr.exe, 'update', '1.0'])
+			assert test_mgr.get_tag() == '1.0'
