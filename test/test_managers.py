@@ -104,3 +104,12 @@ class TestTags(object):
 		assert self.mgr.get_parent_tag() == 'tip'
 		assert self.mgr.get_parent_tag('.') == '1.1'
 		assert self.mgr.get_parent_tag('tip') == '1.1'
+
+	def test_two_tags_same_revision(self):
+		"""
+		Always return the latest tag for a given revision
+		"""
+		self.mgr._run_cmd([self.mgr.exe, 'tag', '1.0'])
+		self.mgr._run_cmd([self.mgr.exe, 'tag', '-r', '1.0', '1.1'])
+		self.mgr._run_cmd([self.mgr.exe, 'update', '1.0'])
+		assert self.mgr.get_tag() == '1.1'
