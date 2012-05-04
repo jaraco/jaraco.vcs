@@ -173,13 +173,25 @@ class SubprocessManager(HGRepoManager):
 		current revision if not specified).
 		"""
 		rev_num = self._get_rev_num(rev)
-		# Note that id might end with '+', indicating local modifications,
-		# but it will fail to match any tag.
-		all_tags = self._get_tags_by_num().get(rev_num, [])
-		# mercurial returns tags for the same revision sorted
-		#  lexicographically (decreasing). Curse!!
-		# For now, assume the greatest is the latest.
-		return all_tags[0] if all_tags else None
+		# rev_num might end with '+', indicating loca lmodifications.
+		if rev_num.endswith('+'): return
+		all_tags = self._read_tags_for_rev(rev_num)
+		return all_tags[-1] if all_tags else None
+
+	def _read_tags_for_rev(self, rev_num):
+		"""
+		Return the tags for revision sorted by when the tags were
+		created (latest first)
+		"""
+		cmd = [self.exe, 'log', '-r', rev_num]
+		res = self._run_cmd(cmd)
+		tag_lines = [
+			line for line in res.splitlines()
+			if line.startswith('tag:')
+		]
+		header_pattern = re.compile('(?P<header>\w+?):\s+(?P<value>.*)')
+		return [header_pattern.match(line).groupdict()['value']
+			for line in tag_lines]
 
 	def _get_rev_num(self, rev=None):
 		"""
