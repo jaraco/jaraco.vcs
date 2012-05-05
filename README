@@ -157,6 +157,14 @@ Changes
 2.0
 ~~~
 
+* Refactored HGRepoManager to better support multiple tags:
+  - `.get_tag` replaced by `.get_tags`, which returns a set of tags
+    for a specific revision. This is currently a set because mercurial
+    does not retain any meaningful order of the tags.
+  - `.get_tags` replaced by `.get_repo_tags`.
+  - `.get_parent_tag` replaced by `.get_parent_tags`.
+  - added `.get_parents` which returns the revision(s) of the specified
+    revision.
 * Removed support for older versions of mercurial (LegacyLibraryManager).
 
 1.2.1

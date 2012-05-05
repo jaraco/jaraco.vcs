@@ -79,7 +79,7 @@ class VersionManagement(object):
 		Return all version tags that can be represented by a
 		StrictVersion.
 		"""
-		for tag in self.get_tags():
+		for tag in self.get_repo_tags():
 			try:
 				yield StrictVersion(tag.tag)
 			except ValueError:
@@ -92,9 +92,11 @@ class VersionManagement(object):
 		the tagged commit and the tip and there are no local
 		modifications, use the tag on the parent changeset.
 		"""
-		tag = self.get_tag()
+		tags = self.get_tags()
+		tag = tags[0] if tags else None
 		if tag == 'tip' and not self.is_modified():
-			ptag = self.get_parent_tag('tip')
+			ptags = self.get_parent_tags('tip')
+			ptag = ptags[0] if ptags else None
 			if ptag:
 				tag = ptag
 		try:

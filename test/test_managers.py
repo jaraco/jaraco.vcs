@@ -89,21 +89,21 @@ class TestTags(object):
 
 	def test_single_tag(self):
 		self.mgr._run_cmd([self.mgr.exe, 'tag', '1.0'])
-		assert self.mgr.get_tag() == 'tip'
+		assert self.mgr.get_tags() == set(['tip'])
 		self.mgr._run_cmd([self.mgr.exe, 'update', '1.0'])
-		assert self.mgr.get_tag() == '1.0'
+		assert self.mgr.get_tags() == set(['1.0'])
 
 	def test_parent_tag(self):
 		self.mgr._run_cmd([self.mgr.exe, 'tag', '1.0'])
-		assert self.mgr.get_tag() == 'tip'
-		assert self.mgr.get_parent_tag() == 'tip'
-		assert self.mgr.get_parent_tag('.') == '1.0'
-		assert self.mgr.get_parent_tag('tip') == '1.0'
+		assert self.mgr.get_tags() == set(['tip'])
+		assert self.mgr.get_parent_tags() == set(['tip'])
+		assert self.mgr.get_parent_tags('.') == set(['1.0'])
+		assert self.mgr.get_parent_tags('tip') == set(['1.0'])
 		self.mgr._run_cmd([self.mgr.exe, 'tag', '1.1'])
-		assert self.mgr.get_tag() == 'tip'
-		assert self.mgr.get_parent_tag() == 'tip'
-		assert self.mgr.get_parent_tag('.') == '1.1'
-		assert self.mgr.get_parent_tag('tip') == '1.1'
+		assert self.mgr.get_tags() == set(['tip'])
+		assert self.mgr.get_parent_tags() == set(['tip'])
+		assert self.mgr.get_parent_tags('.') == set(['1.1'])
+		assert self.mgr.get_parent_tags('tip') == set(['1.1'])
 
 	def test_two_tags_same_revision(self):
 		"""
@@ -112,7 +112,7 @@ class TestTags(object):
 		self.mgr._run_cmd([self.mgr.exe, 'tag', '1.0'])
 		self.mgr._run_cmd([self.mgr.exe, 'tag', '-r', '1.0', '1.1'])
 		self.mgr._run_cmd([self.mgr.exe, 'update', '1.0'])
-		assert self.mgr.get_tag() == '1.1'
+		assert set(self.mgr.get_tags()) == set(['1.0', '1.1'])
 
 	def test_two_tags_same_revision_lexicographically_earlier(self):
 		"""
@@ -121,4 +121,4 @@ class TestTags(object):
 		self.mgr._run_cmd([self.mgr.exe, 'tag', '1.9'])
 		self.mgr._run_cmd([self.mgr.exe, 'tag', '-r', '1.9', '1.10'])
 		self.mgr._run_cmd([self.mgr.exe, 'update', '1.9'])
-		assert self.mgr.get_tag() == '1.10'
+		assert set(self.mgr.get_tags()) == set(['1.9', '1.10'])

@@ -66,28 +66,24 @@ class SubprocessManager(base.HGRepoManager):
 			for path in all_files]
 		return loc_rel_paths
 
-	def get_parent_tag(self, rev=None):
+	def get_parent_revs(self, rev=None):
 		cmd = [self.exe, 'parents']
 		if rev:
 			cmd.extend(['--rev', str(rev)])
 		out = self._run_cmd(cmd)
 		cs_pat = '^changeset:\s+(?P<local>\d+):(?P<hash>[0-9a-zA-Z]+)'
-		matches = re.findall(cs_pat, out)
-		if not len(matches) == 1:
-			return
-		_, parent_rev = matches.pop()
-		return self.get_tag(parent_rev)
+		return (match.groupdict()['local'] for match in
+			re.finditer(cs_pat, out))
 
-	def get_tag(self, rev=None):
+	def get_tags(self, rev=None):
 		"""
-		Get the most recent tag for the given revision specifier (or the
+		Get the tags for the given revision specifier (or the
 		current revision if not specified).
 		"""
 		rev_num = self._get_rev_num(rev)
 		# rev_num might end with '+', indicating loca lmodifications.
 		if rev_num.endswith('+'): return
-		all_tags = self._read_tags_for_rev(rev_num)
-		return all_tags[-1] if all_tags else None
+		return set(self._read_tags_for_rev(rev_num))
 
 	def _read_tags_for_rev(self, rev_num):
 		"""
@@ -101,8 +97,8 @@ class SubprocessManager(base.HGRepoManager):
 			if line.startswith('tag:')
 		]
 		header_pattern = re.compile('(?P<header>\w+?):\s+(?P<value>.*)')
-		return [header_pattern.match(line).groupdict()['value']
-			for line in tag_lines]
+		return (header_pattern.match(line).groupdict()['value']
+			for line in tag_lines)
 
 	def _get_rev_num(self, rev=None):
 		"""
@@ -130,7 +126,7 @@ class SubprocessManager(base.HGRepoManager):
 			for rev, tr_list in revision_tags
 		)
 
-	def get_tags(self):
+	def get_repo_tags(self):
 		tagged_revision = namedtuple('tagged_revision', 'tag revision')
 		lines = self._run_cmd([self.exe, 'tags']).splitlines()
 		return (
