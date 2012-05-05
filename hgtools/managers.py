@@ -38,9 +38,9 @@ class HGRepoManager(versioning.VersionManagement, object):
 		"""
 		force_cmd = os.environ.get('HGTOOLS_FORCE_CMD', False)
 		class_order = (
-			(SubprocessManager, LibraryManager, LegacyLibraryManager)
+			(SubprocessManager, LibraryManager)
 			if force_cmd else
-			(LibraryManager, LegacyLibraryManager, SubprocessManager)
+			(LibraryManager, SubprocessManager)
 			)
 		managers = (cls(location) for cls in class_order)
 		return (mgr for mgr in managers if mgr.is_valid())
@@ -308,24 +308,5 @@ class LibraryManager(HGRepoManager):
 		return (abs
 			for abs in self.repo[rev].walk(match)
 			if (rev or abs in self.repo.dirstate)
-			and abs not in excluded
-			)
-
-class LegacyLibraryManager(LibraryManager):
-	"""
-	A special subclass of LibraryManager which works with older versions
-	of the Mercurial libraries.
-	"""
-	def version_match(self):
-		return mercurial.__version__.version in self.OLD_VERSIONS
-
-	def find_files(self):
-		excluded = self._get_excluded()
-		node = None
-		walker = mercurial.cmdutil.walk(self.repo, [], {}, node=node,
-			badmatch=mercurial.util.always, default='relglob')
-		return (abs
-			for src, abs, rel, exact in walker
-			if src != 'b' and (node or abs in repo.dirstate)
 			and abs not in excluded
 			)

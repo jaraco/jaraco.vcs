@@ -154,6 +154,11 @@ available or fails to run).
 Changes
 *******
 
+2.0
+~~~
+
+* Removed support for older versions of mercurial (LegacyLibraryManager).
+
 1.2.1
 ~~~~~
 
