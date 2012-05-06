@@ -29,27 +29,18 @@ class HGRepoManager(versioning.VersionManagement, object):
 	def setup(self):
 		pass
 
-	@staticmethod
-	def get_valid_managers(location):
+	@classmethod
+	def get_valid_managers(cls, location):
 		"""
 		Get the valid HGRepoManagers for this location.
 		"""
-		force_cmd = os.environ.get('HGTOOLS_FORCE_CMD', False)
-		# until we have importlib, use __import__
+		# until we have importlib (python 2.7), use __import__
 		__import__('hgtools.managers.subprocess')
 		__import__('hgtools.managers.library')
-		class_order = (
-			(
-				hgtools.managers.subprocess.SubprocessManager,
-				hgtools.managers.library.LibraryManager,
-			)
-			if force_cmd else
-			(
-				hgtools.managers.library.LibraryManager,
-				hgtools.managers.subprocess.SubprocessManager,
-			)
-		)
-		all_managers = (cls(location) for cls in class_order)
+		by_priority_attr = lambda c: getattr(c, 'priority', 0)
+		classes = sorted(cls.__subclasses__(), key = by_priority_attr,
+			reverse = True)
+		all_managers = (c(location) for c in classes)
 		return (mgr for mgr in all_managers if mgr.is_valid())
 
 	@staticmethod

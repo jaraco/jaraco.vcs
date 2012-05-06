@@ -15,6 +15,7 @@ class SubprocessManager(base.HGRepoManager):
 	An HGRepoManager implemented by calling into the 'hg' command-line
 	as a subprocess.
 	"""
+	priority = 1
 	exe = 'hg'
 
 	def is_valid(self):

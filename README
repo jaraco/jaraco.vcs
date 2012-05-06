@@ -143,14 +143,6 @@ one or more of the following parameters:
    the author recommends you do read that.
 
 
-Options
-*******
-
-Set the ``HGTOOLS_FORCE_CMD`` environment variable before running
-setup.py if you want to enforce the use of the hg command (though it
-will then fall back to the native libraries if the command is not
-available or fails to run).
-
 Changes
 *******
 
@@ -166,6 +158,8 @@ Changes
   - added `.get_parents` which returns the revision(s) of the specified
     revision.
 * Removed support for older versions of mercurial (LegacyLibraryManager).
+* The subprocess manager is now the default. The HGTOOLS_FORCE_CMD variable
+  no longer has any effect on hgtools.
 * Version detection now resolves multiple tags on the same revision by
   choosing the greatest version.
 
