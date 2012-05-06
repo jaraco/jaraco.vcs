@@ -81,9 +81,12 @@ class SubprocessManager(base.HGRepoManager):
 		current revision if not specified).
 		"""
 		rev_num = self._get_rev_num(rev)
-		# rev_num might end with '+', indicating loca lmodifications.
-		if rev_num.endswith('+'): return
-		return set(self._read_tags_for_rev(rev_num))
+		# rev_num might end with '+', indicating local modifications.
+		return (
+			set(self._read_tags_for_rev(rev_num))
+			if not rev_num.endswith('+')
+			else set([])
+		)
 
 	def _read_tags_for_rev(self, rev_num):
 		"""

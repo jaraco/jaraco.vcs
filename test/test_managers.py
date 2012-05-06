@@ -47,6 +47,9 @@ def test_repo():
 		touch('bar/baz')
 		mgr._run_cmd([mgr.exe, 'addremove'])
 		mgr._run_cmd([mgr.exe, 'ci', '-m', 'committed'])
+		with open('bar/baz', 'w') as baz:
+			baz.write('content')
+		mgr._run_cmd([mgr.exe, 'ci', '-m', 'added content'])
 		yield
 
 
@@ -92,6 +95,16 @@ class TestTags(object):
 		assert self.mgr.get_tags() == set(['tip'])
 		self.mgr._run_cmd([self.mgr.exe, 'update', '1.0'])
 		assert self.mgr.get_tags() == set(['1.0'])
+
+	def test_no_tags(self):
+		"No tag should return empty set"
+		assert self.mgr.get_tags('0') == set([])
+
+	def test_local_modifications(self):
+		"Local modifications should return empty set"
+		with open('bar/baz', 'w') as f:
+			f.write('changed')
+		assert self.mgr.get_tags() == set([])
 
 	def test_parent_tag(self):
 		self.mgr._run_cmd([self.mgr.exe, 'tag', '1.0'])
