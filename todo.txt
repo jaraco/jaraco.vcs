@@ -1,0 +1,1 @@
+use hg log -r "ancestors(.)" to determine the ancestors to downselect tags.
