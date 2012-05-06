@@ -7,18 +7,18 @@ Copyright © 2010-2011 Jason R. Coombs
 """
 
 import setuptools
+import hgtools.plugins
+
 long_description = open('README').read()
 
 # HGTools uses a special technique for getting the version from
 #  mercurial, because it can't require itself to install itself.
 # Don't use this technique in your project. Instead, follow the
 #  directions in the README or see jaraco.util for an example.
-from hgtools.plugins import calculate_version, patch_egg_info
-patch_egg_info(force_hg_version=True)
 
 setup_params = dict(
 	name="hgtools",
-	version=calculate_version(options=dict(increment='1.0')),
+	version=hgtools.plugins.calculate_version(options=dict(increment='1.0')),
 	author="Jannis Leidel/Jason R. Coombs",
 	author_email="jaraco@jaraco.com",
 	url="http://bitbucket.org/jaraco/hgtools/",
@@ -50,4 +50,5 @@ setup_params = dict(
 )
 
 if __name__ == '__main__':
+	hgtools.plugins.patch_egg_info(force_hg_version=True)
 	setuptools.setup(**setup_params)
