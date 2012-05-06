@@ -6,10 +6,13 @@ Setup script for building hgtools distribution
 Copyright © 2010-2011 Jason R. Coombs
 """
 
+from __future__ import with_statement
+
 import setuptools
 import hgtools.plugins
 
-long_description = open('README').read()
+with open('README') as readme:
+	long_description = readme.read()
 
 # HGTools uses a special technique for getting the version from
 #  mercurial, because it can't require itself to install itself.
