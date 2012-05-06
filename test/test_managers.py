@@ -1,7 +1,12 @@
+from __future__ import with_statement
+
 import os
 import contextlib
 import tempfile
 import shutil
+import sys
+
+import py.test
 
 from hgtools import managers
 
@@ -63,6 +68,11 @@ class TestRelativePaths(object):
 	files when location is not the root of the repo. This test demonstrates
 	that we don't have that problem anymore.
 	"""
+	@classmethod
+	def setup_class(cls):
+		if sys.version_info < (2, 6):
+			py.test.xfail('These tests fail on Python 2.5')
+
 	def test_nested_child(self):
 		with test_repo():
 			test_mgr = managers.SubprocessManager('.')

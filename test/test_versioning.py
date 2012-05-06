@@ -1,6 +1,7 @@
 from distutils.version import StrictVersion
 
 from hgtools import versioning
+from hgtools.namedtuple_backport import namedtuple
 
 class VersionedObject(versioning.VersionManagement):
 	def __init__(self, **kwargs):
@@ -53,7 +54,6 @@ class TestVersioning(object):
 		"""
 		When no tags are available, use the greatest tag and add the increment
 		"""
-		from collections import namedtuple
 		mgr = VersionedObject(
 			get_tags = lambda rev=None: set([]),
 			get_repo_tags = lambda: set(
