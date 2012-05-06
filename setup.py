@@ -18,7 +18,7 @@ patch_egg_info(force_hg_version=True)
 
 setup_params = dict(
 	name="hgtools",
-	version=calculate_version(options=dict(increment='0.0.1')),
+	version=calculate_version(options=dict(increment='1.0')),
 	author="Jannis Leidel/Jason R. Coombs",
 	author_email="jaraco@jaraco.com",
 	url="http://bitbucket.org/jaraco/hgtools/",
