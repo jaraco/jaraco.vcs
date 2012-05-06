@@ -74,16 +74,29 @@ class VersionManagement(object):
 
 	increment = '0.0.1'
 
+	@staticmethod
+	def __versions_from_tags(tags):
+		for tag in tags:
+			try:
+				yield StrictVersion(tag)
+			except ValueError:
+				pass
+
+	@staticmethod
+	def __best_version(versions):
+		try:
+			return max(versions)
+		except ValueError:
+			pass
+
 	def get_strict_versions(self):
 		"""
 		Return all version tags that can be represented by a
 		StrictVersion.
 		"""
-		for tag in self.get_repo_tags():
-			try:
-				yield StrictVersion(tag.tag)
-			except ValueError:
-				pass
+		return self.__versions_from_tags(
+			tag.tag for tag in self.get_repo_tags()
+		)
 
 	def get_tagged_version(self):
 		"""
@@ -92,18 +105,11 @@ class VersionManagement(object):
 		the tagged commit and the tip and there are no local
 		modifications, use the tag on the parent changeset.
 		"""
-		tags = self.get_tags()
-		tag = tags[0] if tags else None
-		if tag == 'tip' and not self.is_modified():
-			ptags = self.get_parent_tags('tip')
-			ptag = ptags[0] if ptags else None
-			if ptag:
-				tag = ptag
-		try:
-			# use 'xxx' because StrictVersion(None) is apparently ok
-			return StrictVersion(tag or 'xxx')
-		except ValueError:
-			pass
+		tags = list(self.get_tags())
+		if tags == ['tip'] and not self.is_modified():
+			tags = self.get_parent_tags('tip')
+		versions = self.__versions_from_tags(tags)
+		return self.__best_version(versions)
 
 	def get_latest_version(self):
 		"""

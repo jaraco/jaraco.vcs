@@ -6,6 +6,9 @@ class VersionedObject(versioning.VersionManagement):
 	def __init__(self, **kwargs):
 		self.__dict__.update(kwargs)
 
+	def is_modified(self):
+		return False
+
 class TestVersioning(object):
 	def test_tag_versions(self):
 		"""
@@ -35,7 +38,7 @@ class TestVersioning(object):
 		Use the parent tag if on the tip
 		"""
 		mgr = VersionedObject(
-			get_tags = lambda rev=None: 'tip' if rev is None else set(['1.0']),
-			get_parent_tags = lambda rev=None: '999'
+			get_tags = lambda rev=None: set(['tip']),
+			get_parent_tags = lambda rev=None: set(['1.0']),
 		)
 		assert mgr.get_tagged_version() == '1.0'
