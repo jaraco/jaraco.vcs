@@ -6,7 +6,7 @@ Setup script for building hgtools distribution
 Copyright © 2010-2011 Jason R. Coombs
 """
 
-from __future__ import with_statement
+from __future__ import with_statement, unicode_literals
 
 import setuptools
 import hgtools.plugins
@@ -20,7 +20,8 @@ with open('README') as readme:
 #  directions in the README or see jaraco.util for an example.
 
 setup_params = dict(
-	name="hgtools",
+	# convert to bytes to work around UnicodeDecodeError when using bdist --formats gztar
+	name=str("hgtools"),
 	version=hgtools.plugins.calculate_version(options=dict(increment='1.0')),
 	author="Jannis Leidel/Jason R. Coombs",
 	author_email="jaraco@jaraco.com",
@@ -32,7 +33,9 @@ setup_params = dict(
 	classifiers=[
 		"Development Status :: 5 - Production/Stable",
 		"Programming Language :: Python",
-		"Programming Language :: Python :: 2",
+		"Programming Language :: Python :: 2.5",
+		"Programming Language :: Python :: 2.6",
+		"Programming Language :: Python :: 2.7",
 		"Programming Language :: Python :: 3",
 		"Intended Audience :: Developers",
 		"Operating System :: OS Independent",
