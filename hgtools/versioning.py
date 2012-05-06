@@ -116,8 +116,7 @@ class VersionManagement(object):
 		Determine the latest version ever released of the project in
 		the repo (based on tags).
 		"""
-		versions = sorted(self.get_strict_versions(), reverse=True)
-		return next(iter(versions), None)
+		return self.__best_version(self.get_strict_versions())
 
 	def get_current_version(self, increment=None):
 		"""

@@ -42,3 +42,13 @@ class TestVersioning(object):
 			get_parent_tags = lambda rev=None: set(['1.0']),
 		)
 		assert mgr.get_tagged_version() == '1.0'
+
+	def test_no_valid_tags(self):
+		"""
+		When no tags are available, use the greatest tag and add the increment
+		"""
+		mgr = VersionedObject(
+			get_tags = lambda rev=None: None,
+			get_repo_tags = lambda: set(['foo', 'bar', '1.0'])
+		)
+		assert mgr.get_tagged_version() == '1.0.1dev'
