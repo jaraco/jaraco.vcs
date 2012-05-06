@@ -43,12 +43,23 @@ class TestVersioning(object):
 		)
 		assert mgr.get_tagged_version() == '1.0'
 
-	def test_no_valid_tags(self):
+	def test_get_next_version(self):
+		mgr = VersionedObject(
+			get_repo_tags = lambda: set([])
+		)
+		assert mgr.get_next_version() == '0.0.1'
+
+	def test_local_revision_not_tagged(self):
 		"""
 		When no tags are available, use the greatest tag and add the increment
 		"""
+		from collections import namedtuple
 		mgr = VersionedObject(
-			get_tags = lambda rev=None: None,
-			get_repo_tags = lambda: set(['foo', 'bar', '1.0'])
+			get_tags = lambda rev=None: set([]),
+			get_repo_tags = lambda: set(
+				namedtuple('tag', 'tag')(var)
+				for var in ['foo', 'bar', '1.0'])
 		)
-		assert mgr.get_tagged_version() == '1.0.1dev'
+		assert mgr.get_tagged_version() is None
+		assert mgr.get_next_version() == StrictVersion('1.0.1')
+		assert mgr.get_current_version() == '1.0.1dev'
