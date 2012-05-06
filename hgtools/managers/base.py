@@ -3,15 +3,13 @@ hgtools implements several repo managers, each of which provides an interface
 to Mercurial functionality.
 """
 
-from __future__ import with_statement, unicode_literals
+from __future__ import with_statement
 
-import os
 import posixpath
 import itertools
 
 from hgtools.py25compat import next
 from hgtools import versioning
-import hgtools
 
 class HGRepoManager(versioning.VersionManagement, object):
 	"""
@@ -128,8 +126,8 @@ def one(item):
 	Return the first element from the iterable, but raise an exception
 	if elements remain in the iterable after the first.
 
-	>>> one(['val'])
-	u'val'
+	>>> one([3])
+	3
 	>>> one(['val', 'other'])
 	Traceback (most recent call last):
 	...
