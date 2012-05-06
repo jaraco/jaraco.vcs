@@ -6,7 +6,7 @@ Setup script for building hgtools distribution
 Copyright © 2010-2011 Jason R. Coombs
 """
 
-from setuptools import find_packages
+import setuptools
 long_description = open('README').read()
 
 # HGTools uses a special technique for getting the version from
@@ -50,7 +50,7 @@ setup_params = dict(
         "Topic :: Software Development :: Version Control",
         "Framework :: Setuptools Plugin",
     ],
-    packages=find_packages(),
+    packages=setuptools.find_packages(),
     entry_points = {
         "setuptools.file_finders": [
             "hg = hgtools.plugins:file_finder"
@@ -63,5 +63,4 @@ setup_params = dict(
 )
 
 if __name__ == '__main__':
-	from setuptools import setup
-	setup(**setup_params)
+	setuptools.setup(**setup_params)
