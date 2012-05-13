@@ -146,6 +146,12 @@ one or more of the following parameters:
 Changes
 *******
 
+2.0.1
+~~~~~
+
+* Fixed issue #10 where hgtools would not parse setup.cfg properly if
+  the Python 3 configparser backport was installed on Python 2.
+
 2.0
 ~~~
 
