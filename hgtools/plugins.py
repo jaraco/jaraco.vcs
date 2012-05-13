@@ -9,6 +9,13 @@ of setup.py when hgtools is itself installed).
 """
 
 import sys
+try:
+	# Prefer the Python 2 version of configparser because Python 3
+	#  backport has issues when non-unicode strings are passed.
+	# See issue #10 for details
+	import ConfigParser as configparser
+except ImportError:
+	import configparser
 
 from . import managers
 
@@ -77,10 +84,6 @@ def calculate_version(options={}):
 	# The version is cached in the tag_build value in setup.cfg (so that
 	#  sdist packages will have a copy of the version as determined at
 	#  the build environment).
-	try:
-		import configparser
-	except ImportError:
-		import ConfigParser as configparser
 	parser = configparser.ConfigParser()
 	parser.read('setup.cfg')
 	has_tag_build = (parser.has_section('egg_info')
