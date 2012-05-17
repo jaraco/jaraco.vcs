@@ -165,6 +165,7 @@ Changes
 ~~~
 
 * Refactored HGRepoManager to better support multiple tags:
+
   - `.get_tag` replaced by `.get_tags`, which returns a set of tags
     for a specific revision. This is currently a set because mercurial
     does not retain any meaningful order of the tags.
@@ -172,6 +173,7 @@ Changes
   - `.get_parent_tag` replaced by `.get_parent_tags`.
   - added `.get_parents` which returns the revision(s) of the specified
     revision.
+
 * Removed support for older versions of mercurial (LegacyLibraryManager).
 * The subprocess manager is now the default. The HGTOOLS_FORCE_CMD variable
   no longer has any effect on hgtools.
