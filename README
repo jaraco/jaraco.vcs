@@ -44,6 +44,15 @@ hgtools to the directory where the setup.py is located at (and won't
 install it anywhere else) to get all package data files from the
 Mercurial repository.
 
+You should not need to, and I recommend you don't, install hgtools in
+your site-packages directory. Let setuptools grab it on demand. Also,
+try not to specify an upper bound for the requirement. Usually, simply
+specifying 'hgtools' will get the latest version, which is likely to
+remain compatible (as a plugin) for the life of the project. Specifying
+an upper bound (i.e. `hgtools<1.1`) will only prevent you from getting
+bug fixes. Only specify an upper bound if you require support for older
+versions of Python.
+
 Auto Version Numbering
 **********************
 
