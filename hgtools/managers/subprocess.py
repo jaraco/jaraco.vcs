@@ -68,7 +68,7 @@ class SubprocessManager(base.HGRepoManager):
 		return loc_rel_paths
 
 	def get_parent_revs(self, rev=None):
-		cmd = [self.exe, 'parents']
+		cmd = [self.exe, 'parents', '--style', 'default', '--config', 'defaults.parents=' ]
 		if rev:
 			cmd.extend(['--rev', str(rev)])
 		out = self._run_cmd(cmd)
@@ -94,7 +94,7 @@ class SubprocessManager(base.HGRepoManager):
 		Return the tags for revision sorted by when the tags were
 		created (latest first)
 		"""
-		cmd = [self.exe, 'log', '-r', rev_num]
+		cmd = [self.exe, 'log', '--style', 'default',  '--config', 'defaults.log=', '-r', rev_num]
 		res = self._run_cmd(cmd)
 		tag_lines = [
 			line for line in res.splitlines()
