@@ -11,6 +11,8 @@ try:
 	import mercurial.error
 except ImportError:
 	pass
+except Exception:
+	pass
 
 class LibraryManager(base.HGRepoManager):
 	"""
