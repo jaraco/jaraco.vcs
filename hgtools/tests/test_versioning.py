@@ -1,7 +1,7 @@
 from distutils.version import StrictVersion
 
 from hgtools import versioning
-from hgtools.namedtuple_backport import namedtuple
+from hgtools.py25compat import namedtuple
 
 class VersionedObject(versioning.VersionManagement):
 	def __init__(self, **kwargs):
