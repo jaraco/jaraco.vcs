@@ -155,6 +155,12 @@ one or more of the following parameters:
 Changes
 *******
 
+2.1
+~~~
+
+* hgtools now builds natively on Python 3, rather than requiring a 2to3
+  conversion at install time.
+
 2.0.3
 ~~~~~
 
