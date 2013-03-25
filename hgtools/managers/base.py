@@ -3,12 +3,9 @@ hgtools implements several repo managers, each of which provides an interface
 to Mercurial functionality.
 """
 
-from __future__ import with_statement
-
 import posixpath
 import itertools
 
-from hgtools.py25compat import next
 from hgtools import versioning
 
 class HGRepoManager(versioning.VersionManagement, object):

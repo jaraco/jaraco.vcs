@@ -1,8 +1,7 @@
 from __future__ import division
 
 import operator
-
-from .py25compat import next, reduce
+from functools import reduce
 
 from distutils.version import StrictVersion
 

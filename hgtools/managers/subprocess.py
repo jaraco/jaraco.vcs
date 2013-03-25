@@ -5,8 +5,7 @@ import re
 import subprocess
 import operator
 import itertools
-
-from hgtools.py25compat import namedtuple
+import collections
 
 from . import base
 
@@ -131,7 +130,8 @@ class SubprocessManager(base.HGRepoManager):
 		)
 
 	def get_repo_tags(self):
-		tagged_revision = namedtuple('tagged_revision', 'tag revision')
+		tagged_revision = collections.namedtuple('tagged_revision',
+			'tag revision')
 		lines = self._run_cmd([self.exe, 'tags']).splitlines()
 		return (
 			tagged_revision(*line.rsplit(None, 1))
