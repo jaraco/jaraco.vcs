@@ -1,14 +1,11 @@
 from __future__ import absolute_import
 
+import os
+
 from . import base
 
 try:
 	import mercurial.__version__
-	import mercurial.hg
-	import mercurial.ui
-	import mercurial.cmdutil
-	import mercurial.util
-	import mercurial.error
 except ImportError:
 	pass
 except Exception:
@@ -16,8 +13,7 @@ except Exception:
 
 class LibraryManager(base.HGRepoManager):
 	"""
-	An HGRepoManager implemented by exercising the mercurial Python APIs
-	directly.
+	An HGRepoManager implemented by invoking the hg command in-process.
 
 	Requires mercurial >= 1.2.
 	"""
@@ -26,45 +22,38 @@ class LibraryManager(base.HGRepoManager):
 		modules_present = 'mercurial' in globals() and self.version_match()
 		return modules_present and super(LibraryManager, self).is_valid()
 
+	def _run_hg(self, *params):
+		"""
+		Run the hg command in-process with the supplied params.
+		"""
+		"""
+		TODO:
+		1) Capture stderr, stdout
+		2) Catch SystemExit exceptions
+		3) Set environment
+		4) Invoke command
+		5) Decode output
+		"""
+
 	def find_root(self):
 		try:
-			return self.repo.root
+			return self._run_hg('root')
 		except Exception:
 			pass
 
 	def version_match(self):
+		# TODO: what versions are supported?
 		return mercurial.__version__.version >= '1.2'
-
-	def _get_repo(self):
-		class quiet_ui(mercurial.ui.ui):
-			def write_err(self, *args, **kwargs):
-				pass
-		return mercurial.hg.repository(quiet_ui(), path=self.location)
-
-	@property
-	def repo(self):
-		if not hasattr(self, '_repo'):
-			self._repo = self._get_repo()
-		return self._repo
-
-	def _get_excluded(self):
-		"""
-		Return all files that hg knows about, but haven't been added,
-		deleted, or removed or have an unknown status.
-		"""
-		modified, added, removed, deleted, unknown = self.repo.status()[:5]
-		return removed + deleted + unknown
 
 	def find_files(self):
 		"""
-		Use the Mercurial library to recursively find versioned files in dirname.
+		Find versioned files in self.location
 		"""
-		excluded = self._get_excluded()
-		rev = None
-		match = mercurial.cmdutil.match(self.repo, [], {}, default='relglob')
-		match.bad = lambda x, y: False
-		return (abs
-			for abs in self.repo[rev].walk(match)
-			if (rev or abs in self.repo.dirstate)
-			and abs not in excluded
-			)
+		all_files = self._run_hg('locate', '-I', '.').splitlines()
+		# now we have a list of all files in self.location relative to
+		#  self.find_root()
+		# Remove the parent dirs from them.
+		from_root = os.path.relpath(self.location, self.find_root())
+		loc_rel_paths = [os.path.relpath(path, from_root)
+			for path in all_files]
+		return loc_rel_paths
