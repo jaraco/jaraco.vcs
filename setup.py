@@ -3,7 +3,7 @@
 """
 Setup script for building hgtools distribution
 
-Copyright © 2010-2011 Jason R. Coombs
+Copyright © 2010-2013 Jason R. Coombs
 """
 
 from __future__ import with_statement
