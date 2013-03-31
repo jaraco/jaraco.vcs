@@ -1,21 +1,36 @@
 from __future__ import absolute_import
 
 import os
+import sys
+import io
+import collections
+import contextlib
 
 from . import base
 
 try:
 	import mercurial.__version__
+	import mercurial.dispatch
 except ImportError:
 	pass
 except Exception:
 	pass
 
+SavedIO = collections.namedtuple('SavedIO', 'stdout stderr')
+
+@contextlib.contextmanager
+def capture_stdio():
+	sys_stdout, sys.stdout = sys.stdout, io.BytesIO()
+	sys_stderr, sys.stderr = sys.stderr, io.BytesIO()
+	try:
+		yield SavedIO(sys.stdout, sys.stderr)
+	finally:
+		sys.stdout = sys_stdout
+		sys.stderr = sys.stderr
+
 class LibraryManager(base.HGRepoManager):
 	"""
 	An HGRepoManager implemented by invoking the hg command in-process.
-
-	Requires mercurial >= 1.2.
 	"""
 
 	def is_valid(self):
@@ -26,14 +41,14 @@ class LibraryManager(base.HGRepoManager):
 		"""
 		Run the hg command in-process with the supplied params.
 		"""
-		"""
-		TODO:
-		1) Capture stderr, stdout
-		2) Catch SystemExit exceptions
-		3) Set environment
-		4) Invoke command
-		5) Decode output
-		"""
+		with capture_stdio() as captured:
+			"""
+			TODO:
+			2) Catch SystemExit exceptions
+			3) Set environment
+			4) Invoke command
+			5) Decode output
+			"""
 
 	def find_root(self):
 		try:
