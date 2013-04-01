@@ -28,10 +28,48 @@ def capture_stdio():
 		sys.stdout = sys_stdout
 		sys.stderr = sys.stderr
 
+@contextlib.contextmanager
+def replace_sysargv(params):
+	sys_argv, sys.argv = sys.argv, params
+	try:
+		yield
+	finally:
+		sys.argv = sys.argv
+
+class Result(object):
+	pass
+
+@contextlib.contextmanager
+def capture_system_exit():
+	res = Result()
+	try:
+		yield res
+		res.code = 0
+	except SystemExit as e:
+		if isinstance(e.code, int):
+			res.code = e.code
+		else:
+			res.code = 1
+	except Exception:
+		res.code = 1
+		raise
+
+class ProcessResult(object):
+	pass
+
+@contextlib.contextmanager
+def in_process_context(params):
+	res = ProcessResult()
+	with capture_stdio() as stdio, replace_sysargv(params), capture_system_exit() as proc_res:
+		yield res
+	res.stdio = stdio
+	res.returncode = proc_res.code
+
 class LibraryManager(base.HGRepoManager):
 	"""
 	An HGRepoManager implemented by invoking the hg command in-process.
 	"""
+	exe = 'hg'
 
 	def is_valid(self):
 		modules_present = 'mercurial' in globals() and self.version_match()
@@ -41,14 +79,14 @@ class LibraryManager(base.HGRepoManager):
 		"""
 		Run the hg command in-process with the supplied params.
 		"""
-		with capture_stdio() as captured:
-			"""
-			TODO:
-			2) Catch SystemExit exceptions
-			3) Set environment
-			4) Invoke command
-			5) Decode output
-			"""
+		cmdline = [self.exe] + list(params)
+		with in_process_context(cmdline) as result:
+			mercurial.dispatch.run()
+		stdout = result.stdio.stdout.getvalue()
+		stderr = result.stdio.stderr.getvalue()
+		if not result.returncode == 0:
+			raise RuntimeError(stderr.strip() or stdout.strip())
+		return stdout.decode('utf-8')
 
 	def find_root(self):
 		try:
