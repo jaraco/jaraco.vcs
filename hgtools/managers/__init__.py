@@ -1,3 +1,7 @@
+import sys as _sys
+
 from .base import HGRepoManager
 from .subprocess import SubprocessManager
-from .library import LibraryManager
+
+if _sys.version_info >= (2, 7):
+	from .library import LibraryManager
