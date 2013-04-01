@@ -20,7 +20,7 @@ class SubprocessManager(base.HGRepoManager):
 
 	def is_valid(self):
 		try:
-			self._run_cmd([self.exe, 'version'])
+			self._run_hg('version')
 		except Exception:
 			return False
 		return super(SubprocessManager, self).is_valid()
@@ -39,7 +39,8 @@ class SubprocessManager(base.HGRepoManager):
 		env.pop('MACOSX_DEPLOYMENT_TARGET', None)
 		return env
 
-	def _run_cmd(self, cmd):
+	def _run_hg(self, *params):
+		cmd = [self.exe] + list(params)
 		proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
 			stderr=subprocess.PIPE, cwd=self.location, env=self._safe_env())
 		stdout, stderr = proc.communicate()
@@ -49,7 +50,7 @@ class SubprocessManager(base.HGRepoManager):
 
 	def find_root(self):
 		try:
-			return self._run_cmd([self.exe, 'root']).strip()
+			return self._run_hg('root').strip()
 		except Exception:
 			pass
 
@@ -57,8 +58,7 @@ class SubprocessManager(base.HGRepoManager):
 		"""
 		Find versioned files in self.location
 		"""
-		cmd = [self.exe, 'locate', '-I', '.']
-		all_files = self._run_cmd(cmd).splitlines()
+		all_files = self._run_hg('locate', '-I', '.').splitlines()
 		# now we have a list of all files in self.location relative to
 		#  self.find_root()
 		# Remove the parent dirs from them.
@@ -68,10 +68,11 @@ class SubprocessManager(base.HGRepoManager):
 		return loc_rel_paths
 
 	def get_parent_revs(self, rev=None):
-		cmd = [self.exe, 'parents', '--style', 'default', '--config', 'defaults.parents=' ]
+		cmd = ['parents', '--style', 'default',
+			'--config', 'defaults.parents=']
 		if rev:
 			cmd.extend(['--rev', str(rev)])
-		out = self._run_cmd(cmd)
+		out = self._run_hg(*cmd)
 		cs_pat = '^changeset:\s+(?P<local>\d+):(?P<hash>[0-9a-zA-Z]+)'
 		return (match.groupdict()['local'] for match in
 			re.finditer(cs_pat, out))
@@ -94,8 +95,9 @@ class SubprocessManager(base.HGRepoManager):
 		Return the tags for revision sorted by when the tags were
 		created (latest first)
 		"""
-		cmd = [self.exe, 'log', '--style', 'default',  '--config', 'defaults.log=', '-r', rev_num]
-		res = self._run_cmd(cmd)
+		cmd = ['log', '--style', 'default',  '--config', 'defaults.log=',
+			'-r', rev_num]
+		res = self._run_hg(*cmd)
 		tag_lines = [
 			line for line in res.splitlines()
 			if line.startswith('tag:')
@@ -109,12 +111,12 @@ class SubprocessManager(base.HGRepoManager):
 		Determine the revision number for a given revision specifier.
 		"""
 		# first, determine the numeric ID
-		cmd = [self.exe, 'identify', '--num']
+		cmd = ['identify', '--num']
 		# workaround for #4
 		cmd.extend(['--config', 'defaults.identify='])
 		if rev:
 			cmd.extend(['--rev', rev])
-		res = self._run_cmd(cmd)
+		res = self._run_hg(*cmd)
 		return res.strip()
 
 	def _get_tags_by_num(self):
@@ -132,12 +134,12 @@ class SubprocessManager(base.HGRepoManager):
 
 	def get_repo_tags(self):
 		tagged_revision = namedtuple('tagged_revision', 'tag revision')
-		lines = self._run_cmd([self.exe, 'tags']).splitlines()
+		lines = self._run_hg('tags').splitlines()
 		return (
 			tagged_revision(*line.rsplit(None, 1))
 			for line in lines if line
 		)
 
 	def is_modified(self):
-		out = self._run_cmd([self.exe, 'status', '-mard'])
+		out = self._run_hg('status', '-mard')
 		return bool(out)
