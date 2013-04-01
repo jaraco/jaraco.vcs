@@ -155,6 +155,13 @@ one or more of the following parameters:
 Changes
 *******
 
+2.2
+~~~
+
+* LibraryManager has been re-written to use the command-line API in-process.
+  The new LibraryManager now only works Python 2.7 and greater, but also now
+  shares the same capability as the SubprocessManager with full tags support.
+
 2.1
 ~~~
 
