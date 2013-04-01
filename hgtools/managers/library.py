@@ -79,8 +79,8 @@ class LibraryManager(base.HGRepoManager):
 		"""
 		Run the hg command in-process with the supplied params.
 		"""
-		cmdline = [self.exe] + list(params)
-		with in_process_context(cmdline) as result:
+		cmd = [self.exe] + list(params)
+		with in_process_context(cmd) as result:
 			mercurial.dispatch.run()
 		stdout = result.stdio.stdout.getvalue()
 		stderr = result.stdio.stderr.getvalue()
