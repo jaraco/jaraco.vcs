@@ -10,12 +10,7 @@ from hgtools.py25compat import namedtuple
 
 from . import base
 
-class SubprocessManager(base.HGRepoManager):
-	"""
-	An HGRepoManager implemented by calling into the 'hg' command-line
-	as a subprocess.
-	"""
-	priority = 1
+class Command(object):
 	exe = 'hg'
 
 	def is_valid(self):
@@ -23,30 +18,7 @@ class SubprocessManager(base.HGRepoManager):
 			self._run_hg('version')
 		except Exception:
 			return False
-		return super(SubprocessManager, self).is_valid()
-
-	@staticmethod
-	def _safe_env():
-		"""
-		Return an environment safe for calling an `hg` subprocess.
-
-		Removes MACOSX_DEPLOYMENT_TARGET from the env, as if there's a
-		mismatch between the local Python environment and the environment
-		in which `hg` is installed, it will cause an exception. See
-		https://bitbucket.org/jaraco/hgtools/issue/7 for details.
-		"""
-		env = os.environ.copy()
-		env.pop('MACOSX_DEPLOYMENT_TARGET', None)
-		return env
-
-	def _run_hg(self, *params):
-		cmd = [self.exe] + list(params)
-		proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
-			stderr=subprocess.PIPE, cwd=self.location, env=self._safe_env())
-		stdout, stderr = proc.communicate()
-		if not proc.returncode == 0:
-			raise RuntimeError(stderr.strip() or stdout.strip())
-		return stdout.decode('utf-8')
+		return super(Command, self).is_valid()
 
 	def find_root(self):
 		try:
@@ -143,3 +115,34 @@ class SubprocessManager(base.HGRepoManager):
 	def is_modified(self):
 		out = self._run_hg('status', '-mard')
 		return bool(out)
+
+class SubprocessManager(Command, base.HGRepoManager):
+	"""
+	An HGRepoManager implemented by calling into the 'hg' command-line
+	as a subprocess.
+	"""
+	priority = 1
+
+	@staticmethod
+	def _safe_env():
+		"""
+		Return an environment safe for calling an `hg` subprocess.
+
+		Removes MACOSX_DEPLOYMENT_TARGET from the env, as if there's a
+		mismatch between the local Python environment and the environment
+		in which `hg` is installed, it will cause an exception. See
+		https://bitbucket.org/jaraco/hgtools/issue/7 for details.
+		"""
+		env = os.environ.copy()
+		env.pop('MACOSX_DEPLOYMENT_TARGET', None)
+		return env
+
+	def _run_hg(self, *params):
+		cmd = [self.exe] + list(params)
+		proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+			stderr=subprocess.PIPE, cwd=self.location, env=self._safe_env())
+		stdout, stderr = proc.communicate()
+		if not proc.returncode == 0:
+			raise RuntimeError(stderr.strip() or stdout.strip())
+		return stdout.decode('utf-8')
+
