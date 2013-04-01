@@ -95,8 +95,7 @@ class LibraryManager(base.HGRepoManager):
 			pass
 
 	def version_match(self):
-		# TODO: what versions are supported?
-		return mercurial.__version__.version >= '1.2'
+		return True
 
 	def find_files(self):
 		"""
