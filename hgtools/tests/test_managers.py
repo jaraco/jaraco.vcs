@@ -46,15 +46,15 @@ def tempdir_context():
 def test_repo():
 	with tempdir_context():
 		mgr = managers.SubprocessManager()
-		mgr._run_cmd([mgr.exe, 'init', 'foo'])
+		mgr._run_hg('init', 'foo')
 		os.chdir('foo')
 		os.makedirs('bar')
 		touch('bar/baz')
-		mgr._run_cmd([mgr.exe, 'addremove'])
-		mgr._run_cmd([mgr.exe, 'ci', '-m', 'committed'])
+		mgr._run_hg('addremove')
+		mgr._run_hg('ci', '-m', 'committed')
 		with open('bar/baz', 'w') as baz:
 			baz.write('content')
-		mgr._run_cmd([mgr.exe, 'ci', '-m', 'added content'])
+		mgr._run_hg('ci', '-m', 'added content')
 		yield
 
 
@@ -101,9 +101,9 @@ class TestTags(object):
 		del self.context
 
 	def test_single_tag(self):
-		self.mgr._run_cmd([self.mgr.exe, 'tag', '1.0'])
+		self.mgr._run_hg('tag', '1.0')
 		assert self.mgr.get_tags() == set(['tip'])
-		self.mgr._run_cmd([self.mgr.exe, 'update', '1.0'])
+		self.mgr._run_hg('update', '1.0')
 		assert self.mgr.get_tags() == set(['1.0'])
 
 	def test_no_tags(self):
@@ -117,12 +117,12 @@ class TestTags(object):
 		assert self.mgr.get_tags() == set([])
 
 	def test_parent_tag(self):
-		self.mgr._run_cmd([self.mgr.exe, 'tag', '1.0'])
+		self.mgr._run_hg('tag', '1.0')
 		assert self.mgr.get_tags() == set(['tip'])
 		assert self.mgr.get_parent_tags() == set(['tip'])
 		assert self.mgr.get_parent_tags('.') == set(['1.0'])
 		assert self.mgr.get_parent_tags('tip') == set(['1.0'])
-		self.mgr._run_cmd([self.mgr.exe, 'tag', '1.1'])
+		self.mgr._run_hg('tag', '1.1')
 		assert self.mgr.get_tags() == set(['tip'])
 		assert self.mgr.get_parent_tags() == set(['tip'])
 		assert self.mgr.get_parent_tags('.') == set(['1.1'])
@@ -132,16 +132,16 @@ class TestTags(object):
 		"""
 		Always return the latest tag for a given revision
 		"""
-		self.mgr._run_cmd([self.mgr.exe, 'tag', '1.0'])
-		self.mgr._run_cmd([self.mgr.exe, 'tag', '-r', '1.0', '1.1'])
-		self.mgr._run_cmd([self.mgr.exe, 'update', '1.0'])
+		self.mgr._run_hg('tag', '1.0')
+		self.mgr._run_hg('tag', '-r', '1.0', '1.1')
+		self.mgr._run_hg('update', '1.0')
 		assert set(self.mgr.get_tags()) == set(['1.0', '1.1'])
 
 	def test_two_tags_same_revision_lexicographically_earlier(self):
 		"""
 		Always return the latest tag for a given revision
 		"""
-		self.mgr._run_cmd([self.mgr.exe, 'tag', '1.9'])
-		self.mgr._run_cmd([self.mgr.exe, 'tag', '-r', '1.9', '1.10'])
-		self.mgr._run_cmd([self.mgr.exe, 'update', '1.9'])
+		self.mgr._run_hg('tag', '1.9')
+		self.mgr._run_hg('tag', '-r', '1.9', '1.10')
+		self.mgr._run_hg('update', '1.9')
 		assert set(self.mgr.get_tags()) == set(['1.9', '1.10'])
