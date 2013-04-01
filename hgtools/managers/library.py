@@ -79,7 +79,7 @@ class LibraryManager(base.HGRepoManager):
 		"""
 		Run the hg command in-process with the supplied params.
 		"""
-		cmd = [self.exe] + list(params)
+		cmd = [self.exe, '-R', self.location] + list(params)
 		with in_process_context(cmd) as result:
 			mercurial.dispatch.run()
 		stdout = result.stdio.stdout.getvalue()
@@ -90,7 +90,7 @@ class LibraryManager(base.HGRepoManager):
 
 	def find_root(self):
 		try:
-			return self._run_hg('root')
+			return self._run_hg('root').strip()
 		except Exception:
 			pass
 
