@@ -6,30 +6,11 @@ Setup script for building hgtools distribution
 Copyright © 2010-2013 Jason R. Coombs
 """
 
-from __future__ import with_statement
-
-import sys
-
 import setuptools
-import setuptools.command.build_py as st_build_py
 import hgtools.plugins
 
 with open('README') as readme:
 	long_description = readme.read()
-
-class build_py(st_build_py.build_py):
-	"Custom version of build_py that excludes Python-specific modules"
-	def find_package_modules(self, *args, **kwargs):
-		all_modules = st_build_py.build_py.find_package_modules(self,
-			*args, **kwargs)
-		python3 = sys.version_info >= (3,)
-		exclude_modules = []
-		if python3:
-			exclude_modules.append('namedtuple_backport')
-		# module[1] is the module name
-		filtered_modules = [module for module in all_modules
-			if module[1] not in exclude_modules]
-		return filtered_modules
 
 # HGTools uses a special technique for getting the version from
 #  mercurial, because it can't require itself to install itself.
@@ -49,7 +30,6 @@ setup_params = dict(
 	classifiers=[
 		"Development Status :: 5 - Production/Stable",
 		"Programming Language :: Python",
-		"Programming Language :: Python :: 2.5",
 		"Programming Language :: Python :: 2.6",
 		"Programming Language :: Python :: 2.7",
 		"Programming Language :: Python :: 3",
@@ -68,9 +48,6 @@ setup_params = dict(
 			"use_hg_version = hgtools.plugins:version_calc",
 		],
 	},
-	cmdclass=dict(
-		build_py=build_py,
-	),
 )
 
 if __name__ == '__main__':

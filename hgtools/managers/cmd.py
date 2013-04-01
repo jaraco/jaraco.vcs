@@ -2,8 +2,7 @@ import os
 import re
 import operator
 import itertools
-
-from hgtools.py25compat import namedtuple
+import collections
 
 class Command(object):
 	exe = 'hg'
@@ -100,7 +99,8 @@ class Command(object):
 		)
 
 	def get_repo_tags(self):
-		tagged_revision = namedtuple('tagged_revision', 'tag revision')
+		tagged_revision = collections.namedtuple('tagged_revision',
+			'tag revision')
 		lines = self._run_hg('tags').splitlines()
 		return (
 			tagged_revision(*line.rsplit(None, 1))

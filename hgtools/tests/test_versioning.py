@@ -1,7 +1,7 @@
+import collections
 from distutils.version import StrictVersion
 
 from hgtools import versioning
-from hgtools.py25compat import namedtuple
 
 class VersionedObject(versioning.VersionManagement):
 	def __init__(self, **kwargs):
@@ -57,7 +57,7 @@ class TestVersioning(object):
 		mgr = VersionedObject(
 			get_tags = lambda rev=None: set([]),
 			get_repo_tags = lambda: set(
-				namedtuple('tag', 'tag')(var)
+				collections.namedtuple('tag', 'tag')(var)
 				for var in ['foo', 'bar', '1.0'])
 		)
 		assert mgr.get_tagged_version() is None
