@@ -155,6 +155,13 @@ one or more of the following parameters:
 Changes
 *******
 
+2.2.2
+~~~~~
+
+* Removed the LibraryManager from the default imports. This means it will not
+  be available unless the client application specifically imports
+  `hgtools.managers.library`. This change appears to fix #13.
+
 2.2.1
 ~~~~~
 
