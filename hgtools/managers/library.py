@@ -51,7 +51,7 @@ def capture_system_exit():
 			res.code = e.code
 		else:
 			res.code = 1
-	except Exception:
+	except BaseException:
 		res.code = 1
 		raise
 
@@ -61,10 +61,12 @@ class ProcessResult(object):
 @contextlib.contextmanager
 def in_process_context(params):
 	res = ProcessResult()
-	with capture_stdio() as stdio, replace_sysargv(params), capture_system_exit() as proc_res:
-		yield res
-	res.stdio = stdio
-	res.returncode = proc_res.code
+	try:
+		with capture_stdio() as stdio, replace_sysargv(params), capture_system_exit() as proc_res:
+			yield res
+	finally:
+		res.stdio = stdio
+		res.returncode = proc_res.code
 
 class LibraryManager(cmd.Command, base.HGRepoManager):
 	"""

@@ -2,6 +2,8 @@ from __future__ import print_function
 
 import sys
 
+import py.test
+
 from hgtools.managers import library as reentry
 
 def hello_world():
@@ -53,3 +55,18 @@ class TestReEntry(object):
 		assert proc.returncode == 0
 		out = "args are ['echo', 'foo', 'bar']\n"
 		assert proc.stdio.stdout.getvalue() == out
+
+class TestErrors(object):
+	def test_name_error(self):
+		with py.test.raises(NameError) as exc_info:
+			with reentry.in_process_context([]) as proc:
+				not_present
+		assert proc.returncode == 1
+		msg = "global name 'not_present' is not defined"
+		assert str(exc_info.value) == msg
+
+	def test_keyboard_interrupt(self):
+		with py.test.raises(KeyboardInterrupt):
+			with reentry.in_process_context([]) as proc:
+				raise KeyboardInterrupt()
+		assert proc.returncode == 1
