@@ -32,9 +32,6 @@ class HGRepoManager(versioning.VersionManagement, object):
 		"""
 		Get the valid HGRepoManagers for this location.
 		"""
-		# until we have importlib (python 2.7), use __import__
-		__import__('hgtools.managers.subprocess')
-		__import__('hgtools.managers.library')
 		by_priority_attr = lambda c: getattr(c, 'priority', 0)
 		classes = sorted(cls.__subclasses__(), key = by_priority_attr,
 			reverse = True)
