@@ -2,12 +2,6 @@
 setuptools plugins
 """
 
-"""
-This file (and everything it imports) must remain runnable on both
-Python 2 and Python 3 without conversion (because it runs as part
-of setup.py when hgtools is itself installed).
-"""
-
 import sys
 try:
 	# Prefer the Python 2 version of configparser because Python 3
@@ -38,10 +32,12 @@ def file_finder(dirname="."):
 				return mgr.find_all_files()
 			except Exception:
 				e = sys.exc_info()[1]
-				distutils.log.warn("hgtools.%s could not find files: %s", mgr, e)
+				distutils.log.warn("hgtools.%s could not find files: %s",
+					mgr, e)
 	except Exception:
 		e = sys.exc_info()[1]
-		distutils.log.warn("Unexpected error finding valid managers in hgtools.file_finder_plugin: %s", e)
+		distutils.log.warn("Unexpected error finding valid managers in "
+			"hgtools.file_finder_plugin: %s", e)
 	return []
 
 def patch_egg_info(force_hg_version=False):
@@ -94,9 +90,7 @@ def calculate_version(options={}):
 	else:
 		# We don't have a version stored in tag_build, so calculate
 		#  the version using an HGRepoManager.
-		# use the SubrepoManager because the library version
-		#  is not implemented.
-		mgr = managers.SubprocessManager('.')
+		mgr = managers.HGRepoManager.get_first_valid_manager()
 		version_handler = options.get('version_handler', _calculate_version)
 		version = version_handler(mgr, options)
 	return version

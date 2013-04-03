@@ -155,10 +155,28 @@ one or more of the following parameters:
 Changes
 *******
 
+3.0.1
+~~~~~
+
+* Merged changes from 2.2.2 to address #13.
+
 3.0
 ~~~
 
 * Removed support for Python 2.5. Python 2.6 or later is now required.
+
+2.2.2
+~~~~~
+
+* Removed the LibraryManager from the default imports. This means it will not
+  be available unless the client application specifically imports
+  `hgtools.managers.library`. This change appears to fix #13.
+
+2.2.1
+~~~~~
+
+* Added some exception handling and tests around Library Manager in the hopes
+  of preventing #13.
 
 2.2
 ~~~
