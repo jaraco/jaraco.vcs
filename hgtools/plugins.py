@@ -2,12 +2,6 @@
 setuptools plugins
 """
 
-"""
-This file (and everything it imports) must remain runnable on both
-Python 2 and Python 3 without conversion (because it runs as part
-of setup.py when hgtools is itself installed).
-"""
-
 import sys
 try:
 	# Prefer the Python 2 version of configparser because Python 3
