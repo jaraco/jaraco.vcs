@@ -34,7 +34,7 @@ def file_finder(dirname="."):
 				e = sys.exc_info()[1]
 				distutils.log.warn("hgtools.%s could not find files: %s",
 					mgr, e)
-	except Exception:
+	except BaseException:
 		e = sys.exc_info()[1]
 		distutils.log.warn("Unexpected error finding valid managers in "
 			"hgtools.file_finder_plugin: %s", e)
