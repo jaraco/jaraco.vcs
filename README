@@ -155,6 +155,12 @@ one or more of the following parameters:
 Changes
 *******
 
+2.2.1
+~~~~~
+
+* Added some exception handling and tests around Library Manager in the hopes
+  of preventing #13.
+
 2.2
 ~~~
 
