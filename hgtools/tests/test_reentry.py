@@ -4,7 +4,7 @@ import sys
 
 import py.test
 
-from hgtools.managers import library as reentry
+from hgtools.managers import reentry
 
 def hello_world():
 	print("hello world")
