@@ -96,9 +96,7 @@ def calculate_version(options={}):
 	else:
 		# We don't have a version stored in tag_build, so calculate
 		#  the version using an HGRepoManager.
-		# use the SubrepoManager because the library version
-		#  is not implemented.
-		mgr = managers.SubprocessManager('.')
+		mgr = managers.HGRepoManager.get_first_valid_manager()
 		version_handler = options.get('version_handler', _calculate_version)
 		version = version_handler(mgr, options)
 	return version
