@@ -38,10 +38,12 @@ def file_finder(dirname="."):
 				return mgr.find_all_files()
 			except Exception:
 				e = sys.exc_info()[1]
-				distutils.log.warn("hgtools.%s could not find files: %s", mgr, e)
+				distutils.log.warn("hgtools.%s could not find files: %s",
+					mgr, e)
 	except Exception:
 		e = sys.exc_info()[1]
-		distutils.log.warn("Unexpected error finding valid managers in hgtools.file_finder_plugin: %s", e)
+		distutils.log.warn("Unexpected error finding valid managers in "
+			"hgtools.file_finder_plugin: %s", e)
 	return []
 
 def patch_egg_info(force_hg_version=False):
