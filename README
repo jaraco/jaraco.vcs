@@ -155,6 +155,11 @@ one or more of the following parameters:
 Changes
 *******
 
+3.0.2
+~~~~~
+
+* Restored Python 2.6 compatibility in reentry module.
+
 3.0.1
 ~~~~~
 

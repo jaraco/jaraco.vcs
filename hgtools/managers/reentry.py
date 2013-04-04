@@ -51,9 +51,10 @@ class ProcessResult(object):
 def in_process_context(params):
 	res = ProcessResult()
 	try:
-		with capture_stdio() as stdio, replace_sysargv(params), capture_system_exit() as proc_res:
-			yield res
+		with capture_stdio() as stdio:
+			with replace_sysargv(params):
+				with capture_system_exit() as proc_res:
+					yield res
 	finally:
 		res.stdio = stdio
 		res.returncode = proc_res.code
-
