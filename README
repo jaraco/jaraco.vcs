@@ -155,6 +155,11 @@ one or more of the following parameters:
 Changes
 *******
 
+2.2.3
+~~~~~
+
+* Restored Python 2.5 compatibility in some modules.
+
 2.2.2
 ~~~~~
 
