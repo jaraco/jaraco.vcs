@@ -155,6 +155,11 @@ one or more of the following parameters:
 Changes
 *******
 
+4.0
+~~~
+
+* Removed long-deprecated functions in hgtools (package) module.
+
 3.0.2
 ~~~~~
 
