@@ -9,6 +9,9 @@ from hgtools.managers import reentry
 def hello_world():
 	print("hello world")
 
+def hello_unicode_world():
+	print(b"hello world".decode('ascii'))
+
 def exit_zero():
 	raise SystemExit(0)
 
@@ -28,6 +31,12 @@ class TestReEntry(object):
 	def test_hello_world(self):
 		with reentry.in_process_context(['hello-world.py']) as proc:
 			hello_world()
+		assert proc.returncode == 0
+		assert proc.stdio.stdout.getvalue() == 'hello world\n'
+
+	def test_hello_world_unicode(self):
+		with reentry.in_process_context(['hello-world.py']) as proc:
+			hello_unicode_world()
 		assert proc.returncode == 0
 		assert proc.stdio.stdout.getvalue() == 'hello world\n'
 

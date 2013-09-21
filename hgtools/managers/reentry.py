@@ -7,11 +7,18 @@ import contextlib
 
 SavedIO = collections.namedtuple('SavedIO', 'stdout stderr')
 
+text_type = __builtins__.get('unicode', str)
+
+class TextIO(io.StringIO):
+	def write(self, data):
+		if not isinstance(data, text_type):
+			data = text_type(data, getattr(self, '_encoding', 'UTF-8'), 'replace')
+		io.StringIO.write(self, data)
+
 @contextlib.contextmanager
 def capture_stdio():
-	io_class = io.StringIO if sys.version_info > (3,) else io.BytesIO
-	sys_stdout, sys.stdout = sys.stdout, io_class()
-	sys_stderr, sys.stderr = sys.stderr, io_class()
+	sys_stdout, sys.stdout = sys.stdout, TextIO()
+	sys_stderr, sys.stderr = sys.stderr, TextIO()
 	try:
 		yield SavedIO(sys.stdout, sys.stderr)
 	finally:
