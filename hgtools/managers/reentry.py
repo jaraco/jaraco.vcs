@@ -9,8 +9,9 @@ SavedIO = collections.namedtuple('SavedIO', 'stdout stderr')
 
 @contextlib.contextmanager
 def capture_stdio():
-	sys_stdout, sys.stdout = sys.stdout, io.BytesIO()
-	sys_stderr, sys.stderr = sys.stderr, io.BytesIO()
+	io_class = io.StringIO if sys.version_info > (3,) else io.BytesIO
+	sys_stdout, sys.stdout = sys.stdout, io_class()
+	sys_stderr, sys.stderr = sys.stderr, io_class()
 	try:
 		yield SavedIO(sys.stdout, sys.stderr)
 	finally:
