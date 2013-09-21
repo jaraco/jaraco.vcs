@@ -23,7 +23,7 @@ def capture_stdio():
 		yield SavedIO(sys.stdout, sys.stderr)
 	finally:
 		sys.stdout = sys_stdout
-		sys.stderr = sys.stderr
+		sys.stderr = sys_stderr
 
 @contextlib.contextmanager
 def replace_sysargv(params):
