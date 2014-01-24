@@ -9,7 +9,8 @@ class Command(object):
 
 	def is_valid(self):
 		try:
-			self._run_hg('version')
+			# Check if both command and repo are valid
+			self._run_hg('status')
 		except Exception:
 			return False
 		return super(Command, self).is_valid()
@@ -110,3 +111,16 @@ class Command(object):
 	def is_modified(self):
 		out = self._run_hg('status', '-mard')
 		return bool(out)
+
+
+class GitCommand(Command):
+	exe = 'git'
+
+	def find_root(self):
+		try:
+			return self._run_hg('rev-parse', '--top-level').strip()
+		except Exception:
+			pass
+
+	def get_tags(self, rev=None):
+		return self._run_hg('tag').splitlines()

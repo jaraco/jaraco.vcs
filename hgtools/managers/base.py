@@ -30,7 +30,17 @@ class HGRepoManager(versioning.VersionManagement, object):
 		Get the valid HGRepoManagers for this location.
 		"""
 		by_priority_attr = lambda c: getattr(c, 'priority', 0)
-		classes = sorted(cls.__subclasses__(), key = by_priority_attr,
+
+		def _get_all_subclasses(c):
+			"""
+			Get all superclasses up to "object".
+			"""
+			for sc in c.__subclasses__():
+				yield sc
+				for c in _get_all_subclasses(sc):
+					yield c
+
+		classes = sorted(set(_get_all_subclasses(cls)), key = by_priority_attr,
 			reverse = True)
 		all_managers = (c(location) for c in classes)
 		return (mgr for mgr in all_managers if mgr.is_valid())

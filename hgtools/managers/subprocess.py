@@ -35,3 +35,11 @@ class SubprocessManager(cmd.Command, base.HGRepoManager):
 		if not proc.returncode == 0:
 			raise RuntimeError(stderr.strip() or stdout.strip())
 		return stdout.decode('utf-8')
+
+
+class GitSubprocessManager(SubprocessManager, cmd.GitCommand):
+	"""
+	An HGRepoManager implemented by calling into the 'git' command-line
+	as a subprocess.
+	"""
+	priority = 2
