@@ -25,8 +25,8 @@ def file_finder(dirname="."):
 	import distutils.log
 	dirname = dirname or '.'
 	try:
-		valid_mgrs = managers.HGRepoManager.get_valid_managers(dirname)
-		valid_mgrs = managers.HGRepoManager.existing_only(valid_mgrs)
+		valid_mgrs = managers.RepoManager.get_valid_managers(dirname)
+		valid_mgrs = managers.RepoManager.existing_only(valid_mgrs)
 		for mgr in valid_mgrs:
 			try:
 				return mgr.find_all_files()
@@ -88,9 +88,9 @@ def calculate_version(options={}):
 		# a cached version is available, so use it.
 		version = parser.get('egg_info', 'tag_build')
 	else:
-		# We don't have a version stored in tag_build, so calculate
-		#  the version using an HGRepoManager.
-		mgr = managers.HGRepoManager.get_first_valid_manager()
+		# No version is stored in tag_build, so calculate
+		#  the version using a RepoManager.
+		mgr = managers.RepoManager.get_first_valid_manager()
 		version_handler = options.get('version_handler', _calculate_version)
 		version = version_handler(mgr, options)
 	return version

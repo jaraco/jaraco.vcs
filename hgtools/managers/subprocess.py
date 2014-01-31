@@ -6,9 +6,9 @@ import subprocess
 from . import base
 from . import cmd
 
-class SubprocessManager(cmd.Command, base.HGRepoManager):
+class SubprocessManager(cmd.Command, base.RepoManager):
 	"""
-	An HGRepoManager implemented by calling into the 'hg' command-line
+	A RepoManager implemented by calling into the 'hg' command-line
 	as a subprocess.
 	"""
 	priority = 1
@@ -39,7 +39,7 @@ class SubprocessManager(cmd.Command, base.HGRepoManager):
 
 class GitSubprocessManager(SubprocessManager, cmd.GitCommand):
 	"""
-	An HGRepoManager implemented by calling into the 'git' command-line
+	A RepoManager implemented by calling into the 'git' command-line
 	as a subprocess.
 	"""
 	priority = 2

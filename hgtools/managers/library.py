@@ -12,9 +12,9 @@ except ImportError:
 except Exception:
 	pass
 
-class LibraryManager(cmd.Command, base.HGRepoManager):
+class LibraryManager(cmd.Command, base.RepoManager):
 	"""
-	An HGRepoManager implemented by invoking the hg command in-process.
+	A RepoManager implemented by invoking the hg command in-process.
 	"""
 
 	def _run_hg(self, *params):

@@ -68,7 +68,7 @@ class SummableVersion(StrictVersion):
 
 class VersionManagement(object):
 	"""
-	Version functions for HGRepoManager classes
+	Version functions for RepoManager classes
 	"""
 
 	increment = '0.0.1'

@@ -1,2 +1,2 @@
-from .base import HGRepoManager
+from .base import RepoManager
 from .subprocess import SubprocessManager

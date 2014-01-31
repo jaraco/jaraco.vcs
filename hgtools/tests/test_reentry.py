@@ -71,8 +71,8 @@ class TestErrors(object):
 			with reentry.in_process_context([]) as proc:
 				not_present
 		assert proc.returncode == 1
-		msg = "global name 'not_present' is not defined"
-		assert str(exc_info.value) == msg
+		msg = "name 'not_present' is not defined"
+		assert str(exc_info.value).endswith(msg)
 
 	def test_keyboard_interrupt(self):
 		with py.test.raises(KeyboardInterrupt):

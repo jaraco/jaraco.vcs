@@ -9,10 +9,10 @@ import itertools
 from hgtools import versioning
 from hgtools.util import itersubclasses
 
-class HGRepoManager(versioning.VersionManagement, object):
+class RepoManager(versioning.VersionManagement, object):
 	"""
 	An abstract class defining some interfaces for working with
-	Mercurial repositories.
+	repositories.
 	"""
 	def __init__(self, location='.'):
 		self.location = location
@@ -28,7 +28,7 @@ class HGRepoManager(versioning.VersionManagement, object):
 	@classmethod
 	def get_valid_managers(cls, location):
 		"""
-		Get the valid HGRepoManagers for this location.
+		Get the valid RepoManagers for this location.
 		"""
 		by_priority_attr = lambda c: getattr(c, 'priority', 0)
 		classes = sorted(itersubclasses(cls), key=by_priority_attr,
@@ -38,7 +38,7 @@ class HGRepoManager(versioning.VersionManagement, object):
 
 	@staticmethod
 	def get_first_valid_manager(location='.'):
-		return next(HGRepoManager.get_valid_managers(location))
+		return next(RepoManager.get_valid_managers(location))
 
 	@staticmethod
 	def existing_only(managers):
