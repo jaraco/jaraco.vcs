@@ -1,7 +1,6 @@
 import os
-import contextlib
-import tempfile
-import shutil
+
+import pytest
 
 from hgtools import managers
 from hgtools.managers import subprocess
@@ -27,37 +26,26 @@ def test_existing_only():
 	existing = list(managers.RepoManager.existing_only(mgrs))
 	assert not existing
 
-@contextlib.contextmanager
-def tempdir_context():
-	temp_dir = tempfile.mkdtemp()
-	orig_dir = os.getcwd()
-	try:
-		os.chdir(temp_dir)
-		yield temp_dir
-	finally:
-		os.chdir(orig_dir)
-		shutil.rmtree(temp_dir)
-
-@contextlib.contextmanager
-def test_repo():
-	with tempdir_context():
-		mgr = managers.MercurialManager()
-		mgr._invoke('init', 'foo')
-		os.chdir('foo')
-		os.makedirs('bar')
-		touch('bar/baz')
-		mgr._invoke('addremove')
-		mgr._invoke('ci', '-m', 'committed')
-		with open('bar/baz', 'w') as baz:
-			baz.write('content')
-		mgr._invoke('ci', '-m', 'added content')
-		yield
+@pytest.fixture
+def hg_repo(tmpdir):
+	tmpdir.chdir()
+	mgr = managers.MercurialManager()
+	mgr._invoke('init', '.')
+	os.makedirs('bar')
+	touch('bar/baz')
+	mgr._invoke('addremove')
+	mgr._invoke('ci', '-m', 'committed')
+	with open('bar/baz', 'w') as baz:
+		baz.write('content')
+	mgr._invoke('ci', '-m', 'added content')
+	return tmpdir
 
 
 def touch(filename):
 	with open(filename, 'a'):
 		pass
 
+@pytest.mark.usefixtures("hg_repo", scope='function')
 class TestRelativePaths(object):
 	"""
 	Issue #9 demonstrated that we can inadvertently return too many
@@ -65,31 +53,25 @@ class TestRelativePaths(object):
 	that we don't have that problem anymore.
 	"""
 	def test_nested_child(self):
-		with test_repo():
-			test_mgr = managers.MercurialManager('.')
-			assert test_mgr.find_files() == [os.path.join('bar', 'baz')]
+		test_mgr = managers.MercurialManager('.')
+		assert test_mgr.find_files() == [os.path.join('bar', 'baz')]
 
 	def test_manager_in_child(self):
-		with test_repo():
-			test_mgr = managers.MercurialManager('bar')
-			assert test_mgr.find_files() == ['baz']
+		test_mgr = managers.MercurialManager('bar')
+		assert test_mgr.find_files() == ['baz']
 
 	def test_current_dir_in_child(self):
-		with test_repo():
-			os.chdir('bar')
-			test_mgr = managers.MercurialManager('.')
-			assert test_mgr.find_files() == ['baz']
+		os.chdir('bar')
+		test_mgr = managers.MercurialManager('.')
+		assert test_mgr.find_files() == ['baz']
 
+@pytest.mark.usefixtures("hg_repo", scope='function')
 class TestTags(object):
 	def setup_method(self, method):
-		self.context = test_repo()
-		self.context.__enter__()
 		self.mgr = managers.MercurialManager('.')
 
 	def teardown_method(self, method):
 		del self.mgr
-		self.context.__exit__(None, None, None)
-		del self.context
 
 	def test_single_tag(self):
 		self.mgr._invoke('tag', '1.0')
