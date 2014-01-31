@@ -25,6 +25,7 @@ class TestTags(object):
 		del self.mgr
 
 	def test_single_tag(self):
+		assert self.mgr.get_tags() == set([])
 		self.mgr._invoke('tag', '-am', "Tagging 1.0", '1.0')
 		assert self.mgr.get_tags() == set(['1.0'])
 		self.mgr._invoke('checkout', '1.0')

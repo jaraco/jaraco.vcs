@@ -129,4 +129,5 @@ class Git(Command):
 		"""
 		Return the tags for the current revision as a set
 		"""
-		return set(self._invoke('tag').splitlines())
+		rev = rev or 'HEAD'
+		return set(self._invoke('tag', '--points-at', rev).splitlines())
