@@ -31,8 +31,8 @@ class HGRepoManager(versioning.VersionManagement, object):
 		Get the valid HGRepoManagers for this location.
 		"""
 		by_priority_attr = lambda c: getattr(c, 'priority', 0)
-		classes = sorted(itersubclasses(cls), key = by_priority_attr,
-			reverse = True)
+		classes = sorted(itersubclasses(cls), key=by_priority_attr,
+			reverse=True)
 		all_managers = (c(location) for c in classes)
 		return (mgr for mgr in all_managers if mgr.is_valid())
 
@@ -48,9 +48,7 @@ class HGRepoManager(versioning.VersionManagement, object):
 		return (mgr for mgr in managers if mgr.find_root())
 
 	def __repr__(self):
-		class_name = self.__class__.__name__
-		loc = self.location
-		return '%(class_name)s(%(loc)r)' % vars()
+		return '{self.__class__.__name__}({self.location}'.format(**vars())
 
 	def find_root(self):
 		raise NotImplementedError()
