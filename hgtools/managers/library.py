@@ -12,7 +12,7 @@ except ImportError:
 except Exception:
 	pass
 
-class MercurialInProcManager(cmd.MercurialCommand, base.RepoManager):
+class MercurialInProcManager(cmd.Mercurial, base.RepoManager):
 	"""
 	A RepoManager implemented by invoking the hg command in-process.
 	"""

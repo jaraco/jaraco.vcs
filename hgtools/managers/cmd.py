@@ -5,16 +5,18 @@ import itertools
 import collections
 
 
-class MercurialCommand(object):
-	exe = 'hg'
-
+class Command(object):
 	def is_valid(self):
 		try:
 			# Check if both command and repo are valid
 			self._invoke('status')
 		except Exception:
 			return False
-		return super(MercurialCommand, self).is_valid()
+		return super(Command, self).is_valid()
+
+
+class Mercurial(Command):
+	exe = 'hg'
 
 	def find_root(self):
 		try:
@@ -114,7 +116,7 @@ class MercurialCommand(object):
 		return bool(out)
 
 
-class GitCommand(object):
+class Git(Command):
 	exe = 'git'
 
 	def find_root(self):
