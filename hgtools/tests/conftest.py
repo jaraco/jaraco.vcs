@@ -19,6 +19,23 @@ def hg_repo(tmpdir):
 	return tmpdir
 
 
+@pytest.fixture
+def git_repo(tmpdir):
+	tmpdir.chdir()
+	mgr = managers.GitManager()
+	mgr._invoke('init')
+	mgr._invoke('config', 'user.email', 'hgtools@example.com')
+	mgr._invoke('config', 'user.name', 'HGTools')
+	os.makedirs('bar')
+	touch('bar/baz')
+	mgr._invoke('add', '.')
+	mgr._invoke('commit', '-m', 'committed')
+	with open('bar/baz', 'w') as baz:
+		baz.write('content')
+	mgr._invoke('commit', '-am', 'added content')
+	return tmpdir
+
+
 def touch(filename):
 	with open(filename, 'a'):
 		pass

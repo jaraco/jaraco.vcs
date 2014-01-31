@@ -126,4 +126,7 @@ class Git(Command):
 			pass
 
 	def get_tags(self, rev=None):
-		return self._invoke('tag').splitlines()
+		"""
+		Return the tags for the current revision as a set
+		"""
+		return set(self._invoke('tag').splitlines())
