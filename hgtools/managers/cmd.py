@@ -4,20 +4,21 @@ import operator
 import itertools
 import collections
 
-class Command(object):
+
+class MercurialCommand(object):
 	exe = 'hg'
 
 	def is_valid(self):
 		try:
 			# Check if both command and repo are valid
-			self._run_hg('status')
+			self._invoke('status')
 		except Exception:
 			return False
-		return super(Command, self).is_valid()
+		return super(MercurialCommand, self).is_valid()
 
 	def find_root(self):
 		try:
-			return self._run_hg('root').strip()
+			return self._invoke('root').strip()
 		except Exception:
 			pass
 
@@ -25,7 +26,7 @@ class Command(object):
 		"""
 		Find versioned files in self.location
 		"""
-		all_files = self._run_hg('locate', '-I', '.').splitlines()
+		all_files = self._invoke('locate', '-I', '.').splitlines()
 		# now we have a list of all files in self.location relative to
 		#  self.find_root()
 		# Remove the parent dirs from them.
@@ -39,7 +40,7 @@ class Command(object):
 			'--config', 'defaults.parents=']
 		if rev:
 			cmd.extend(['--rev', str(rev)])
-		out = self._run_hg(*cmd)
+		out = self._invoke(*cmd)
 		cs_pat = '^changeset:\s+(?P<local>\d+):(?P<hash>[0-9a-zA-Z]+)'
 		return (match.groupdict()['local'] for match in
 			re.finditer(cs_pat, out))
@@ -64,7 +65,7 @@ class Command(object):
 		"""
 		cmd = ['log', '--style', 'default',  '--config', 'defaults.log=',
 			'-r', rev_num]
-		res = self._run_hg(*cmd)
+		res = self._invoke(*cmd)
 		tag_lines = [
 			line for line in res.splitlines()
 			if line.startswith('tag:')
@@ -83,7 +84,7 @@ class Command(object):
 		cmd.extend(['--config', 'defaults.identify='])
 		if rev:
 			cmd.extend(['--rev', rev])
-		res = self._run_hg(*cmd)
+		res = self._invoke(*cmd)
 		return res.strip()
 
 	def _get_tags_by_num(self):
@@ -102,25 +103,25 @@ class Command(object):
 	def get_repo_tags(self):
 		tagged_revision = collections.namedtuple('tagged_revision',
 			'tag revision')
-		lines = self._run_hg('tags').splitlines()
+		lines = self._invoke('tags').splitlines()
 		return (
 			tagged_revision(*line.rsplit(None, 1))
 			for line in lines if line
 		)
 
 	def is_modified(self):
-		out = self._run_hg('status', '-mard')
+		out = self._invoke('status', '-mard')
 		return bool(out)
 
 
-class GitCommand(Command):
+class GitCommand(object):
 	exe = 'git'
 
 	def find_root(self):
 		try:
-			return self._run_hg('rev-parse', '--top-level').strip()
+			return self._invoke('rev-parse', '--top-level').strip()
 		except Exception:
 			pass
 
 	def get_tags(self, rev=None):
-		return self._run_hg('tag').splitlines()
+		return self._invoke('tag').splitlines()

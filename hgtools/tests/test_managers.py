@@ -7,6 +7,7 @@ import sys
 import py.test
 
 from hgtools import managers
+from hgtools.managers import subprocess
 
 def test_subprocess_manager_invalid_when_exe_missing():
 	"""
@@ -15,7 +16,7 @@ def test_subprocess_manager_invalid_when_exe_missing():
 	"""
 	non_existent_exe = '/non_existent_executable'
 	assert not os.path.exists(non_existent_exe)
-	mgr = managers.SubprocessManager()
+	mgr = subprocess.MercurialManager()
 	mgr.exe = non_existent_exe
 	assert not mgr.is_valid()
 
@@ -43,16 +44,16 @@ def tempdir_context():
 @contextlib.contextmanager
 def test_repo():
 	with tempdir_context():
-		mgr = managers.SubprocessManager()
-		mgr._run_hg('init', 'foo')
+		mgr = managers.MercurialManager()
+		mgr._invoke('init', 'foo')
 		os.chdir('foo')
 		os.makedirs('bar')
 		touch('bar/baz')
-		mgr._run_hg('addremove')
-		mgr._run_hg('ci', '-m', 'committed')
+		mgr._invoke('addremove')
+		mgr._invoke('ci', '-m', 'committed')
 		with open('bar/baz', 'w') as baz:
 			baz.write('content')
-		mgr._run_hg('ci', '-m', 'added content')
+		mgr._invoke('ci', '-m', 'added content')
 		yield
 
 
@@ -73,25 +74,25 @@ class TestRelativePaths(object):
 
 	def test_nested_child(self):
 		with test_repo():
-			test_mgr = managers.SubprocessManager('.')
+			test_mgr = managers.MercurialManager('.')
 			assert test_mgr.find_files() == [os.path.join('bar', 'baz')]
 
 	def test_manager_in_child(self):
 		with test_repo():
-			test_mgr = managers.SubprocessManager('bar')
+			test_mgr = managers.MercurialManager('bar')
 			assert test_mgr.find_files() == ['baz']
 
 	def test_current_dir_in_child(self):
 		with test_repo():
 			os.chdir('bar')
-			test_mgr = managers.SubprocessManager('.')
+			test_mgr = managers.MercurialManager('.')
 			assert test_mgr.find_files() == ['baz']
 
 class TestTags(object):
 	def setup_method(self, method):
 		self.context = test_repo()
 		self.context.__enter__()
-		self.mgr = managers.SubprocessManager('.')
+		self.mgr = managers.MercurialManager('.')
 
 	def teardown_method(self, method):
 		del self.mgr
@@ -99,9 +100,9 @@ class TestTags(object):
 		del self.context
 
 	def test_single_tag(self):
-		self.mgr._run_hg('tag', '1.0')
+		self.mgr._invoke('tag', '1.0')
 		assert self.mgr.get_tags() == set(['tip'])
-		self.mgr._run_hg('update', '1.0')
+		self.mgr._invoke('update', '1.0')
 		assert self.mgr.get_tags() == set(['1.0'])
 
 	def test_no_tags(self):
@@ -115,12 +116,12 @@ class TestTags(object):
 		assert self.mgr.get_tags() == set([])
 
 	def test_parent_tag(self):
-		self.mgr._run_hg('tag', '1.0')
+		self.mgr._invoke('tag', '1.0')
 		assert self.mgr.get_tags() == set(['tip'])
 		assert self.mgr.get_parent_tags() == set(['tip'])
 		assert self.mgr.get_parent_tags('.') == set(['1.0'])
 		assert self.mgr.get_parent_tags('tip') == set(['1.0'])
-		self.mgr._run_hg('tag', '1.1')
+		self.mgr._invoke('tag', '1.1')
 		assert self.mgr.get_tags() == set(['tip'])
 		assert self.mgr.get_parent_tags() == set(['tip'])
 		assert self.mgr.get_parent_tags('.') == set(['1.1'])
@@ -130,16 +131,16 @@ class TestTags(object):
 		"""
 		Always return the latest tag for a given revision
 		"""
-		self.mgr._run_hg('tag', '1.0')
-		self.mgr._run_hg('tag', '-r', '1.0', '1.1')
-		self.mgr._run_hg('update', '1.0')
+		self.mgr._invoke('tag', '1.0')
+		self.mgr._invoke('tag', '-r', '1.0', '1.1')
+		self.mgr._invoke('update', '1.0')
 		assert set(self.mgr.get_tags()) == set(['1.0', '1.1'])
 
 	def test_two_tags_same_revision_lexicographically_earlier(self):
 		"""
 		Always return the latest tag for a given revision
 		"""
-		self.mgr._run_hg('tag', '1.9')
-		self.mgr._run_hg('tag', '-r', '1.9', '1.10')
-		self.mgr._run_hg('update', '1.9')
+		self.mgr._invoke('tag', '1.9')
+		self.mgr._invoke('tag', '-r', '1.9', '1.10')
+		self.mgr._invoke('update', '1.9')
 		assert set(self.mgr.get_tags()) == set(['1.9', '1.10'])

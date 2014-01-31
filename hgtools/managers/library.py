@@ -12,14 +12,14 @@ except ImportError:
 except Exception:
 	pass
 
-class LibraryManager(cmd.Command, base.RepoManager):
+class MercurialInProcManager(cmd.MercurialCommand, base.RepoManager):
 	"""
 	A RepoManager implemented by invoking the hg command in-process.
 	"""
 
-	def _run_hg(self, *params):
+	def _invoke(self, *params):
 		"""
-		Run the hg command in-process with the supplied params.
+		Run the self.exe command in-process with the supplied params.
 		"""
 		cmd = [self.exe, '-R', self.location] + list(params)
 		with reentry.in_process_context(cmd) as result:

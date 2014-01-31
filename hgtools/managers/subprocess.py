@@ -6,15 +6,32 @@ import subprocess
 from . import base
 from . import cmd
 
-class SubprocessManager(cmd.Command, base.RepoManager):
+
+class Subprocess(object):
+	env = None
+
+	def _invoke(self, *params):
+		"""
+		Invoke self.exe as a subprocess
+		"""
+		cmd = [self.exe] + list(params)
+		proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+			stderr=subprocess.PIPE, cwd=self.location, env=self.env)
+		stdout, stderr = proc.communicate()
+		if not proc.returncode == 0:
+			raise RuntimeError(stderr.strip() or stdout.strip())
+		return stdout.decode('utf-8')
+
+
+class MercurialManager(Subprocess, cmd.MercurialCommand, base.RepoManager):
 	"""
 	A RepoManager implemented by calling into the 'hg' command-line
 	as a subprocess.
 	"""
 	priority = 1
 
-	@staticmethod
-	def _safe_env():
+	@property
+	def env(self):
 		"""
 		Return an environment safe for calling an `hg` subprocess.
 
@@ -27,19 +44,10 @@ class SubprocessManager(cmd.Command, base.RepoManager):
 		env.pop('MACOSX_DEPLOYMENT_TARGET', None)
 		return env
 
-	def _run_hg(self, *params):
-		cmd = [self.exe] + list(params)
-		proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
-			stderr=subprocess.PIPE, cwd=self.location, env=self._safe_env())
-		stdout, stderr = proc.communicate()
-		if not proc.returncode == 0:
-			raise RuntimeError(stderr.strip() or stdout.strip())
-		return stdout.decode('utf-8')
 
-
-class GitSubprocessManager(SubprocessManager, cmd.GitCommand):
+class GitManager(Subprocess, cmd.GitCommand, base.RepoManager):
 	"""
 	A RepoManager implemented by calling into the 'git' command-line
 	as a subprocess.
 	"""
-	priority = 2
+	priority = 1
