@@ -3,7 +3,7 @@
 """
 Setup script for building hgtools distribution
 
-Copyright © 2010-2013 Jason R. Coombs
+Copyright © 2010-2014 Jason R. Coombs
 """
 
 import setuptools
@@ -22,8 +22,8 @@ setup_params = dict(
 	version=hgtools.plugins.calculate_version(options=dict(increment='0.0.1')),
 	author="Jannis Leidel/Jason R. Coombs",
 	author_email="jaraco@jaraco.com",
-	url="http://bitbucket.org/jaraco/hgtools/",
-	download_url="http://bitbucket.org/jaraco/hgtools/downloads/",
+	url="https://bitbucket.org/jaraco/hgtools/",
+	download_url="https://bitbucket.org/jaraco/hgtools/downloads/",
 	description="Classes and setuptools plugin for Mercurial repositories",
 	long_description=long_description,
 	license="GPL2",
