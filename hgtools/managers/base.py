@@ -48,7 +48,7 @@ class RepoManager(versioning.VersionManagement, object):
 		return (mgr for mgr in managers if mgr.find_root())
 
 	def __repr__(self):
-		return '{self.__class__.__name__}({self.location}'.format(**vars())
+		return '{self.__class__.__name__}({self.location})'.format(**vars())
 
 	def find_root(self):
 		raise NotImplementedError()
