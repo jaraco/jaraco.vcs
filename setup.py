@@ -46,6 +46,7 @@ setup_params = dict(
 		],
 		"distutils.setup_keywords": [
 			"use_hg_version = hgtools.plugins:version_calc",
+			"use_vcs_version = hgtools.plugins:version_calc",
 		],
 	},
 )
