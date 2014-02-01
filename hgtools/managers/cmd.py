@@ -131,3 +131,9 @@ class Git(Command):
 		"""
 		rev = rev or 'HEAD'
 		return set(self._invoke('tag', '--points-at', rev).splitlines())
+
+	def is_modified(self):
+		"""
+		Is the current state modified? (currently stubbed assuming no)
+		"""
+		return False
