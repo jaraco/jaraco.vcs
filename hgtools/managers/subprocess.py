@@ -29,6 +29,8 @@ class MercurialManager(Subprocess, cmd.Mercurial, base.RepoManager):
 	as a subprocess.
 	"""
 	priority = 1
+	if os.path.isdir('.hg'):
+		priority += 1
 
 	@property
 	def env(self):
@@ -51,3 +53,5 @@ class GitManager(Subprocess, cmd.Git, base.RepoManager):
 	as a subprocess.
 	"""
 	priority = 1
+	if os.path.isdir('.git'):
+		priority += 1
