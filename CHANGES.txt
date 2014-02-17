@@ -1,6 +1,26 @@
 Changes
 *******
 
+5.0
+~~~
+
+* Added new ``use_vcs_version`` distutils parameter to supersede
+  ``use_hg_version``. Clients should update to use this new parameter as soon
+  as hgtools 5.0 is generally available.
+* Initial git support. The tool now nominally supports eliciting the project
+  version from a git tag. Many of the hg features are not yet implemented,
+  such as auto-incrementing versions when the current revision is not on a
+  tag and file discovery from repo metadata.
+  This new Git support provides experimental support for dual-hosted
+  repositories (such as those found on Kiln). Since file discovery is not yet
+  tested or implemented, there are likely to be yet undiscovered issues.
+* Refactored the Manager models to better support the two repositories.
+  Clients that use hgtools to programmatically manipulate repositories will
+  need to update to use the new names. In particular, HGRepoManager was
+  renamed to RepoManager. SubprocessManager renamed to MercurialManager and
+  a new GitManager was created. The LibraryManager was renamed to
+  MercurialInProcManager.
+
 4.0
 ~~~
 
