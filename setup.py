@@ -9,9 +9,9 @@ Copyright © 2010-2014 Jason R. Coombs
 import setuptools
 import hgtools.plugins
 
-with open('README') as readme:
+with open('README.txt') as readme:
 	long_description = readme.read()
-with open('CHANGES') as changes:
+with open('CHANGES.txt') as changes:
 	long_description += '\n' + changes.read()
 
 # HGTools uses a special technique for getting the version from
