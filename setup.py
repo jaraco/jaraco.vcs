@@ -11,6 +11,8 @@ import hgtools.plugins
 
 with open('README') as readme:
 	long_description = readme.read()
+with open('CHANGES') as changes:
+	long_description += '\n' + changes.read()
 
 # HGTools uses a special technique for getting the version from
 #  mercurial, because it can't require itself to install itself.
