@@ -1,6 +1,13 @@
 Changes
 *******
 
+5.0.1
+~~~~~
+
+* Issue #17: Fix regression on older versions of setuptools where unspecified
+  distribution attributes would cause use_vcs_version of None to supersede
+  a supplied use_hg_version.
+
 5.0
 ~~~
 

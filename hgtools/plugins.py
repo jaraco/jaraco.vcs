@@ -54,8 +54,10 @@ def patch_egg_info(force_hg_version=False):
 
 	@functools.wraps(orig_ver)
 	def tagged_version(self):
-		vcs_param = getattr(self.distribution, 'use_vcs_version',
-			getattr(self.distribution, 'use_hg_version', False))
+		vcs_param = (
+			getattr(self.distribution, 'use_vcs_version', False) or
+			getattr(self.distribution, 'use_hg_version', False)
+		)
 		using_hg_version = force_hg_version or vcs_param
 		if force_hg_version:
 			# disable patched `tagged_version` to avoid affecting
