@@ -93,7 +93,10 @@ def calculate_version(options={}):
 		#  the version using a RepoManager.
 		mgr = managers.RepoManager.get_first_valid_manager()
 		version_handler = options.get('version_handler', _calculate_version)
-		version = version_handler(mgr, options)
+		try:
+			version = version_handler(mgr, options)
+		except Exception:
+			version = options.get('increment')
 	return version
 
 def version_calc(dist, attr, value):

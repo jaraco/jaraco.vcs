@@ -1,6 +1,12 @@
 Changes
 *******
 
+5.1
+~~~
+
+* In version inference, always fallback to increment (or None) when an
+  Exception occurs in the calculation.
+
 5.0.1
 ~~~~~
 
