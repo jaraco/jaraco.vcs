@@ -1,6 +1,11 @@
 Changes
 *******
 
+5.3
+~~~
+
+* Issue #19: Add file finder support for git. Credit to Berry Phillips.
+
 5.2
 ~~~
 
