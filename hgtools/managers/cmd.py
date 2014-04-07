@@ -125,6 +125,10 @@ class Git(Command):
 		except Exception:
 			pass
 
+	def find_files(self):
+		all_files = self._invoke('ls-files').splitlines()
+		return all_files
+
 	def get_tags(self, rev=None):
 		"""
 		Return the tags for the current revision as a set
