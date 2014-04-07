@@ -132,6 +132,19 @@ class Git(Command):
 		rev = rev or 'HEAD'
 		return set(self._invoke('tag', '--points-at', rev).splitlines())
 
+	def get_repo_tags(self):
+		tagged_revision = collections.namedtuple('tagged_revision',
+			'tag revision')
+
+		cmd = ["for-each-ref", "--sort=-committerdate",
+				"--format=%(refname:short) %(objectname:short)", "refs/tags"]
+
+		lines = self._invoke(*cmd).splitlines()
+		return (
+			tagged_revision(*line.rsplit(None, 1))
+			for line in lines if line
+		)
+
 	def is_modified(self):
 		"""
 		Is the current state modified? (currently stubbed assuming no)
