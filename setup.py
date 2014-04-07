@@ -21,7 +21,7 @@ with open('CHANGES.txt') as changes:
 
 setup_params = dict(
 	name="hgtools",
-	version=hgtools.plugins.calculate_version(options=dict(increment='0.0.1')),
+	version=hgtools.plugins.calculate_version(options=dict(increment='0.1')),
 	author="Jannis Leidel/Jason R. Coombs",
 	author_email="jaraco@jaraco.com",
 	url="https://bitbucket.org/jaraco/hgtools/",
