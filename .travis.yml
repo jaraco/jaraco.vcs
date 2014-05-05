@@ -7,4 +7,4 @@ python:
   - 3.4
 # command to run tests
 script:
- - python setup.py ptr
+ - py.test
