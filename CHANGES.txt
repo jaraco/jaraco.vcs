@@ -1,6 +1,13 @@
 Changes
 *******
 
+6.0
+~~~
+
+* Issue #23: hgtools no longer imports Mercurial and thus does not link to
+  it. Applications that wish to use the in-process Mercurial manager must
+  first `import mercurial.dispatch` in their application.
+
 5.3
 ~~~
 

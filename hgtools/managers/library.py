@@ -1,15 +1,10 @@
 from __future__ import absolute_import
 
+import sys
+
 from . import base
 from . import cmd
 from . import reentry
-
-try:
-	import mercurial.dispatch
-except ImportError:
-	pass
-except Exception:
-	pass
 
 class MercurialInProcManager(cmd.Mercurial, base.RepoManager):
 	"""
@@ -22,7 +17,7 @@ class MercurialInProcManager(cmd.Mercurial, base.RepoManager):
 		"""
 		cmd = [self.exe, '-R', self.location] + list(params)
 		with reentry.in_process_context(cmd) as result:
-			mercurial.dispatch.run()
+			sys.modules['mercurial.dispatch'].run()
 		stdout = result.stdio.stdout.getvalue()
 		stderr = result.stdio.stderr.getvalue()
 		if not result.returncode == 0:
