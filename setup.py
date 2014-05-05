@@ -28,7 +28,7 @@ setup_params = dict(
 	download_url="https://bitbucket.org/jaraco/hgtools/downloads/",
 	description="Classes and setuptools plugin for Mercurial repositories",
 	long_description=long_description,
-	license="GPL2",
+	license="MIT",
 	classifiers=[
 		"Development Status :: 5 - Production/Stable",
 		"Programming Language :: Python",
