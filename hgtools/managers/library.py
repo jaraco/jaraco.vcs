@@ -5,7 +5,6 @@ from . import cmd
 from . import reentry
 
 try:
-	import mercurial.__version__
 	import mercurial.dispatch
 except ImportError:
 	pass
