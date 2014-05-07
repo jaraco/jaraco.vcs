@@ -121,6 +121,14 @@ class Mercurial(Command):
 			for line in lines if line
 		)
 
+	def get_ancestral_tags(self, rev='.'):
+		"""
+		Like get_repo_tags, but only get those tags ancestral to the current
+		changeset.
+		"""
+		spec = 'sort(ancestors({rev}), -date)'.format(**vars())
+		return self._read_tags_for_revset(spec)
+
 	def is_modified(self):
 		out = self._invoke('status', '-mard')
 		return bool(out)

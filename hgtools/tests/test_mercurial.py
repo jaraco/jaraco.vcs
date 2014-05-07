@@ -89,3 +89,39 @@ class TestTags(object):
 		self.mgr._invoke('tag', '-r', '1.9', '1.10')
 		self.mgr._invoke('update', '1.9')
 		assert set(self.mgr.get_tags()) == set(['1.9', '1.10'])
+
+	def _setup_branchy_tags(self):
+		"""
+		Create two heads, one which has a 1.0 tag and a different one which
+		has a 1.1 tag.
+		"""
+		# create a commit with a tag
+		with open('bar/baz', 'a') as f:
+			f.write('\nmore to say\n')
+		self.mgr._invoke('commit', '-m', 'Had more to say')
+		self.mgr._invoke('tag', '1.0')
+		# update to the pre-tagged revision
+		self.mgr._invoke('update', '1')
+		# Make a different commit
+		with open('bar/baz', 'a') as f:
+			f.write('\na different concept\n')
+		self.mgr._invoke('commit', '-m', 'A different approach')
+		self.mgr._invoke('tag', '1.1')
+
+	def test_ancestral_tags_local(self):
+		"""
+		get_ancestral_tags should only return tagged revisions ancestral
+		to the current revision.
+		"""
+		self._setup_branchy_tags()
+		tag, tip = self.mgr.get_ancestral_tags()
+		assert tag.tag == '1.1'
+
+	def test_ancestral_tags_specified(self):
+		"""
+		get_ancestral_tags should only return tagged revisions ancestral
+		to the specified revision.
+		"""
+		self._setup_branchy_tags()
+		tag, = self.mgr.get_ancestral_tags(3)
+		assert tag.tag == '1.0'
