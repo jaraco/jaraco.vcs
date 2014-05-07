@@ -5,6 +5,9 @@ import itertools
 import collections
 
 
+TaggedRevision = collections.namedtuple('TaggedRevision', 'tag revision')
+
+
 class Command(object):
 	def is_valid(self):
 		try:
@@ -103,11 +106,9 @@ class Mercurial(Command):
 		)
 
 	def get_repo_tags(self):
-		tagged_revision = collections.namedtuple('tagged_revision',
-			'tag revision')
 		lines = self._invoke('tags').splitlines()
 		return (
-			tagged_revision(*line.rsplit(None, 1))
+			TaggedRevision(*line.rsplit(None, 1))
 			for line in lines if line
 		)
 
@@ -137,15 +138,12 @@ class Git(Command):
 		return set(self._invoke('tag', '--points-at', rev).splitlines())
 
 	def get_repo_tags(self):
-		tagged_revision = collections.namedtuple('tagged_revision',
-			'tag revision')
-
 		cmd = ["for-each-ref", "--sort=-committerdate",
 				"--format=%(refname:short) %(objectname:short)", "refs/tags"]
 
 		lines = self._invoke(*cmd).splitlines()
 		return (
-			tagged_revision(*line.rsplit(None, 1))
+			TaggedRevision(*line.rsplit(None, 1))
 			for line in lines if line
 		)
 
