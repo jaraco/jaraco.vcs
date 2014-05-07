@@ -68,16 +68,25 @@ class Mercurial(Command):
 		Return the tags for revision sorted by when the tags were
 		created (latest first)
 		"""
+		return (tr.tag for tr in self._read_tags_for_revset(rev_num))
+
+	def _read_tags_for_revset(self, spec):
+		"""
+		Return TaggedRevision for each tag/rev combination in the revset spec
+		"""
 		cmd = ['log', '--style', 'default',  '--config', 'defaults.log=',
-			'-r', rev_num]
+			'-r', spec]
 		res = self._invoke(*cmd)
-		tag_lines = [
-			line for line in res.splitlines()
-			if line.startswith('tag:')
-		]
 		header_pattern = re.compile('(?P<header>\w+?):\s+(?P<value>.*)')
-		return (header_pattern.match(line).groupdict()['value']
-			for line in tag_lines)
+		match_res = map(header_pattern.match, res.splitlines())
+		matched_lines = filter(None, match_res)
+		matches = (match.groupdict() for match in matched_lines)
+		for match in matches:
+			if match['header'] == 'changeset':
+				id, sep, rev = match['value'].partition(':')
+			if match['header'] == 'tag':
+				tag = match['value']
+				yield TaggedRevision(tag, rev)
 
 	def _get_rev_num(self, rev=None):
 		"""
