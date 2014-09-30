@@ -4,6 +4,8 @@ import operator
 import itertools
 import collections
 
+import pkg_resources
+
 
 TaggedRevision = collections.namedtuple('TaggedRevision', 'tag revision')
 
@@ -136,6 +138,14 @@ class Mercurial(Command):
 
 class Git(Command):
 	exe = 'git'
+
+	def is_valid(self):
+		return super(Command, self).is_valid() and self.version_suitable()
+
+	def version_suitable(self):
+		req_ver = pkg_resources.parse_version('1.7.10')
+		act_ver = pkg_resources.parse_version(self.version())
+		return act_ver >= req_ver
 
 	def find_root(self):
 		try:
