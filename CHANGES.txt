@@ -1,6 +1,11 @@
 Changes
 *******
 
+6.1
+~~~
+
+* Issue #21: GitManager is now only valid if Git 1.7.10 or later is present.
+
 6.0
 ~~~
 
