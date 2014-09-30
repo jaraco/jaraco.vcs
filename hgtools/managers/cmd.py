@@ -169,3 +169,10 @@ class Git(Command):
 		Is the current state modified? (currently stubbed assuming no)
 		"""
 		return False
+
+	def version(self):
+		"""
+		Return the underlying git version
+		"""
+		version = next(self._invoke(['version']).splitlines()).strip()
+		return re.match(r'git version (\d+\.\d+.*)', version).group(1)
