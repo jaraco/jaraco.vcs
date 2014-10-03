@@ -184,6 +184,6 @@ class Git(Command):
 		"""
 		Return the underlying git version
 		"""
-		lines = iter(self._invoke(['version']).splitlines())
+		lines = iter(self._invoke('version').splitlines())
 		version = next(lines).strip()
 		return re.match(r'git version (\d+\.\d+.*)', version).group(1)
