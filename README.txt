@@ -28,7 +28,9 @@ sandboxing).
 Usage
 *****
 
-Here's a simple example of a setup.py that uses hgtools::
+Here's a simple example of a setup.py that uses hgtools:
+
+.. code-block:: python
 
     from setuptools import setup, find_packages
     setup(
@@ -82,7 +84,9 @@ repo is not on any of those tags, get_current_version will return
 A distutils hook has been created to hack setuptools to use this version
 information automatically. To use this functionality, just use the
 ``use_vcs_version`` parameter to setup.
-For example::
+For example:
+
+.. code-block:: python
 
     from setuptools import setup, find_packages
     setup(
@@ -117,7 +121,9 @@ one or more of the following parameters:
    current tree to help hgtools guess the target version.
 
  - `version_handler`:
-   A Python function with the following signature::
+   A Python function with the following signature:
+
+   .. code-block:: python
 
        def calc_version(mgr, options):
            return str('1.0')
@@ -128,7 +134,9 @@ one or more of the following parameters:
    and the `options` is the dictionary passed to use_vcs_version.
 
    Use this option, for example, to include the Mercurial hash or local
-   revision ID in the version::
+   revision ID in the version:
+
+   .. code-block:: python
 
        def id_as_version(mgr, options):
            "Always return the Mercurial revision ID as the version"
