@@ -140,7 +140,7 @@ class Git(Command):
 	exe = 'git'
 
 	def is_valid(self):
-		return super(Command, self).is_valid() and self.version_suitable()
+		return super(Git, self).is_valid() and self.version_suitable()
 
 	def version_suitable(self):
 		req_ver = pkg_resources.parse_version('1.7.10')
