@@ -74,7 +74,7 @@ def patch_egg_info(force_hg_version=False):
 def _calculate_version(mgr, options):
 	default_increment = options.get('increment')
 	repo_exists = bool(mgr.find_root())
-	return (mgr.get_current_version(default_increment)
+	return (mgr.get_current_version(**options)
 		if repo_exists else default_increment)
 
 def calculate_version(options={}):

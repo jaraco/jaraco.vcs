@@ -58,7 +58,7 @@ Auto Version Numbering
 **********************
 
 With the 0.4 release, hgtools adds support for automatically generating
-project version numbers from the mercurial repository in which the
+project version numbers from the repository in which the
 project is developed.
 
 To use this feature, your project must follow the following assumptions:
@@ -97,7 +97,7 @@ For example:
     )
 
 If the value supplied to use_vcs_version resolves to True, hgtools will
-use the mercurial version to determine the version of the
+use the tagged version to determine the version of the
 package (based on get_current_version). If an sdist is created, hgtools
 will store the calculated version in the tag_build of the setup.cfg and
 will use that version when deploying remotely. Therefore, if you are
@@ -110,7 +110,7 @@ Versioning Parameters
 
 It's also possible to pass keyword parameters to use_vcs_version to
 tweak how it generates version numbers. To pass parameters, instead of
-setting `use_hg_version = True`, set it to a non-empty dictionary with
+setting `use_vcs_version = True`, set it to a non-empty dictionary with
 one or more of the following parameters:
 
  - `increment`:
@@ -133,7 +133,7 @@ one or more of the following parameters:
    `hgtools.managers.base.RepoManager` object referencing the local repo
    and the `options` is the dictionary passed to use_vcs_version.
 
-   Use this option, for example, to include the Mercurial hash or local
+   Use this option, for example, to include the commit hash or local
    revision ID in the version:
 
    .. code-block:: python
