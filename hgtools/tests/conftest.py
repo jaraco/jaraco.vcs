@@ -8,6 +8,8 @@ from hgtools import managers
 def hg_repo(tmpdir):
 	tmpdir.chdir()
 	mgr = managers.MercurialManager()
+	if not mgr.is_valid():
+		pytest.skip()
 	mgr._invoke('init', '.')
 	os.makedirs('bar')
 	touch('bar/baz')
@@ -23,6 +25,8 @@ def hg_repo(tmpdir):
 def git_repo(tmpdir):
 	tmpdir.chdir()
 	mgr = managers.GitManager()
+	if not mgr.is_valid():
+		pytest.skip()
 	mgr._invoke('init')
 	mgr._invoke('config', 'user.email', 'hgtools@example.com')
 	mgr._invoke('config', 'user.name', 'HGTools')
