@@ -114,9 +114,16 @@ class TestTags(object):
 		to the current revision.
 		"""
 		self._setup_branchy_tags()
-		print(list(self.mgr.get_ancestral_tags()))
-		tag, tip = self.mgr.get_ancestral_tags()
-		assert tag.tag == '1.1'
+		tags = self.mgr.get_ancestral_tags()
+		# Two tags expected, one is the tag we made and the other is tip On
+		# fast hardware, the timestamps for these may be close enough that
+		# mercurial doesn't sort them properly by time.
+		tags = list(tags)
+		print(tags)
+		assert tags[0].tag in ('1.1', 'tip')
+		assert tags[1].tag in ('1.1', 'tip')
+		assert tags[0].tag != tags[1].tag
+		assert len(tags) == 2
 
 	def test_ancestral_tags_specified(self):
 		"""
