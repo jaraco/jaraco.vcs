@@ -1,4 +1,5 @@
 import os
+import operator
 
 import pytest
 
@@ -114,16 +115,14 @@ class TestTags(object):
 		to the current revision.
 		"""
 		self._setup_branchy_tags()
-		tags = self.mgr.get_ancestral_tags()
-		# Two tags expected, one is the tag we made and the other is tip On
-		# fast hardware, the timestamps for these may be close enough that
-		# mercurial doesn't sort them properly by time.
-		tags = list(tags)
-		print(tags)
-		assert tags[0].tag in ('1.1', 'tip')
-		assert tags[1].tag in ('1.1', 'tip')
-		assert tags[0].tag != tags[1].tag
-		assert len(tags) == 2
+		tag_revs = self.mgr.get_ancestral_tags()
+		tags = map(operator.attrgetter('tag'), tag_revs)
+		# Two tags expected, one is the specified tag and
+		# the other is 'tip'. On fast hardware, the
+		# timestamps for these may be close enough that
+		# mercurial doesn't sort them properly by time,
+		# so normalize order.
+		assert sorted(tags) == ['1.1', 'tip']
 
 	def test_ancestral_tags_specified(self):
 		"""
