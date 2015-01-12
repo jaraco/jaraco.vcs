@@ -186,4 +186,8 @@ class Git(Command):
 		"""
 		lines = iter(self._invoke('version').splitlines())
 		version = next(lines).strip()
+		return self._parse_version(version)
+
+	@classmethod
+	def _parse_version(cls, version):
 		return re.match(r'git version (\d+\.\d+.*)', version).group(1)
