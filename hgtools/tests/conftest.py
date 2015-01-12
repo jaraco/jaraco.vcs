@@ -30,7 +30,7 @@ def hg_repo(tmpdir):
 def git_repo(tmpdir):
 	tmpdir.chdir()
 	mgr = managers.GitManager()
-	_ensure_present()
+	_ensure_present(mgr)
 	mgr._invoke('init')
 	mgr._invoke('config', 'user.email', 'hgtools@example.com')
 	mgr._invoke('config', 'user.name', 'HGTools')
