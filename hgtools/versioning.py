@@ -119,15 +119,14 @@ class VersionManagement(object):
 		"""
 		return self.__best_version(self.get_strict_versions())
 
-	def get_current_version(self, increment=None, version_style='strict',
-			**kwargs):
+	def get_current_version(self, increment=None):
 		"""
 		Return as a string the version of the current state of the
 		repository -- a tagged version, if present, or the next version
 		based on prior tagged releases.
 		"""
 		ver = (
-			self.get_tagged_version(version_style)
+			self.get_tagged_version()
 			or str(self.get_next_version(increment)) + 'dev'
 			)
 		return str(ver)
