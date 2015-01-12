@@ -3,6 +3,7 @@ import os
 import pytest
 
 from hgtools import managers
+from hgtools.managers import cmd
 from hgtools.managers import subprocess
 
 def test_subprocess_manager_invalid_when_exe_missing():
@@ -30,3 +31,11 @@ class TestTags(object):
 		assert self.mgr.get_tags() == set(['1.0'])
 		self.mgr._invoke('checkout', '1.0')
 		assert self.mgr.get_tags() == set(['1.0'])
+
+class TestParseVersion:
+	def test_simple(self):
+		assert cmd.Git._parse_version('git version 1.9.3') == '1.9.3'
+
+	def test_trailing_mess(self):
+		val = cmd.Git._parse_version('git version 1.9.3 (Mac OS X)')
+		assert val == '1.9.3'
