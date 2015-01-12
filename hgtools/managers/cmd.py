@@ -19,9 +19,22 @@ class Command(object):
 			return False
 		return super(Command, self).is_valid()
 
+	def version(self):
+		"""
+		Return the underlying version
+		"""
+		lines = iter(self._invoke('version').splitlines())
+		version = next(lines).strip()
+		return self._parse_version(version)
+
+	@classmethod
+	def _parse_version(cls, version):
+		return re.search(cls.version_pattern, version).group(1)
+
 
 class Mercurial(Command):
 	exe = 'hg'
+	version_pattern = r'Mercurial Distributed SCM \((.*?)\)'
 
 	def find_root(self):
 		try:
@@ -138,6 +151,7 @@ class Mercurial(Command):
 
 class Git(Command):
 	exe = 'git'
+	version_pattern = r'git version (\d+\.\d+[^ ]*)'
 
 	def is_valid(self):
 		return super(Git, self).is_valid() and self.version_suitable()
@@ -179,15 +193,3 @@ class Git(Command):
 		Is the current state modified? (currently stubbed assuming no)
 		"""
 		return False
-
-	def version(self):
-		"""
-		Return the underlying git version
-		"""
-		lines = iter(self._invoke('version').splitlines())
-		version = next(lines).strip()
-		return self._parse_version(version)
-
-	@classmethod
-	def _parse_version(cls, version):
-		return re.match(r'git version (\d+\.\d+[^ ]*)', version).group(1)
