@@ -3,7 +3,7 @@
 """
 Setup script for building hgtools distribution
 
-Copyright © 2010-2014 Jason R. Coombs
+Copyright © 2010-2015 Jason R. Coombs
 """
 
 import setuptools
