@@ -4,12 +4,17 @@ import pytest
 
 from hgtools import managers
 
+def _ensure_present(mgr):
+	try:
+		mgr.version()
+	except Exception:
+		pytest.skip()
+
 @pytest.fixture
 def hg_repo(tmpdir):
 	tmpdir.chdir()
 	mgr = managers.MercurialManager()
-	if not mgr.is_valid():
-		pytest.skip()
+	_ensure_present(mgr)
 	mgr._invoke('init', '.')
 	os.makedirs('bar')
 	touch('bar/baz')
@@ -25,8 +30,7 @@ def hg_repo(tmpdir):
 def git_repo(tmpdir):
 	tmpdir.chdir()
 	mgr = managers.GitManager()
-	if not mgr.is_valid():
-		pytest.skip()
+	_ensure_present()
 	mgr._invoke('init')
 	mgr._invoke('config', 'user.email', 'hgtools@example.com')
 	mgr._invoke('config', 'user.name', 'HGTools')
