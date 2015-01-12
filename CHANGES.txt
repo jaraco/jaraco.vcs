@@ -1,6 +1,11 @@
 Changes
 *******
 
+6.1.2
+~~~~~
+
+* Issue #28: Fixed poor parsing of git version.
+
 6.1
 ~~~
 
