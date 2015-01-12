@@ -31,7 +31,7 @@ def replace_sysargv(params):
 	try:
 		yield
 	finally:
-		sys.argv = sys.argv
+		sys.argv = sys_argv
 
 class Result(object):
 	pass
