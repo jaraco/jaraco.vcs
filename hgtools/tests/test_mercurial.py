@@ -114,6 +114,7 @@ class TestTags(object):
 		to the current revision.
 		"""
 		self._setup_branchy_tags()
+		print(list(self.mgr.get_ancestral_tags()))
 		tag, tip = self.mgr.get_ancestral_tags()
 		assert tag.tag == '1.1'
 
