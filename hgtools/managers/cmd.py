@@ -190,4 +190,4 @@ class Git(Command):
 
 	@classmethod
 	def _parse_version(cls, version):
-		return re.match(r'git version (\d+\.\d+.*)', version).group(1)
+		return re.match(r'git version (\d+\.\d+[^ ]*)', version).group(1)
