@@ -38,7 +38,11 @@ class RepoManager(versioning.VersionManagement, object):
 
 	@staticmethod
 	def get_first_valid_manager(location='.'):
-		return next(RepoManager.get_valid_managers(location))
+		try:
+			return next(RepoManager.get_valid_managers(location))
+		except StopIteration as e:
+			e.args = "No source repo or suitable VCS version found",
+			raise
 
 	@staticmethod
 	def existing_only(managers):

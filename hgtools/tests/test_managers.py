@@ -1,3 +1,6 @@
+import mock
+import pytest
+
 from hgtools import managers
 
 def test_existing_only():
@@ -9,3 +12,14 @@ def test_existing_only():
 	mgrs = managers.RepoManager.get_valid_managers('/')
 	existing = list(managers.RepoManager.existing_only(mgrs))
 	assert not existing
+
+@mock.patch.object(managers.RepoManager, 'get_valid_managers',
+	classmethod(lambda cls, location: iter(())))
+def test_no_valid_managers():
+	"""
+	When no valid managers can be found, a StopIteration is raised providing
+	a nice message.
+	"""
+	with pytest.raises(StopIteration) as err:
+		managers.RepoManager.get_first_valid_manager()
+	assert 'no source repo' in str(err).lower()
