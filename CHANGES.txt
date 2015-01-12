@@ -1,6 +1,11 @@
 Changes
 *******
 
+6.2.1
+~~~~~
+
+* Pull Request #7: Fixed intermittent test failures.
+
 6.2
 ~~~
 
