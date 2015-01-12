@@ -1,10 +1,11 @@
 Changes
 *******
 
-6.1.2
-~~~~~
+6.2
+~~~
 
-* Issue #28: Fixed poor parsing of git version.
+* Issue #28: Fixed poor parsing of git version. Also provide a nicer error
+  message when no repo manager is found.
 
 6.1
 ~~~
