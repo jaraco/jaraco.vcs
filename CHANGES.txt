@@ -1,6 +1,12 @@
 Changes
 *******
 
+6.3
+~~~
+
+* Updated 'dev' revision to be compatible with setuptools 8 canonical
+  pre-release version numbering (now '.dev0').
+
 6.2.1
 ~~~~~
 

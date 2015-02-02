@@ -62,4 +62,4 @@ class TestVersioning(object):
 		)
 		assert mgr.get_tagged_version() is None
 		assert mgr.get_next_version() == StrictVersion('1.0.1')
-		assert mgr.get_current_version() == '1.0.1dev'
+		assert mgr.get_current_version() == '1.0.1.dev0'

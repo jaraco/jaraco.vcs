@@ -127,7 +127,7 @@ class VersionManagement(object):
 		"""
 		ver = (
 			self.get_tagged_version()
-			or str(self.get_next_version(increment)) + 'dev'
+			or str(self.get_next_version(increment)) + '.dev0'
 			)
 		return str(ver)
 
