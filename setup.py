@@ -6,6 +6,8 @@ Setup script for building hgtools distribution
 Copyright © 2010-2015 Jason R. Coombs
 """
 
+import sys
+
 import setuptools
 import hgtools.plugins
 
@@ -13,6 +15,8 @@ with open('README.txt') as readme:
 	long_description = readme.read()
 with open('CHANGES.txt') as changes:
 	long_description += '\n' + changes.read()
+
+pytest_runner = ['pytest-runner'] if 'ptr' in sys.argv else []
 
 # HGTools uses a special technique for getting the version from
 #  mercurial, because it can't require itself to install itself.
@@ -42,7 +46,7 @@ setup_params = dict(
 		"Framework :: Setuptools Plugin",
 	],
 	packages=setuptools.find_packages(),
-	entry_points = {
+	entry_points={
 		"setuptools.file_finders": [
 			"hg = hgtools.plugins:file_finder"
 		],
@@ -51,6 +55,10 @@ setup_params = dict(
 			"use_vcs_version = hgtools.plugins:version_calc",
 		],
 	},
+	setup_requires=pytest_runner,
+	tests_require=[
+		"pytest",
+	],
 )
 
 if __name__ == '__main__':
