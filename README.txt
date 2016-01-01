@@ -1,6 +1,10 @@
 hgtools
 =======
 
+.. warning:: hgtools is defunct. It has been largely superseded by the
+   `setuptools_scm <https://pypi.python.org/pypi/setuptools_scm>`_
+   project.
+
 hgtools builds on the setuptools_hg plugin for setuptools. hgtools
 provides classes for inspecting and working with repositories in the
 Mercurial and Git version control systems (VCS).
