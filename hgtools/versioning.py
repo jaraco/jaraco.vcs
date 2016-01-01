@@ -107,7 +107,7 @@ class VersionManagement(object):
 		modifications, use the tag on the parent changeset.
 		"""
 		tags = list(self.get_tags())
-		if tags == ['tip'] and not self.is_modified():
+		if 'tip' in tags and not self.is_modified():
 			tags = self.get_parent_tags('tip')
 		versions = self.__versions_from_tags(tags)
 		return self.__best_version(versions)

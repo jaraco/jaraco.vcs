@@ -1,6 +1,12 @@
 Changes
 *******
 
+6.5
+~~~
+
+* Issue #31: Add support for Git-backed Mercurial repositories with
+  bookmarks on the tip.
+
 6.4
 ~~~
 
