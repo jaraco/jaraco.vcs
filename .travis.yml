@@ -1,10 +1,10 @@
 sudo: false
 language: python
 python:
- - 2.6
- - 2.7
- - 3.3
- - 3.6
+- 2.6
+- 2.7
+- 3.3
+- 3.6
 matrix:
   allow_failures:
   - python: 2.6
@@ -23,6 +23,7 @@ deploy:
     all_branches: true
     python: 3.6
   user: jaraco
-  # supply password with `travis encrypt --add deploy.password`
   distributions: dists
   skip_upload_docs: true
+  password:
+    secure: KzvFC+r/dZNfRKy00n92RNybwISe5n0vKP0x6xCT2FND/Jzo+RU/dCqOmQBeOm38b3o7EXPJ0/i1LS6NlaQTiQoHb4xi+bav6+WYXIKoqaXbuhQML9BR702uubcT+F/+LAISE7qcBFjYbo8fqPlJhdOAwcY0F451A9TfzqD7SppsSAUMm3I6XyV+Y/kf9chXmRZWgpxXi71ByZSkchj6/b2cL+htTOLRKl1j2XHhY2MrIdqnPH2f/vUQ7vJHkTANlVQvIgX1xk6r4KoNV19GAQ2SNxCU3q4O9Fu2rYBTMrz7F+IjR4c8mHEnsPGFJRH90sDGeaNHNduNcxcAFxDvgxT/qTz5m4bgu/Mva9iIkK+Uz40WtSokrKH/Oltq0OTRE7s8vd/TNAZLHeUxgPMl+SOlD0oNQTYGGmD5rk6UOCPy1HAcn2o7qEpRmdls4LvZ+Bc85i7w4MoCowVpYPM+u1ejvpJA9GZKh7VQ3Ju8a1IWVei+HOHhiVEF7As6Pvz8LdJYViZAy/dlhNq3/lcFb6H1ZSZOTt/Wnma81l7ee/WMCNOegrQSVJACXnuC8Tyic9/7QqkhI8ZfUADCJ0nH4gNgrg/L7HlhofHFdi5xb7Jg5eyo3glYEtYNwLMngAJ1BSynPcmac2SoTFl2xiYrOjAr32PDv4pYU2pqZeIGvT8=
