@@ -1,9 +1,26 @@
-hgtools
-=======
+.. image:: https://img.shields.io/pypi/v/hgtools.svg
+   :target: https://pypi.org/project/hgtools
+
+.. image:: https://img.shields.io/pypi/pyversions/hgtools.svg
+
+.. image:: https://img.shields.io/pypi/dm/hgtools.svg
+
+.. image:: https://img.shields.io/travis/jaraco/hgtools/master.svg
+   :target: http://travis-ci.org/jaraco/hgtools
 
 .. warning:: hgtools is defunct. It has been largely superseded by the
    `setuptools_scm <https://pypi.python.org/pypi/setuptools_scm>`_
    project.
+
+License
+=======
+
+License is indicated in the project metadata (typically one or more
+of the Trove classifiers). For more details, see `this explanation
+<https://github.com/jaraco/skeleton/issues/1>`_.
+
+Usage
+=====
 
 hgtools builds on the setuptools_hg plugin for setuptools. hgtools
 provides classes for inspecting and working with repositories in the
