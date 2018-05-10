@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 import os
 import subprocess
 
@@ -7,7 +5,7 @@ from . import base
 from . import cmd
 
 
-class Subprocess(object):
+class Subprocess:
 	env = None
 
 	def _invoke(self, *params):

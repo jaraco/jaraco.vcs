@@ -20,7 +20,7 @@ def test_subprocess_manager_invalid_when_exe_missing():
 
 
 @pytest.mark.usefixtures("hg_repo", scope='function')
-class TestRelativePaths(object):
+class TestRelativePaths:
 	"""
 	Issue #9 demonstrated that the Manager would inadvertently return too many
 	files when location is not the root of the repo. This test demonstrates
@@ -41,7 +41,7 @@ class TestRelativePaths(object):
 
 
 @pytest.mark.usefixtures("hg_repo", scope='function')
-class TestTags(object):
+class TestTags:
 	def setup_method(self, method):
 		self.mgr = managers.MercurialManager('.')
 

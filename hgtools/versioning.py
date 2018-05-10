@@ -1,5 +1,3 @@
-from __future__ import division
-
 import operator
 from functools import reduce
 
@@ -75,7 +73,7 @@ class SummableVersion(StrictVersion):
 		return reduce(combine, reversed(self.version))
 
 
-class VersionManagement(object):
+class VersionManagement:
 	"""
 	Version functions for RepoManager classes
 	"""

@@ -3,6 +3,7 @@
 
 * Removed setuptools plugin support. Library remains available for
   programmatic control of repos.
+* Drop support for Python 3.4 and earlier.
 
 7.0
 ===

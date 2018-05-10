@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 import sys
 import io
 import collections
@@ -37,7 +35,7 @@ def replace_sysargv(params):
 		sys.argv = sys_argv
 
 
-class Result(object):
+class Result:
 	pass
 
 
@@ -57,7 +55,7 @@ def capture_system_exit():
 		raise
 
 
-class ProcessResult(object):
+class ProcessResult:
 	pass
 
 
