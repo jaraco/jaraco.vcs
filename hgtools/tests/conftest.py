@@ -13,8 +13,13 @@ def _ensure_present(mgr):
 
 
 @pytest.fixture
-def hg_repo(tmpdir):
-	tmpdir.chdir()
+def tmpdir_as_cwd(tmpdir):
+	with tmpdir.as_cwd():
+		yield tmpdir
+
+
+@pytest.fixture
+def hg_repo(tmpdir_as_cwd):
 	mgr = managers.MercurialManager()
 	_ensure_present(mgr)
 	mgr._invoke('init', '.')
@@ -25,12 +30,11 @@ def hg_repo(tmpdir):
 	with open('bar/baz', 'w') as baz:
 		baz.write('content')
 	mgr._invoke('ci', '-m', 'added content')
-	return tmpdir
+	return tmpdir_as_cwd
 
 
 @pytest.fixture
-def git_repo(tmpdir):
-	tmpdir.chdir()
+def git_repo(tmpdir_as_cwd):
 	mgr = managers.GitManager()
 	_ensure_present(mgr)
 	mgr._invoke('init')
@@ -43,7 +47,7 @@ def git_repo(tmpdir):
 	with open('bar/baz', 'w') as baz:
 		baz.write('content')
 	mgr._invoke('commit', '-am', 'added content')
-	return tmpdir
+	return tmpdir_as_cwd
 
 
 def touch(filename):
