@@ -9,7 +9,7 @@ import itertools
 from more_itertools import one
 from jaraco.classes.ancestry import iter_subclasses
 
-from hgtools import versioning
+from .. import versioning
 
 
 class RepoManager(versioning.VersionManagement, object):
