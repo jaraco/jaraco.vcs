@@ -11,21 +11,48 @@ with io.open('README.rst', encoding='utf-8') as readme:
 
 name = 'hgtools'
 description = 'Classes and setuptools plugin for Mercurial and Git repositories'
+nspkg_technique = 'native'
+"""
+Does this package use "native" namespace packages or
+pkg_resources "managed" namespace packages?
+"""
 
 params = dict(
 	name=name,
 	use_scm_version=True,
-	author="Jannis Leidel/Jason R. Coombs",
+	author="Jason R. Coombs",
 	author_email="jaraco@jaraco.com",
 	description=description or name,
 	long_description=long_description,
 	url="https://github.com/jaraco/" + name,
 	packages=setuptools.find_packages(),
 	include_package_data=True,
-	namespace_packages=name.split('.')[:-1],
+	namespace_packages=(
+		name.split('.')[:-1] if nspkg_technique == 'managed'
+		else []
+	),
+	python_requires='>=2.7',
 	install_requires=[
 	],
 	extras_require={
+		'testing': [
+			# upstream
+			'pytest>=3.5',
+			'pytest-sugar>=0.9.1',
+			'collective.checkdocs',
+			'pytest-flake8',
+
+			# local
+			'backports.unittest_mock',
+		],
+		'docs': [
+			# upstream
+			'sphinx',
+			'jaraco.packaging>=3.2',
+			'rst.linker>=1.9',
+
+			# local
+		],
 	},
 	setup_requires=[
 		'setuptools_scm>=1.15.0',
@@ -33,9 +60,7 @@ params = dict(
 	classifiers=[
 		"Development Status :: 5 - Production/Stable",
 		"Intended Audience :: Developers",
-		"License :: OSI Approved :: GNU General Public License (GPL)",
-		"Programming Language :: Python",
-		"Programming Language :: Python :: 2.6",
+		"License :: OSI Approved :: MIT License",
 		"Programming Language :: Python :: 2.7",
 		"Programming Language :: Python :: 3",
 		"Operating System :: OS Independent",
