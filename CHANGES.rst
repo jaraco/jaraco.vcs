@@ -1,3 +1,8 @@
+7.0
+===
+
+* Drop support for Python 2.6.
+
 6.5
 ===
 
