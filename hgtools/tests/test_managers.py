@@ -3,6 +3,7 @@ import pytest
 
 from hgtools import managers
 
+
 def test_existing_only():
 	"""
 	Test the static method RepoManager.existing_only.
@@ -13,7 +14,9 @@ def test_existing_only():
 	existing = list(managers.RepoManager.existing_only(mgrs))
 	assert not existing
 
-@mock.patch.object(managers.RepoManager, 'get_valid_managers',
+
+@mock.patch.object(
+	managers.RepoManager, 'get_valid_managers',
 	classmethod(lambda cls, location: iter(())))
 def test_no_valid_managers():
 	"""

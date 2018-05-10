@@ -9,6 +9,7 @@ import itertools
 from hgtools import versioning
 from hgtools.util import itersubclasses
 
+
 class RepoManager(versioning.VersionManagement, object):
 	"""
 	An abstract class defining some interfaces for working with
@@ -30,8 +31,10 @@ class RepoManager(versioning.VersionManagement, object):
 		"""
 		Get the valid RepoManagers for this location.
 		"""
-		by_priority_attr = lambda c: getattr(c, 'priority', 0)
-		classes = sorted(itersubclasses(cls), key=by_priority_attr,
+		def by_priority_attr(c):
+			return getattr(c, 'priority', 0)
+		classes = sorted(
+			itersubclasses(cls), key=by_priority_attr,
 			reverse=True)
 		all_managers = (c(location) for c in classes)
 		return (mgr for mgr in all_managers if mgr.is_valid())
@@ -116,6 +119,7 @@ class RepoManager(versioning.VersionManagement, object):
 
 		locs = [part.partition('=')[0].strip() for part in subs]
 		return [self.__class__(posixpath.join(self.location, loc)) for loc in locs]
+
 
 # from jaraco.util.itertools
 def one(item):

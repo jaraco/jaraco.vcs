@@ -15,6 +15,7 @@ from . import managers
 
 __all__ = ['file_finder', 'version_calc']
 
+
 def file_finder(dirname="."):
 	"""
 	Find the files in ``dirname`` under Mercurial version control
@@ -32,13 +33,16 @@ def file_finder(dirname="."):
 				return mgr.find_all_files()
 			except Exception:
 				e = sys.exc_info()[1]
-				distutils.log.warn("hgtools.%s could not find files: %s",
+				distutils.log.warn(
+					"hgtools.%s could not find files: %s",
 					mgr, e)
 	except Exception:
 		e = sys.exc_info()[1]
-		distutils.log.warn("Unexpected error finding valid managers in "
+		distutils.log.warn(
+			"Unexpected error finding valid managers in "
 			"hgtools.file_finder_plugin: %s", e)
 	return []
+
 
 def patch_egg_info(force_hg_version=False):
 	"""
@@ -55,8 +59,8 @@ def patch_egg_info(force_hg_version=False):
 	@functools.wraps(orig_ver)
 	def tagged_version(self):
 		vcs_param = (
-			getattr(self.distribution, 'use_vcs_version', False) or
-			getattr(self.distribution, 'use_hg_version', False)
+			getattr(self.distribution, 'use_vcs_version', False)
+			or getattr(self.distribution, 'use_hg_version', False)
 		)
 		using_hg_version = force_hg_version or vcs_param
 		if force_hg_version:
@@ -71,11 +75,14 @@ def patch_egg_info(force_hg_version=False):
 		return result
 	egg_info.tagged_version = tagged_version
 
+
 def _calculate_version(mgr, options):
 	default_increment = options.get('increment')
 	repo_exists = bool(mgr.find_root())
-	return (mgr.get_current_version(default_increment)
+	return (
+		mgr.get_current_version(default_increment)
 		if repo_exists else default_increment)
+
 
 def calculate_version(options={}):
 	# The version is cached in the tag_build value in setup.cfg (so that
@@ -83,7 +90,8 @@ def calculate_version(options={}):
 	#  the build environment).
 	parser = configparser.ConfigParser()
 	parser.read('setup.cfg')
-	has_tag_build = (parser.has_section('egg_info')
+	has_tag_build = (
+		parser.has_section('egg_info')
 		and 'tag_build' in parser.options('egg_info'))
 	if has_tag_build:
 		# a cached version is available, so use it.
@@ -99,6 +107,7 @@ def calculate_version(options={}):
 			version = options.get('increment')
 	return version
 
+
 def version_calc(dist, attr, value):
 	"""
 	Handler for parameter to setup(use_vcs_version=value)
@@ -108,7 +117,8 @@ def version_calc(dist, attr, value):
 	value may optionally be a dict and supply options to the plugin.
 	"""
 	expected_attrs = 'use_hg_version', 'use_vcs_version'
-	if not value or not attr in expected_attrs: return
+	if not value or attr not in expected_attrs:
+		return
 	options = value if isinstance(value, dict) else {}
 	dist.metadata.version = calculate_version(options)
 	patch_egg_info()

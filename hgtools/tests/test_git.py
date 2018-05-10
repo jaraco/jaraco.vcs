@@ -6,6 +6,7 @@ from hgtools import managers
 from hgtools.managers import cmd
 from hgtools.managers import subprocess
 
+
 def test_subprocess_manager_invalid_when_exe_missing():
 	"""
 	If the hg executable dosen't exist, the manager should report
@@ -16,6 +17,7 @@ def test_subprocess_manager_invalid_when_exe_missing():
 	mgr = subprocess.GitManager()
 	mgr.exe = non_existent_exe
 	assert not mgr.is_valid()
+
 
 @pytest.mark.usefixtures("git_repo", scope='function')
 class TestTags(object):
@@ -31,6 +33,7 @@ class TestTags(object):
 		assert self.mgr.get_tags() == set(['1.0'])
 		self.mgr._invoke('checkout', '1.0')
 		assert self.mgr.get_tags() == set(['1.0'])
+
 
 class TestParseVersion:
 	def test_simple(self):

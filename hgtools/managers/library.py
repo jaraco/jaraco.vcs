@@ -6,6 +6,7 @@ from . import base
 from . import cmd
 from . import reentry
 
+
 class MercurialInProcManager(cmd.Mercurial, base.RepoManager):
 	"""
 	A RepoManager implemented by invoking the hg command in-process.

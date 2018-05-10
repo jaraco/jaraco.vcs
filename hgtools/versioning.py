@@ -5,6 +5,7 @@ from functools import reduce
 
 from distutils.version import StrictVersion
 
+
 def find(pred, items):
 	"""
 	Find the index of the first element in items for which pred returns
@@ -16,7 +17,9 @@ def find(pred, items):
 	True
 	"""
 	for i, item in enumerate(items):
-		if pred(item): return i
+		if pred(item):
+			return i
+
 
 def rfind(pred, items):
 	"""
@@ -28,6 +31,7 @@ def rfind(pred, items):
 	-4
 	"""
 	return -find(pred, reversed(items)) - 1
+
 
 class SummableVersion(StrictVersion):
 	"""
@@ -52,11 +56,13 @@ class SummableVersion(StrictVersion):
 		>>> str(ver)
 		'3.1'
 		"""
-		nonzero = lambda x: x != 0
+		def nonzero(x):
+			return x != 0
 		version_len = 3  # strict versions are always a tuple of 3
 		significant_pos = rfind(nonzero, significant_version.version)
 		significant_pos = version_len + significant_pos + 1
-		self.version = (self.version[:significant_pos]
+		self.version = (
+			self.version[:significant_pos]
 			+ (0,) * (version_len - significant_pos))
 
 	def as_number(self):
@@ -67,6 +73,7 @@ class SummableVersion(StrictVersion):
 		def combine(subver, ver):
 			return subver / 10 + ver
 		return reduce(combine, reversed(self.version))
+
 
 class VersionManagement(object):
 	"""
@@ -128,7 +135,7 @@ class VersionManagement(object):
 		ver = (
 			self.get_tagged_version()
 			or str(self.get_next_version(increment)) + '.dev0'
-			)
+		)
 		return str(ver)
 
 	def get_next_version(self, increment=None):
@@ -146,7 +153,8 @@ class VersionManagement(object):
 
 		Set up a shorthand for examples
 
-		>>> VM_infer = lambda *params: str(VersionManagement.infer_next_version(*params))
+		>>> def VM_infer(*params):
+		...     return str(VersionManagement.infer_next_version(*params))
 
 		>>> VM_infer('3.2', '0.0.1')
 		'3.2.1'

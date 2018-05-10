@@ -6,23 +6,30 @@ import py.test
 
 from hgtools.managers import reentry
 
+
 def hello_world():
 	print("hello world")
+
 
 def hello_unicode_world():
 	print(b"hello world".decode('ascii'))
 
+
 def exit_zero():
 	raise SystemExit(0)
+
 
 def exit_one():
 	raise SystemExit(1)
 
+
 def exit_string():
 	raise SystemExit('who does this?')
 
+
 def echo():
 	print("args are", sys.argv)
+
 
 class TestReEntry(object):
 	"""
@@ -65,11 +72,12 @@ class TestReEntry(object):
 		out = "args are ['echo', 'foo', 'bar']\n"
 		assert proc.stdio.stdout.getvalue() == out
 
+
 class TestErrors(object):
 	def test_name_error(self):
 		with py.test.raises(NameError) as exc_info:
 			with reentry.in_process_context([]) as proc:
-				not_present
+				not_present  # noqa
 		assert proc.returncode == 1
 		msg = "name 'not_present' is not defined"
 		assert str(exc_info.value).endswith(msg)

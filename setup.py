@@ -10,7 +10,8 @@ with io.open('README.rst', encoding='utf-8') as readme:
 	long_description = readme.read()
 
 name = 'hgtools'
-description = 'Classes and setuptools plugin for Mercurial and Git repositories'
+description = (
+	'Classes and setuptools plugin for Mercurial and Git repositories')
 nspkg_technique = 'native'
 """
 Does this package use "native" namespace packages or

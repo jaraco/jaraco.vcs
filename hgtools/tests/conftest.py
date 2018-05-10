@@ -4,11 +4,13 @@ import pytest
 
 from hgtools import managers
 
+
 def _ensure_present(mgr):
 	try:
 		mgr.version()
 	except Exception:
 		pytest.skip()
+
 
 @pytest.fixture
 def hg_repo(tmpdir):

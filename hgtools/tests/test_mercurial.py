@@ -6,6 +6,7 @@ import pytest
 from hgtools import managers
 from hgtools.managers import subprocess
 
+
 def test_subprocess_manager_invalid_when_exe_missing():
 	"""
 	If the hg executable dosen't exist, the manager should report
@@ -16,6 +17,7 @@ def test_subprocess_manager_invalid_when_exe_missing():
 	mgr = subprocess.MercurialManager()
 	mgr.exe = non_existent_exe
 	assert not mgr.is_valid()
+
 
 @pytest.mark.usefixtures("hg_repo", scope='function')
 class TestRelativePaths(object):
@@ -36,6 +38,7 @@ class TestRelativePaths(object):
 		os.chdir('bar')
 		test_mgr = managers.MercurialManager('.')
 		assert test_mgr.find_files() == ['baz']
+
 
 @pytest.mark.usefixtures("hg_repo", scope='function')
 class TestTags(object):

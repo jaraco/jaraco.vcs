@@ -51,18 +51,21 @@ class Mercurial(Command):
 		#  self.find_root()
 		# Remove the parent dirs from them.
 		from_root = os.path.relpath(self.location, self.find_root())
-		loc_rel_paths = [os.path.relpath(path, from_root)
+		loc_rel_paths = [
+			os.path.relpath(path, from_root)
 			for path in all_files]
 		return loc_rel_paths
 
 	def get_parent_revs(self, rev=None):
-		cmd = ['parents', '--style', 'default',
+		cmd = [
+			'parents', '--style', 'default',
 			'--config', 'defaults.parents=']
 		if rev:
 			cmd.extend(['--rev', str(rev)])
 		out = self._invoke(*cmd)
-		cs_pat = '^changeset:\s+(?P<local>\d+):(?P<hash>[0-9a-zA-Z]+)'
-		return (match.groupdict()['local'] for match in
+		cs_pat = r'^changeset:\s+(?P<local>\d+):(?P<hash>[0-9a-zA-Z]+)'
+		return (
+			match.groupdict()['local'] for match in
 			re.finditer(cs_pat, out))
 
 	def get_tags(self, rev=None):
@@ -89,10 +92,11 @@ class Mercurial(Command):
 		"""
 		Return TaggedRevision for each tag/rev combination in the revset spec
 		"""
-		cmd = ['log', '--style', 'default',  '--config', 'defaults.log=',
+		cmd = [
+			'log', '--style', 'default', '--config', 'defaults.log=',
 			'-r', spec]
 		res = self._invoke(*cmd)
-		header_pattern = re.compile('(?P<header>\w+?):\s+(?P<value>.*)')
+		header_pattern = re.compile(r'(?P<header>\w+?):\s+(?P<value>.*)')
 		match_res = map(header_pattern.match, res.splitlines())
 		matched_lines = filter(None, match_res)
 		matches = (match.groupdict() for match in matched_lines)
@@ -123,7 +127,9 @@ class Mercurial(Command):
 		by_revision = operator.attrgetter('revision')
 		tags = sorted(self.get_tags(), key=by_revision)
 		revision_tags = itertools.groupby(tags, key=by_revision)
-		get_id = lambda rev: rev.split(':', 1)[0]
+
+		def get_id(rev):
+			return rev.split(':', 1)[0]
 		return dict(
 			(get_id(rev), [tr.tag for tr in tr_list])
 			for rev, tr_list in revision_tags
@@ -179,8 +185,9 @@ class Git(Command):
 		return set(self._invoke('tag', '--points-at', rev).splitlines())
 
 	def get_repo_tags(self):
-		cmd = ["for-each-ref", "--sort=-committerdate",
-				"--format=%(refname:short) %(objectname:short)", "refs/tags"]
+		cmd = [
+			"for-each-ref", "--sort=-committerdate",
+			"--format=%(refname:short) %(objectname:short)", "refs/tags"]
 
 		lines = self._invoke(*cmd).splitlines()
 		return (
