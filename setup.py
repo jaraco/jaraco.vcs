@@ -35,6 +35,7 @@ params = dict(
 	install_requires=[
 		'jaraco.classes',
 		'more_itertools',
+		'packaging',
 	],
 	extras_require={
 		'testing': [
