@@ -45,6 +45,7 @@ params = dict(
 
 			# local
 			'backports.unittest_mock',
+			'pygments',
 		],
 		'docs': [
 			# upstream
