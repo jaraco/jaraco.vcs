@@ -6,8 +6,10 @@ to Mercurial functionality.
 import posixpath
 import itertools
 
+from more_itertools import one
+from jaraco.classes.ancestry import iter_subclasses
+
 from hgtools import versioning
-from hgtools.util import itersubclasses
 
 
 class RepoManager(versioning.VersionManagement, object):
@@ -34,7 +36,7 @@ class RepoManager(versioning.VersionManagement, object):
 		def by_priority_attr(c):
 			return getattr(c, 'priority', 0)
 		classes = sorted(
-			itersubclasses(cls), key=by_priority_attr,
+			iter_subclasses(cls), key=by_priority_attr,
 			reverse=True)
 		all_managers = (c(location) for c in classes)
 		return (mgr for mgr in all_managers if mgr.is_valid())
@@ -119,27 +121,3 @@ class RepoManager(versioning.VersionManagement, object):
 
 		locs = [part.partition('=')[0].strip() for part in subs]
 		return [self.__class__(posixpath.join(self.location, loc)) for loc in locs]
-
-
-# from jaraco.util.itertools
-def one(item):
-	"""
-	Return the first element from the iterable, but raise an exception
-	if elements remain in the iterable after the first.
-
-	>>> one([3])
-	3
-	>>> one(['val', 'other'])
-	Traceback (most recent call last):
-	...
-	ValueError: item contained more than one value
-	>>> one([])
-	Traceback (most recent call last):
-	...
-	StopIteration
-	"""
-	iterable = iter(item)
-	result = next(iterable)
-	if tuple(itertools.islice(iterable, 1)):
-		raise ValueError("item contained more than one value")
-	return result
