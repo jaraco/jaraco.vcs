@@ -1,3 +1,9 @@
+8.0
+===
+
+* Removed setuptools plugin support. Library remains available for
+  programmatic control of repos.
+
 7.0
 ===
 

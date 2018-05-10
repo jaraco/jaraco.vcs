@@ -10,8 +10,7 @@ with io.open('README.rst', encoding='utf-8') as readme:
 	long_description = readme.read()
 
 name = 'hgtools'
-description = (
-	'Classes and setuptools plugin for Mercurial and Git repositories')
+description = 'Classes for Mercurial and Git repositories'
 nspkg_technique = 'native'
 """
 Does this package use "native" namespace packages or
@@ -67,17 +66,7 @@ params = dict(
 		"Programming Language :: Python :: 3",
 		"Operating System :: OS Independent",
 		"Topic :: Software Development :: Version Control",
-		"Framework :: Setuptools Plugin",
 	],
-	entry_points={
-		"setuptools.file_finders": [
-			"hg = hgtools.plugins:file_finder"
-		],
-		"distutils.setup_keywords": [
-			"use_hg_version = hgtools.plugins:version_calc",
-			"use_vcs_version = hgtools.plugins:version_calc",
-		],
-	},
 )
 if __name__ == '__main__':
 	setuptools.setup(**params)
