@@ -7,7 +7,7 @@ import posixpath
 import itertools
 
 from .. import versioning
-from .._vendor import iter_subclasses
+from .._vendor import iter_subclasses, one
 
 
 class RepoManager(versioning.VersionManagement, object):
@@ -119,27 +119,3 @@ class RepoManager(versioning.VersionManagement, object):
 
 		locs = [part.partition('=')[0].strip() for part in subs]
 		return [self.__class__(posixpath.join(self.location, loc)) for loc in locs]
-
-
-# from jaraco.util.itertools
-def one(item):
-	"""
-	Return the first element from the iterable, but raise an exception
-	if elements remain in the iterable after the first.
-
-	>>> one([3])
-	3
-	>>> one(['val', 'other'])
-	Traceback (most recent call last):
-	...
-	ValueError: item contained more than one value
-	>>> one([])
-	Traceback (most recent call last):
-	...
-	StopIteration
-	"""
-	iterable = iter(item)
-	result = next(iterable)
-	if tuple(itertools.islice(iterable, 1)):
-		raise ValueError("item contained more than one value")
-	return result
