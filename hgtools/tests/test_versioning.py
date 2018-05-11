@@ -12,7 +12,7 @@ class VersionedObject(versioning.VersionManagement):
 		return False
 
 
-class TestVersioning:
+class TestVersioning(object):
 	def test_tag_versions(self):
 		"""
 		Versioning should only choose relevant tags (versions)

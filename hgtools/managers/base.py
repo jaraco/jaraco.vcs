@@ -12,7 +12,7 @@ from jaraco.classes.ancestry import iter_subclasses
 from .. import versioning
 
 
-class RepoManager(versioning.VersionManagement):
+class RepoManager(versioning.VersionManagement, object):
 	"""
 	An abstract class defining some interfaces for working with
 	repositories.
