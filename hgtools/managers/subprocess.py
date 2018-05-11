@@ -6,8 +6,10 @@ import subprocess
 from . import base
 from . import cmd
 
+__metaclass__ = type
 
-class Subprocess(object):
+
+class Subprocess:
 	env = None
 
 	def _invoke(self, *params):

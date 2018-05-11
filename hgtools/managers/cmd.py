@@ -7,10 +7,12 @@ import collections
 import packaging.version
 
 
+__metaclass__ = type
+
 TaggedRevision = collections.namedtuple('TaggedRevision', 'tag revision')
 
 
-class Command(object):
+class Command:
 	def is_valid(self):
 		try:
 			# Check if both command and repo are valid

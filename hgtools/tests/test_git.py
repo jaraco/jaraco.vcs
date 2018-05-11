@@ -20,7 +20,7 @@ def test_subprocess_manager_invalid_when_exe_missing():
 
 
 @pytest.mark.usefixtures("git_repo", scope='function')
-class TestTags(object):
+class TestTags:
 	def setup_method(self, method):
 		self.mgr = managers.GitManager('.')
 

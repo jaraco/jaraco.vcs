@@ -5,6 +5,8 @@ import io
 import collections
 import contextlib
 
+__metaclass__ = type
+
 SavedIO = collections.namedtuple('SavedIO', 'stdout stderr')
 
 text_type = __builtins__.get('unicode', str)
@@ -37,7 +39,7 @@ def replace_sysargv(params):
 		sys.argv = sys_argv
 
 
-class Result(object):
+class Result:
 	pass
 
 
@@ -57,7 +59,7 @@ def capture_system_exit():
 		raise
 
 
-class ProcessResult(object):
+class ProcessResult:
 	pass
 
 

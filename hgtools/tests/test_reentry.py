@@ -31,7 +31,7 @@ def echo():
 	print("args are", sys.argv)
 
 
-class TestReEntry(object):
+class TestReEntry:
 	"""
 	Test the in-process entry point launcher
 	"""
@@ -73,7 +73,7 @@ class TestReEntry(object):
 		assert proc.stdio.stdout.getvalue() == out
 
 
-class TestErrors(object):
+class TestErrors:
 	def test_name_error(self):
 		with py.test.raises(NameError) as exc_info:
 			with reentry.in_process_context([]) as proc:
