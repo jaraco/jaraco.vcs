@@ -1,3 +1,9 @@
+8.1
+===
+
+* Restored setuptools plugin support and Python 2.7 support to
+  support old packages forever.
+
 8.0
 ===
 
