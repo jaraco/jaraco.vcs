@@ -7,7 +7,7 @@ import posixpath
 import itertools
 
 from .. import versioning
-from ..util import itersubclasses
+from .._vendor import itersubclasses
 
 
 class RepoManager(versioning.VersionManagement, object):
