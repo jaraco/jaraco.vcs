@@ -1,3 +1,8 @@
+8.1.1
+=====
+
+* Once again vendored dependencies to restore compatibility.
+
 8.1
 ===
 
