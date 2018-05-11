@@ -4,7 +4,7 @@ import operator
 import itertools
 import collections
 
-import packaging.version
+import pkg_resources
 
 
 __metaclass__ = type
@@ -165,8 +165,8 @@ class Git(Command):
 		return super(Git, self).is_valid() and self.version_suitable()
 
 	def version_suitable(self):
-		req_ver = packaging.version.Version('1.7.10')
-		act_ver = packaging.version.Version(self.version())
+		req_ver = pkg_resources.parse_version('1.7.10')
+		act_ver = pkg_resources.parse_version(self.version())
 		return act_ver >= req_ver
 
 	def find_root(self):
