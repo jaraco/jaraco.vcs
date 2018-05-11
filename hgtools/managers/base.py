@@ -7,7 +7,7 @@ import posixpath
 import itertools
 
 from .. import versioning
-from .._vendor import itersubclasses
+from .._vendor import iter_subclasses
 
 
 class RepoManager(versioning.VersionManagement, object):
@@ -34,7 +34,7 @@ class RepoManager(versioning.VersionManagement, object):
 		def by_priority_attr(c):
 			return getattr(c, 'priority', 0)
 		classes = sorted(
-			itersubclasses(cls), key=by_priority_attr,
+			iter_subclasses(cls), key=by_priority_attr,
 			reverse=True)
 		all_managers = (c(location) for c in classes)
 		return (mgr for mgr in all_managers if mgr.is_valid())
