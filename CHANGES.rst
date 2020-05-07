@@ -1,3 +1,9 @@
+v8.2.0
+======
+
+* Declare compatibility with Python 3.6 and later.
+* Refreshed package metadata.
+
 8.1.1
 =====
 
