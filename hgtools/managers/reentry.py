@@ -9,7 +9,7 @@ __metaclass__ = type
 
 SavedIO = collections.namedtuple('SavedIO', 'stdout stderr')
 
-text_type = __builtins__.get('unicode', str)
+text_type = __builtins__.get('unicode', str)  # type: ignore
 
 
 class TextIO(io.StringIO):

@@ -8,9 +8,9 @@ try:
     # Prefer the Python 2 version of configparser because Python 3
     #  backport has issues when non-unicode strings are passed.
     # See issue #10 for details
-    import ConfigParser as configparser
+    import ConfigParser as configparser  # type: ignore
 except ImportError:
-    import configparser
+    import configparser  # type: ignore
 
 from . import managers
 
