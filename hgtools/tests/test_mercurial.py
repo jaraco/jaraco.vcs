@@ -1,10 +1,29 @@
 import os
 import operator
+import platform
 
 import pytest
 
 from hgtools import managers
 from hgtools.managers import subprocess
+
+
+@pytest.fixture(autouse=True)
+def configure_username(monkeypatch):
+    """
+    Some environments (Windows on Azure) have Mercurial installed
+    but not configured in a way that it can commit files, because
+    the username isn't configured correctly. Monkeypatch the
+    class to bypass this issue.
+    """
+    if platform.system() != 'Windows':
+        return
+
+    def _invoke(self, *params):
+        params = ('--config', 'ui.username=tester') + params
+        return super(subprocess.MercurialManager, self)._invoke(*params)
+
+    monkeypatch.setattr(subprocess.MercurialManager, '_invoke', _invoke)
 
 
 def test_subprocess_manager_invalid_when_exe_missing():
