@@ -1,3 +1,8 @@
+v8.2.1
+======
+
+* Refreshed package metadata and minor fixes.
+
 v8.2.0
 ======
 
