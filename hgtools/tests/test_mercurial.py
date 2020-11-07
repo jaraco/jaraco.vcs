@@ -38,7 +38,7 @@ def test_subprocess_manager_invalid_when_exe_missing():
     assert not mgr.is_valid()
 
 
-@pytest.mark.usefixtures("hg_repo", scope='function')
+@pytest.mark.usefixtures("hg_repo")
 class TestRelativePaths:
     """
     Issue #9 demonstrated that the Manager would inadvertently return too many
@@ -60,7 +60,7 @@ class TestRelativePaths:
         assert test_mgr.find_files() == ['baz']
 
 
-@pytest.mark.usefixtures("hg_repo", scope='function')
+@pytest.mark.usefixtures("hg_repo")
 class TestTags:
     def setup_method(self, method):
         self.mgr = managers.MercurialManager('.')
