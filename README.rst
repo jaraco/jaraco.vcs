@@ -6,20 +6,16 @@
 
 .. _PyPI link: https://pypi.org/project/hgtools
 
-.. image:: https://dev.azure.com/jaraco/hgtools/_apis/build/status/jaraco.hgtools?branchName=master
-   :target: https://dev.azure.com/jaraco/hgtools/_build/latest?definitionId=1&branchName=master
-
-.. image:: https://img.shields.io/pypi/dm/hgtools.svg
+.. image:: https://github.com/jaraco/hgtools/workflows/Automated%20Tests/badge.svg
+   :target: https://github.com/jaraco/hgtools/actions?query=workflow%3A%22Automated+Tests%22
+   :alt: Automated Tests
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
    :target: https://github.com/psf/black
    :alt: Code style: Black
 
-.. .. image:: https://img.shields.io/appveyor/ci/jaraco/hgtools/master.svg
-..    :target: https://ci.appveyor.com/project/jaraco/hgtools/branch/master
-
-.. image:: https://img.shields.io/travis/jaraco/hgtools/master.svg
-   :target: https://travis-ci.org/jaraco/hgtools
+.. .. image:: https://readthedocs.org/projects/skeleton/badge/?version=latest
+..    :target: https://skeleton.readthedocs.io/en/latest/?badge=latest
 
 .. warning:: hgtools is defunct. It has been largely superseded by the
    `setuptools_scm <https://pypi.python.org/pypi/setuptools_scm>`_
