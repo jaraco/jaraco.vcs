@@ -12,7 +12,7 @@ def iter_subclasses(cls, _seen=None):
     >>> class E(D): pass
     >>>
     >>> for cls in iter_subclasses(A):
-    ...		print(cls.__name__)
+    ...     print(cls.__name__)
     B
     D
     E
