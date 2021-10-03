@@ -5,13 +5,11 @@ import contextlib
 
 SavedIO = collections.namedtuple('SavedIO', 'stdout stderr')
 
-text_type = __builtins__.get('unicode', str)  # type: ignore
-
 
 class TextIO(io.StringIO):
     def write(self, data):
-        if not isinstance(data, text_type):
-            data = text_type(data, getattr(self, '_encoding', 'UTF-8'), 'replace')
+        if not isinstance(data, str):
+            data = str(data, getattr(self, '_encoding', 'UTF-8'), 'replace')
         io.StringIO.write(self, data)
 
 
