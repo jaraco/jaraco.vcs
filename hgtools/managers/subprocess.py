@@ -4,8 +4,6 @@ import subprocess
 from . import base
 from . import cmd
 
-__metaclass__ = type
-
 
 class Subprocess:
     env = None

@@ -3,8 +3,6 @@ from functools import reduce
 
 from distutils.version import StrictVersion
 
-__metaclass__ = type
-
 
 def find(pred, items):
     """

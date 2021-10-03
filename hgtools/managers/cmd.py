@@ -7,8 +7,6 @@ import collections
 import pkg_resources
 
 
-__metaclass__ = type
-
 TaggedRevision = collections.namedtuple('TaggedRevision', 'tag revision')
 
 
