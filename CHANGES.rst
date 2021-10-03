@@ -1,3 +1,10 @@
+v8.3.0
+======
+
+* #33: Replace ``distutils.StrictVersion`` with
+  ``packaging.version.Version``. Adds dependency on
+  packaging.
+
 v8.2.1
 ======
 

@@ -1,5 +1,5 @@
 import collections
-from distutils.version import StrictVersion
+import packaging.version
 
 from hgtools import versioning
 
@@ -19,7 +19,7 @@ class TestVersioning:
         """
         mgr = VersionedObject(get_tags=lambda: tags)
         tags = set(['foo', 'bar', '3.0'])
-        assert mgr.get_tagged_version() == StrictVersion('3.0')
+        assert mgr.get_tagged_version() == packaging.version.Version('3.0')
         tags = set([])
         assert mgr.get_tagged_version() is None
         tags = set(['foo', 'bar'])
@@ -32,9 +32,9 @@ class TestVersioning:
         """
         mgr = VersionedObject(get_tags=lambda: tags)
         tags = set(['1.0', '1.1'])
-        assert mgr.get_tagged_version() == '1.1'
+        assert mgr.get_tagged_version() == packaging.version.Version('1.1')
         tags = set(['0.10', '0.9'])
-        assert mgr.get_tagged_version() == '0.10'
+        assert mgr.get_tagged_version() == packaging.version.Version('0.10')
 
     def test_defer_to_parent_tag(self):
         """
@@ -44,7 +44,7 @@ class TestVersioning:
             get_tags=lambda rev=None: set(['tip']),
             get_parent_tags=lambda rev=None: set(['1.0']),
         )
-        assert mgr.get_tagged_version() == '1.0'
+        assert mgr.get_tagged_version() == packaging.version.Version('1.0')
 
     def test_get_next_version(self):
         mgr = VersionedObject(get_repo_tags=lambda: set([]))
@@ -62,5 +62,5 @@ class TestVersioning:
             ),
         )
         assert mgr.get_tagged_version() is None
-        assert mgr.get_next_version() == StrictVersion('1.0.1')
+        assert mgr.get_next_version() == packaging.version.Version('1.0.1')
         assert mgr.get_current_version() == '1.0.1.dev0'
