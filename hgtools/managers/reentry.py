@@ -1,3 +1,8 @@
+"""
+Base classes for invoking a Python script from within
+the current Python process.
+"""
+
 import sys
 import io
 import collections
