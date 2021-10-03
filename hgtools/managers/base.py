@@ -7,7 +7,8 @@ import posixpath
 import itertools
 
 from .. import versioning
-from .._vendor import iter_subclasses, one
+from jaraco.classes.ancestry import iter_subclasses
+from more_itertools import one
 
 
 class RepoManager(versioning.VersionManagement, object):
