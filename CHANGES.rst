@@ -1,3 +1,13 @@
+v9.0.0
+======
+
+* Once again, removed setuptools plugin support.
+  Environments relying on packages relying on plugin
+  support should either pre-install older hgtools in
+  the environment prior to installing those packages
+  or get those packages to supply wheels (built with
+  older versions of hgtools or with setuptools_scm).
+
 v8.3.0
 ======
 
