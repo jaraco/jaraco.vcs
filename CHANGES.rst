@@ -197,8 +197,7 @@ v8.2.0
 * Force `hg log` and `hg parents` to use the defaults style for output.
   Otherwise, the parsing code fails to identify the tags. Also, reset the
   'default.log' value in case a user has an alias for `hg log` in his .hgrc.
-  (For example, some use log=-G to force the graph output). Thanks to
-  `dc <https://bitbucket.org/dc>`_ for the patch.
+  (For example, some use log=-G to force the graph output).
 
 2.0.1
 =====
