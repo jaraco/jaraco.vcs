@@ -1,3 +1,8 @@
+v9.1.0
+======
+
+* Require Python 3.7 or later.
+
 v9.0.0
 ======
 
