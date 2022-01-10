@@ -1,6 +1,6 @@
 """
 hgtools implements several repo managers, each of which provides an interface
-to Mercurial functionality.
+to source code repository functionality.
 """
 
 import posixpath
