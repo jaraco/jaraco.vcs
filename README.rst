@@ -45,9 +45,9 @@ To use this feature, your project must follow the following assumptions:
 	 - Repo tags are used to indicate released versions.
 	 - Tag names are specified as the version only (i.e. 0.1 and not
 	   v0.1 or release-0.1)
-	 - Released versions currently must conform to the StrictVersion in
-	   distutils. Any tags that don't match this scheme will be ignored.
-	   Future releases may relax this restriction.
+	 - Released versions currently must conform to the Version in
+	   `packaging <https://pypi.org/project/packaging>`_. Any tags
+	   that don't match this scheme will be ignored.
 
 Thereafter, you may use the RepoManager.get_current_version to
 determine the version of your product. If the current revision is tagged
