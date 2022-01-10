@@ -49,8 +49,8 @@ To use this feature, your project must follow the following assumptions:
 	   `packaging <https://pypi.org/project/packaging>`_. Any tags
 	   that don't match this scheme will be ignored.
 
-Thereafter, you may use the RepoManager.get_current_version to
-determine the version of your product. If the current revision is tagged
+Thereafter, use the RepoManager.get_current_version to
+determine the version of the local code. If the current revision is tagged
 with a valid version, that version will be used. Otherwise, the tags in
 the repo will be searched, the latest release will be found, and hgtools
 will infer the upcoming release version.
@@ -59,3 +59,10 @@ For example, if the repo contains the tags 0.1, 0.2, and 0.3 and the
 repo is not on any of those tags, get_current_version will return
 '0.3.1dev' and get_current_version(increment='0.1') will return
 '0.4dev'.
+
+Example::
+
+    >>> from hgtools.managers import RepoManager
+    >>> RepoManager().get_first_valid_manager().get_current_version()
+    '9.0.1.dev0'
+
