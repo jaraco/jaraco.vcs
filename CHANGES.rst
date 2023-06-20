@@ -1,3 +1,9 @@
+v10.0.0
+=======
+
+* Removed ``hg.versioning``. Use ``jaraco.versioning``
+  instead.
+
 v9.2.0
 ======
 

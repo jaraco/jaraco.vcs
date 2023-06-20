@@ -6,7 +6,7 @@ to source code repository functionality.
 import posixpath
 import itertools
 
-from .. import versioning
+from jaraco import versioning
 from jaraco.classes.ancestry import iter_subclasses
 from more_itertools import one
 

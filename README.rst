@@ -66,4 +66,3 @@ Example::
     >>> from hgtools.managers import RepoManager
     >>> RepoManager().get_first_valid_manager().get_current_version()
     '9.0.1.dev0'
-
