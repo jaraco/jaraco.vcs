@@ -70,31 +70,31 @@ class TestTags:
 
     def test_single_tag(self):
         self.mgr._invoke('tag', '1.0')
-        assert self.mgr.get_tags() == set(['tip'])
+        assert self.mgr.get_tags() == {'tip'}
         self.mgr._invoke('update', '1.0')
-        assert self.mgr.get_tags() == set(['1.0'])
+        assert self.mgr.get_tags() == {'1.0'}
 
     def test_no_tags(self):
         "No tag should return empty set"
-        assert self.mgr.get_tags('0') == set([])
+        assert self.mgr.get_tags('0') == set()
 
     def test_local_modifications(self):
         "Local modifications should return empty set"
         with open('bar/baz', 'w', encoding='utf-8') as f:
             f.write('changed')
-        assert self.mgr.get_tags() == set([])
+        assert self.mgr.get_tags() == set()
 
     def test_parent_tag(self):
         self.mgr._invoke('tag', '1.0')
-        assert self.mgr.get_tags() == set(['tip'])
-        assert self.mgr.get_parent_tags() == set(['tip'])
-        assert self.mgr.get_parent_tags('.') == set(['1.0'])
-        assert self.mgr.get_parent_tags('tip') == set(['1.0'])
+        assert self.mgr.get_tags() == {'tip'}
+        assert self.mgr.get_parent_tags() == {'tip'}
+        assert self.mgr.get_parent_tags('.') == {'1.0'}
+        assert self.mgr.get_parent_tags('tip') == {'1.0'}
         self.mgr._invoke('tag', '1.1')
-        assert self.mgr.get_tags() == set(['tip'])
-        assert self.mgr.get_parent_tags() == set(['tip'])
-        assert self.mgr.get_parent_tags('.') == set(['1.1'])
-        assert self.mgr.get_parent_tags('tip') == set(['1.1'])
+        assert self.mgr.get_tags() == {'tip'}
+        assert self.mgr.get_parent_tags() == {'tip'}
+        assert self.mgr.get_parent_tags('.') == {'1.1'}
+        assert self.mgr.get_parent_tags('tip') == {'1.1'}
 
     def test_two_tags_same_revision(self):
         """
@@ -103,7 +103,7 @@ class TestTags:
         self.mgr._invoke('tag', '1.0')
         self.mgr._invoke('tag', '-r', '1.0', '1.1')
         self.mgr._invoke('update', '1.0')
-        assert set(self.mgr.get_tags()) == set(['1.0', '1.1'])
+        assert set(self.mgr.get_tags()) == {'1.0', '1.1'}
 
     def test_two_tags_same_revision_lexicographically_earlier(self):
         """
@@ -112,7 +112,7 @@ class TestTags:
         self.mgr._invoke('tag', '1.9')
         self.mgr._invoke('tag', '-r', '1.9', '1.10')
         self.mgr._invoke('update', '1.9')
-        assert set(self.mgr.get_tags()) == set(['1.9', '1.10'])
+        assert set(self.mgr.get_tags()) == {'1.9', '1.10'}
 
     def _setup_branchy_tags(self):
         """

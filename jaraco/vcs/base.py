@@ -11,7 +11,7 @@ from jaraco.classes.ancestry import iter_subclasses
 from more_itertools import one
 
 
-class Repo(versioning.VersionManagement, object):
+class Repo(versioning.VersionManagement):
     """
     An abstract class defining some interfaces for working with
     repositories.

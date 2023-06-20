@@ -16,7 +16,7 @@ class Command:
             self._invoke('status')
         except Exception:
             return False
-        return super(Command, self).is_valid()
+        return super().is_valid()
 
     def version(self):
         """
@@ -66,7 +66,7 @@ class Mercurial(Command):
         return (
             set(self._read_tags_for_rev(rev_num))
             if not rev_num.endswith('+')
-            else set([])
+            else set()
         )
 
     def _read_tags_for_rev(self, rev_num):
@@ -117,9 +117,9 @@ class Mercurial(Command):
         def get_id(rev):
             return rev.split(':', 1)[0]
 
-        return dict(
-            (get_id(rev), [tr.tag for tr in tr_list]) for rev, tr_list in revision_tags
-        )
+        return {
+            get_id(rev): [tr.tag for tr in tr_list] for rev, tr_list in revision_tags
+        }
 
     def get_repo_tags(self):
         lines = self._invoke('tags').splitlines()
@@ -143,7 +143,7 @@ class Git(Command):
     version_pattern = r'git version (\d+\.\d+[^ ]*)'
 
     def is_valid(self):
-        return super(Git, self).is_valid() and self.version_suitable()
+        return super().is_valid() and self.version_suitable()
 
     def version_suitable(self):
         req_ver = packaging.version.Version('1.7.10')
