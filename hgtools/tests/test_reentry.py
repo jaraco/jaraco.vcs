@@ -1,6 +1,6 @@
 import sys
 
-import py.test
+import pytest
 
 from hgtools.managers import reentry
 
@@ -74,7 +74,7 @@ class TestReEntry:
 
 class TestErrors:
     def test_name_error(self):
-        with py.test.raises(NameError) as exc_info:
+        with pytest.raises(NameError) as exc_info:
             with reentry.in_process_context([]) as proc:
                 not_present  # noqa
         assert proc.returncode == 1
@@ -82,7 +82,7 @@ class TestErrors:
         assert str(exc_info.value).endswith(msg)
 
     def test_keyboard_interrupt(self):
-        with py.test.raises(KeyboardInterrupt):
+        with pytest.raises(KeyboardInterrupt):
             with reentry.in_process_context([]) as proc:
                 raise KeyboardInterrupt()
         assert proc.returncode == 1
