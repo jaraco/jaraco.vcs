@@ -21,9 +21,9 @@ def configure_username(monkeypatch):
 
     def _invoke(self, *params):
         params = ('--config', 'ui.username=tester') + params
-        return super(subprocess.MercurialManager, self)._invoke(*params)
+        return super(subprocess.Mercurial, self)._invoke(*params)
 
-    monkeypatch.setattr(subprocess.MercurialManager, '_invoke', _invoke)
+    monkeypatch.setattr(subprocess.Mercurial, '_invoke', _invoke)
 
 
 def test_subprocess_manager_invalid_when_exe_missing():
@@ -33,7 +33,7 @@ def test_subprocess_manager_invalid_when_exe_missing():
     """
     non_existent_exe = '/non_existent_executable'
     assert not os.path.exists(non_existent_exe)
-    mgr = subprocess.MercurialManager()
+    mgr = subprocess.Mercurial()
     mgr.exe = non_existent_exe
     assert not mgr.is_valid()
 
@@ -47,23 +47,23 @@ class TestRelativePaths:
     """
 
     def test_nested_child(self):
-        test_mgr = vcs.MercurialManager('.')
+        test_mgr = vcs.Mercurial('.')
         assert test_mgr.find_files() == [os.path.join('bar', 'baz')]
 
     def test_manager_in_child(self):
-        test_mgr = vcs.MercurialManager('bar')
+        test_mgr = vcs.Mercurial('bar')
         assert test_mgr.find_files() == ['baz']
 
     def test_current_dir_in_child(self):
         os.chdir('bar')
-        test_mgr = vcs.MercurialManager('.')
+        test_mgr = vcs.Mercurial('.')
         assert test_mgr.find_files() == ['baz']
 
 
 @pytest.mark.usefixtures("hg_repo")
 class TestTags:
     def setup_method(self, method):
-        self.mgr = vcs.MercurialManager('.')
+        self.mgr = vcs.Mercurial('.')
 
     def teardown_method(self, method):
         del self.mgr

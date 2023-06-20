@@ -26,9 +26,9 @@ class Subprocess:
         return stdout.decode('utf-8')
 
 
-class MercurialManager(Subprocess, cmd.Mercurial, base.RepoManager):
+class Mercurial(Subprocess, cmd.Mercurial, base.Repo):
     """
-    A RepoManager implemented by calling into the 'hg' command-line
+    A Repo implemented by calling into the 'hg' command-line
     as a subprocess.
     """
 
@@ -49,7 +49,7 @@ class MercurialManager(Subprocess, cmd.Mercurial, base.RepoManager):
         return env
 
 
-class GitManager(Subprocess, cmd.Git, base.RepoManager):
+class Git(Subprocess, cmd.Git, base.Repo):
     """
     A RepoManager implemented by calling into the 'git' command-line
     as a subprocess.

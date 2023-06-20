@@ -28,7 +28,7 @@ source_tree = dict(
 
 @pytest.fixture
 def hg_repo(temp_work_dir):
-    mgr = vcs.MercurialManager()
+    mgr = vcs.Mercurial()
     _ensure_present(mgr)
     mgr._invoke('init', '.')
     jaraco.path.build(source_tree)
@@ -40,7 +40,7 @@ def hg_repo(temp_work_dir):
 
 @pytest.fixture
 def git_repo(temp_work_dir):
-    mgr = vcs.GitManager()
+    mgr = vcs.Git()
     _ensure_present(mgr)
     mgr._invoke('init')
     mgr._invoke('config', 'user.email', 'vip@example.com')

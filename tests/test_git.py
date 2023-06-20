@@ -14,7 +14,7 @@ def test_subprocess_manager_invalid_when_exe_missing():
     """
     non_existent_exe = '/non_existent_executable'
     assert not os.path.exists(non_existent_exe)
-    mgr = subprocess.GitManager()
+    mgr = subprocess.Git()
     mgr.exe = non_existent_exe
     assert not mgr.is_valid()
 
@@ -22,7 +22,7 @@ def test_subprocess_manager_invalid_when_exe_missing():
 @pytest.mark.usefixtures("git_repo")
 class TestTags:
     def setup_method(self, method):
-        self.mgr = vcs.GitManager('.')
+        self.mgr = vcs.Git('.')
 
     def teardown_method(self, method):
         del self.mgr

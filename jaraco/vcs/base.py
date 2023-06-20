@@ -11,7 +11,7 @@ from jaraco.classes.ancestry import iter_subclasses
 from more_itertools import one
 
 
-class RepoManager(versioning.VersionManagement, object):
+class Repo(versioning.VersionManagement, object):
     """
     An abstract class defining some interfaces for working with
     repositories.
@@ -42,12 +42,15 @@ class RepoManager(versioning.VersionManagement, object):
         return (mgr for mgr in all_managers if mgr.is_valid())
 
     @staticmethod
-    def get_first_valid_manager(location='.'):
+    def detect(location='.'):
         try:
-            return next(RepoManager.get_valid_managers(location))
+            return next(Repo.get_valid_managers(location))
         except StopIteration as e:
             e.args = ("No source repo or suitable VCS version found",)
             raise
+
+    # for compatibility
+    get_first_valid_manager = detect
 
     @staticmethod
     def existing_only(managers):

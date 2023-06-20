@@ -10,13 +10,13 @@ def test_existing_only():
     """
     # presumably, '/' is never an hg repo - at least for our purposes, that's
     #  a reasonable assumption.
-    mgrs = vcs.RepoManager.get_valid_managers('/')
-    existing = list(vcs.RepoManager.existing_only(mgrs))
+    mgrs = vcs.Repo.get_valid_managers('/')
+    existing = list(vcs.Repo.existing_only(mgrs))
     assert not existing
 
 
 @mock.patch.object(
-    vcs.RepoManager,
+    vcs.Repo,
     'get_valid_managers',
     classmethod(lambda cls, location: iter(())),
 )
@@ -26,5 +26,5 @@ def test_no_valid_managers():
     a nice message.
     """
     with pytest.raises(StopIteration) as err:
-        vcs.RepoManager.get_first_valid_manager()
+        vcs.Repo.get_first_valid_manager()
     assert 'no source repo' in str(err).lower()

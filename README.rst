@@ -63,6 +63,6 @@ repo is not on any of those tags, get_current_version will return
 
 Example::
 
-    >>> from jaraco.vcs import RepoManager
-    >>> RepoManager().get_first_valid_manager().get_current_version()
+    >>> import jaraco.vcs
+    >>> jaraco.vcs.repo().get_current_version()
     '9.0.1.dev0'
