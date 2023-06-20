@@ -14,9 +14,9 @@ def _ensure_present(mgr):
 
 
 @pytest.fixture
-def tmpdir_as_cwd(tmpdir):
-    with tmpdir.as_cwd():
-        yield tmpdir
+def temp_work_dir(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    return tmp_path
 
 
 bar_baz = dict(
@@ -27,7 +27,7 @@ bar_baz = dict(
 
 
 @pytest.fixture
-def hg_repo(tmpdir_as_cwd):
+def hg_repo(temp_work_dir):
     mgr = managers.MercurialManager()
     _ensure_present(mgr)
     mgr._invoke('init', '.')
@@ -36,11 +36,10 @@ def hg_repo(tmpdir_as_cwd):
     mgr._invoke('ci', '-m', 'committed')
     pathlib.Path('bar/baz').write_text('content', encoding='utf-8')
     mgr._invoke('ci', '-m', 'added content')
-    return tmpdir_as_cwd
 
 
 @pytest.fixture
-def git_repo(tmpdir_as_cwd):
+def git_repo(temp_work_dir):
     mgr = managers.GitManager()
     _ensure_present(mgr)
     mgr._invoke('init')
@@ -51,4 +50,3 @@ def git_repo(tmpdir_as_cwd):
     mgr._invoke('commit', '-m', 'committed')
     pathlib.Path('bar/baz').write_text('content', encoding='utf-8')
     mgr._invoke('commit', '-am', 'added content')
-    return tmpdir_as_cwd
