@@ -1,6 +1,7 @@
-import os
+import pathlib
 
 import pytest
+import jaraco.path
 
 from hgtools import managers
 
@@ -18,17 +19,22 @@ def tmpdir_as_cwd(tmpdir):
         yield tmpdir
 
 
+bar_baz = dict(
+    bar=dict(
+        baz="",
+    ),
+)
+
+
 @pytest.fixture
 def hg_repo(tmpdir_as_cwd):
     mgr = managers.MercurialManager()
     _ensure_present(mgr)
     mgr._invoke('init', '.')
-    os.makedirs('bar')
-    touch('bar/baz')
+    jaraco.path.build(bar_baz)
     mgr._invoke('addremove')
     mgr._invoke('ci', '-m', 'committed')
-    with open('bar/baz', 'w', encoding='utf-8') as baz:
-        baz.write('content')
+    pathlib.Path('bar/baz').write_text('content', encoding='utf-8')
     mgr._invoke('ci', '-m', 'added content')
     return tmpdir_as_cwd
 
@@ -40,16 +46,9 @@ def git_repo(tmpdir_as_cwd):
     mgr._invoke('init')
     mgr._invoke('config', 'user.email', 'hgtools@example.com')
     mgr._invoke('config', 'user.name', 'HGTools')
-    os.makedirs('bar')
-    touch('bar/baz')
+    jaraco.path.build(bar_baz)
     mgr._invoke('add', '.')
     mgr._invoke('commit', '-m', 'committed')
-    with open('bar/baz', 'w', encoding='utf-8') as baz:
-        baz.write('content')
+    pathlib.Path('bar/baz').write_text('content', encoding='utf-8')
     mgr._invoke('commit', '-am', 'added content')
     return tmpdir_as_cwd
-
-
-def touch(filename):
-    with open(filename, 'a', encoding='utf-8'):
-        pass
