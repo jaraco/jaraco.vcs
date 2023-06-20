@@ -42,7 +42,7 @@ class MercurialManager(Subprocess, cmd.Mercurial, base.RepoManager):
         Removes MACOSX_DEPLOYMENT_TARGET from the env, as if there's a
         mismatch between the local Python environment and the environment
         in which `hg` is installed, it will cause an exception. See
-        https://github.com/jaraco/hgtools/issues/7 for details.
+        https://github.com/jaraco/jaraco.vcs/issues/7 for details.
         """
         env = os.environ.copy()
         env.pop('MACOSX_DEPLOYMENT_TARGET', None)

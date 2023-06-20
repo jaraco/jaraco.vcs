@@ -1,7 +1,7 @@
 from unittest import mock
 import pytest
 
-from hgtools import managers
+from jaraco import vcs
 
 
 def test_existing_only():
@@ -10,13 +10,13 @@ def test_existing_only():
     """
     # presumably, '/' is never an hg repo - at least for our purposes, that's
     #  a reasonable assumption.
-    mgrs = managers.RepoManager.get_valid_managers('/')
-    existing = list(managers.RepoManager.existing_only(mgrs))
+    mgrs = vcs.RepoManager.get_valid_managers('/')
+    existing = list(vcs.RepoManager.existing_only(mgrs))
     assert not existing
 
 
 @mock.patch.object(
-    managers.RepoManager,
+    vcs.RepoManager,
     'get_valid_managers',
     classmethod(lambda cls, location: iter(())),
 )
@@ -26,5 +26,5 @@ def test_no_valid_managers():
     a nice message.
     """
     with pytest.raises(StopIteration) as err:
-        managers.RepoManager.get_first_valid_manager()
+        vcs.RepoManager.get_first_valid_manager()
     assert 'no source repo' in str(err).lower()

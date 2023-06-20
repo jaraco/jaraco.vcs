@@ -2,7 +2,7 @@ import sys
 
 import pytest
 
-from hgtools.managers import reentry
+from jaraco.vcs import reentry
 
 
 def hello_world():

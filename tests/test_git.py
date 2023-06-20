@@ -2,9 +2,9 @@ import os
 
 import pytest
 
-from hgtools import managers
-from hgtools.managers import cmd
-from hgtools.managers import subprocess
+from jaraco import vcs
+from jaraco.vcs import cmd
+from jaraco.vcs import subprocess
 
 
 def test_subprocess_manager_invalid_when_exe_missing():
@@ -22,7 +22,7 @@ def test_subprocess_manager_invalid_when_exe_missing():
 @pytest.mark.usefixtures("git_repo")
 class TestTags:
     def setup_method(self, method):
-        self.mgr = managers.GitManager('.')
+        self.mgr = vcs.GitManager('.')
 
     def teardown_method(self, method):
         del self.mgr

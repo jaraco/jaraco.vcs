@@ -4,8 +4,8 @@ import platform
 
 import pytest
 
-from hgtools import managers
-from hgtools.managers import subprocess
+from jaraco import vcs
+from jaraco.vcs import subprocess
 
 
 @pytest.fixture(autouse=True)
@@ -47,23 +47,23 @@ class TestRelativePaths:
     """
 
     def test_nested_child(self):
-        test_mgr = managers.MercurialManager('.')
+        test_mgr = vcs.MercurialManager('.')
         assert test_mgr.find_files() == [os.path.join('bar', 'baz')]
 
     def test_manager_in_child(self):
-        test_mgr = managers.MercurialManager('bar')
+        test_mgr = vcs.MercurialManager('bar')
         assert test_mgr.find_files() == ['baz']
 
     def test_current_dir_in_child(self):
         os.chdir('bar')
-        test_mgr = managers.MercurialManager('.')
+        test_mgr = vcs.MercurialManager('.')
         assert test_mgr.find_files() == ['baz']
 
 
 @pytest.mark.usefixtures("hg_repo")
 class TestTags:
     def setup_method(self, method):
-        self.mgr = managers.MercurialManager('.')
+        self.mgr = vcs.MercurialManager('.')
 
     def teardown_method(self, method):
         del self.mgr

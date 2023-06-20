@@ -1,10 +1,10 @@
-.. image:: https://img.shields.io/pypi/v/hgtools.svg
-   :target: https://pypi.org/project/hgtools
+.. image:: https://img.shields.io/pypi/v/jaraco.vcs.svg
+   :target: https://pypi.org/project/jaraco.vcs
 
-.. image:: https://img.shields.io/pypi/pyversions/hgtools.svg
+.. image:: https://img.shields.io/pypi/pyversions/jaraco.vcs.svg
 
-.. image:: https://github.com/jaraco/hgtools/workflows/tests/badge.svg
-   :target: https://github.com/jaraco/hgtools/actions?query=workflow%3A%22tests%22
+.. image:: https://github.com/jaraco/jaraco.vcs/workflows/tests/badge.svg
+   :target: https://github.com/jaraco/jaraco.vcs/actions?query=workflow%3A%22tests%22
    :alt: tests
 
 .. image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v2.json
@@ -24,22 +24,22 @@
 Usage
 =====
 
-hgtools
+jaraco.vcs
 provides classes for inspecting and working with repositories in the
 Mercurial and Git version control systems (VCS).
 
-The classes provided by hgtools are designed to use subprocess invocation to
+The classes provided are designed to use subprocess invocation to
 leverage the command-line interfaces of the VCS tools ``hg`` and ``git``. An
 in-process RepoManager for Mercurial exists but has been disabled due to
 issues that arise when run in certain environments (namely setuptools
 sandboxing).
 
 Auto Version Numbering
-**********************
+----------------------
 
-With the 0.4 release, hgtools adds support for automatically generating
-project version numbers from the repository in which the
-project is developed.
+This project adds support for automatically generating
+project version numbers from a source code repository under
+development.
 
 To use this feature, the project must follow the following assumptions:
 
@@ -53,8 +53,8 @@ To use this feature, the project must follow the following assumptions:
 Thereafter, use the RepoManager.get_current_version to
 determine the version of the local code. If the current revision is tagged
 with a valid version, that version will be used. Otherwise, the tags in
-the repo will be searched, the latest release will be found, and hgtools
-will infer the upcoming release version.
+the repo will be searched, the latest release will be found, and the
+function will infer the upcoming release version.
 
 For example, if the repo contains the tags 0.1, 0.2, and 0.3 and the
 repo is not on any of those tags, get_current_version will return
@@ -63,6 +63,6 @@ repo is not on any of those tags, get_current_version will return
 
 Example::
 
-    >>> from hgtools.managers import RepoManager
+    >>> from jaraco.vcs import RepoManager
     >>> RepoManager().get_first_valid_manager().get_current_version()
     '9.0.1.dev0'

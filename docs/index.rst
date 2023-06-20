@@ -7,7 +7,17 @@ Welcome to |project| documentation!
    history
 
 
-.. automodule:: hgtools
+.. automodule:: jaraco.vcs
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+.. automodule:: jaraco.vcs.subprocess
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+.. automodule:: jaraco.vcs.cmd
     :members:
     :undoc-members:
     :show-inheritance:

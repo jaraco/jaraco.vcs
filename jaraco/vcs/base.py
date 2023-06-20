@@ -1,12 +1,12 @@
 """
-hgtools implements several repo managers, each of which provides an interface
-to source code repository functionality.
+This project implements several repo managers, each of which provides
+an interface to source code repository functionality.
 """
 
 import posixpath
 import itertools
 
-from jaraco import versioning
+import jaraco.versioning as versioning
 from jaraco.classes.ancestry import iter_subclasses
 from more_itertools import one
 
