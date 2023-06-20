@@ -24,7 +24,8 @@ v8.3.0
 
 * #33: Replace ``distutils.StrictVersion`` with
   ``packaging.version.Version``. Adds dependency on
-  packaging.
+  packaging. Adds support for tags prefixed with
+  ``v`` (a la semver).
 
 v8.2.1
 ======

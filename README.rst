@@ -41,14 +41,14 @@ With the 0.4 release, hgtools adds support for automatically generating
 project version numbers from the repository in which the
 project is developed.
 
-To use this feature, your project must follow the following assumptions:
+To use this feature, the project must follow the following assumptions:
 
-	 - Repo tags are used to indicate released versions.
-	 - Tag names are specified as the version only (i.e. 0.1 and not
-	   v0.1 or release-0.1)
-	 - Released versions currently must conform to the Version in
-	   `packaging <https://pypi.org/project/packaging>`_. Any tags
-	   that don't match this scheme will be ignored.
+- Repo tags are used to indicate released versions.
+- Tag names are specified as the version only (i.e. 0.1 or v0.1 and
+  not release-0.1)
+- Released versions currently must conform to the Version in
+  `packaging <https://pypi.org/project/packaging>`_. Any tags
+  that don't match this scheme will be ignored.
 
 Thereafter, use the RepoManager.get_current_version to
 determine the version of the local code. If the current revision is tagged
