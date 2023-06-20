@@ -27,7 +27,7 @@ def hg_repo(tmpdir_as_cwd):
     touch('bar/baz')
     mgr._invoke('addremove')
     mgr._invoke('ci', '-m', 'committed')
-    with open('bar/baz', 'w') as baz:
+    with open('bar/baz', 'w', encoding='utf-8') as baz:
         baz.write('content')
     mgr._invoke('ci', '-m', 'added content')
     return tmpdir_as_cwd
@@ -44,12 +44,12 @@ def git_repo(tmpdir_as_cwd):
     touch('bar/baz')
     mgr._invoke('add', '.')
     mgr._invoke('commit', '-m', 'committed')
-    with open('bar/baz', 'w') as baz:
+    with open('bar/baz', 'w', encoding='utf-8') as baz:
         baz.write('content')
     mgr._invoke('commit', '-am', 'added content')
     return tmpdir_as_cwd
 
 
 def touch(filename):
-    with open(filename, 'a'):
+    with open(filename, 'a', encoding='utf-8'):
         pass

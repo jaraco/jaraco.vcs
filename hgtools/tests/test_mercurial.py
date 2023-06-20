@@ -80,7 +80,7 @@ class TestTags:
 
     def test_local_modifications(self):
         "Local modifications should return empty set"
-        with open('bar/baz', 'w') as f:
+        with open('bar/baz', 'w', encoding='utf-8') as f:
             f.write('changed')
         assert self.mgr.get_tags() == set([])
 
@@ -120,14 +120,14 @@ class TestTags:
         has a 1.1 tag.
         """
         # create a commit with a tag
-        with open('bar/baz', 'a') as f:
+        with open('bar/baz', 'a', encoding='utf-8') as f:
             f.write('\nmore to say\n')
         self.mgr._invoke('commit', '-m', 'Had more to say')
         self.mgr._invoke('tag', '1.0')
         # update to the pre-tagged revision
         self.mgr._invoke('update', '1')
         # Make a different commit
-        with open('bar/baz', 'a') as f:
+        with open('bar/baz', 'a', encoding='utf-8') as f:
             f.write('\na different concept\n')
         self.mgr._invoke('commit', '-m', 'A different approach')
         self.mgr._invoke('tag', '1.1')
