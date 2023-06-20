@@ -1,3 +1,9 @@
+v9.2.0
+======
+
+* #34: Fixed test failures when running tests and
+  ``ui.relative-paths=yes``.
+
 v9.1.0
 ======
 
