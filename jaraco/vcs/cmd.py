@@ -183,3 +183,12 @@ class Git(Command):
         Is the current state modified? (currently stubbed assuming no)
         """
         return False
+
+    def get_ancestral_tags(self, rev=None):
+        """
+        Like get_repo_tags, but only get those tags ancestral to the current
+        changeset.
+        """
+        rev = rev or 'HEAD'
+        matches = self._invoke('tags', '--merged', rev).splitlines()
+        return (rev for rev in self.get_repo_tags() if rev.tag in matches)
