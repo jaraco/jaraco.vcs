@@ -1,3 +1,9 @@
+v10.1.0
+=======
+
+* Final release of ``hgtools`` redirecting users to
+  `jaraco.vcs <https://pypi.org/project/jaraco.vcs>`_.
+
 v10.0.0
 =======
 
