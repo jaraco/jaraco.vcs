@@ -19,7 +19,7 @@ def temp_work_dir(tmp_path, monkeypatch):
     return tmp_path
 
 
-bar_baz = dict(
+source_tree = dict(
     bar=dict(
         baz="",
     ),
@@ -31,7 +31,7 @@ def hg_repo(temp_work_dir):
     mgr = managers.MercurialManager()
     _ensure_present(mgr)
     mgr._invoke('init', '.')
-    jaraco.path.build(bar_baz)
+    jaraco.path.build(source_tree)
     mgr._invoke('addremove')
     mgr._invoke('ci', '-m', 'committed')
     pathlib.Path('bar/baz').write_text('content', encoding='utf-8')
@@ -45,7 +45,7 @@ def git_repo(temp_work_dir):
     mgr._invoke('init')
     mgr._invoke('config', 'user.email', 'hgtools@example.com')
     mgr._invoke('config', 'user.name', 'HGTools')
-    jaraco.path.build(bar_baz)
+    jaraco.path.build(source_tree)
     mgr._invoke('add', '.')
     mgr._invoke('commit', '-m', 'committed')
     pathlib.Path('bar/baz').write_text('content', encoding='utf-8')
