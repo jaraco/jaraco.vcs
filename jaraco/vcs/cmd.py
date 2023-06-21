@@ -147,7 +147,9 @@ class Git(Command):
 
     def version_suitable(self):
         req_ver = packaging.version.Version('1.7.10')
-        act_ver = packaging.version.Version(self.version())
+        act_ver = packaging.version.Version(
+            self.version().replace('.windows', '+windows')
+        )
         return act_ver >= req_ver
 
     def find_root(self):
