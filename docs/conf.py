@@ -32,7 +32,7 @@ link_files = {
 nitpicky = True
 
 nitpick_ignore = [
-    ('py:class', 'jaraco.versioning.VersionManagement'),
+    ('py:class', 'jaraco.versioning.Versioned'),
 ]
 
 # Include Python intersphinx mapping to prevent failures
