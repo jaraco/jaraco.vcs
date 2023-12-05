@@ -202,3 +202,7 @@ class Git(Command):
         rev = rev or 'HEAD'
         matches = self._invoke('tags', '--merged', rev).splitlines()
         return (rev for rev in self.get_repo_tags() if rev.tag in matches)
+
+    def sub_paths(self):
+        lines = self._invoke('submodules', 'status').splitlines()
+        return (line.split()[1] for line in lines)
