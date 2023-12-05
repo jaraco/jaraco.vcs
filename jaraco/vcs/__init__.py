@@ -9,11 +9,6 @@ from .base import Repo
 from .subprocess import Mercurial, Git
 
 
-__all__ = ['Repo', 'repo']
+__all__ = ['Repo', 'repo', 'Mercurial', 'Git']
 
 repo = Repo.detect
-
-# for compatibility
-RepoManager = Repo
-MercurialManager = Mercurial
-GitManager = Git

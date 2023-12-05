@@ -49,9 +49,6 @@ class Repo(versioning.VersionManagement):
             e.args = ("No source repo or suitable VCS version found",)
             raise
 
-    # for compatibility
-    get_first_valid_manager = detect
-
     @staticmethod
     def existing_only(managers):
         """

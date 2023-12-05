@@ -7,9 +7,10 @@ from jaraco import vcs
 def test_existing_only():
     """
     Test the static method RepoManager.existing_only.
+
+    Presumably, '/' is never an hg repo; at least for testing
+    purposes, that's a reasonable assumption.
     """
-    # presumably, '/' is never an hg repo - at least for our purposes, that's
-    #  a reasonable assumption.
     mgrs = vcs.Repo.get_valid_managers('/')
     existing = list(vcs.Repo.existing_only(mgrs))
     assert not existing
@@ -26,5 +27,5 @@ def test_no_valid_managers():
     a nice message.
     """
     with pytest.raises(StopIteration) as err:
-        vcs.Repo.get_first_valid_manager()
+        vcs.Repo.detect()
     assert 'no source repo' in str(err).lower()
