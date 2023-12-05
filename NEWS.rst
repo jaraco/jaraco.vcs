@@ -1,3 +1,12 @@
+v1.3.0
+======
+
+Features
+--------
+
+- Remove mask for environment when invoking hg as the underlying issue has been corrected. (#7)
+
+
 v1.2.0
 ======
 
