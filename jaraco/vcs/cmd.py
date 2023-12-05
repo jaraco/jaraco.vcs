@@ -1,3 +1,4 @@
+import os.path
 import re
 import operator
 import itertools
@@ -136,6 +137,13 @@ class Mercurial(Command):
     def is_modified(self):
         out = self._invoke('status', '-mard')
         return bool(out)
+
+    def sub_paths(self):
+        try:
+            with open(os.path.join(self.location, '.hgsub')) as file:
+                return [line.partition('=')[0].strip() for line in file]
+        except Exception:
+            return ()
 
 
 class Git(Command):

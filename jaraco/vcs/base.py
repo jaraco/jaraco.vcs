@@ -3,6 +3,7 @@ This project implements several repo managers, each of which provides
 an interface to source code repository functionality.
 """
 
+import os.path
 import posixpath
 import itertools
 
@@ -113,11 +114,8 @@ class Repo(versioning.VersionManagement):
         return itertools.chain(files, subrepo_files)
 
     def subrepos(self):
-        try:
-            with open(posixpath.join(self.location, '.hgsub')) as file:
-                subs = list(file)
-        except Exception:
-            subs = []
+        paths = (os.path.join(self.location, path) for path in self.sub_paths())
+        return map(self.__class__, paths)
 
-        locs = [part.partition('=')[0].strip() for part in subs]
-        return [self.__class__(posixpath.join(self.location, loc)) for loc in locs]
+    def sub_paths(self):
+        raise NotImplementedError()
