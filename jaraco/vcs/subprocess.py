@@ -1,6 +1,8 @@
 import os
 import subprocess
 
+from jaraco.collections import Mask
+
 from . import base
 from . import cmd
 
@@ -44,9 +46,7 @@ class Mercurial(Subprocess, cmd.Mercurial, base.Repo):
         in which `hg` is installed, it will cause an exception. See
         https://github.com/jaraco/jaraco.vcs/issues/7 for details.
         """
-        env = os.environ.copy()
-        env.pop('MACOSX_DEPLOYMENT_TARGET', None)
-        return env
+        return Mask(['MACOSX_DEPLOYMENT_TARGET'], os.environ)
 
 
 class Git(Subprocess, cmd.Git, base.Repo):
