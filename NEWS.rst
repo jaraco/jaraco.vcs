@@ -1,3 +1,18 @@
+v2.0.0
+======
+
+Features
+--------
+
+- Implement subrepos for Git repos.
+
+
+Deprecations and Removals
+-------------------------
+
+- Removed legacy names.
+
+
 v1.3.0
 ======
 
