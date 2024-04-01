@@ -1,5 +1,5 @@
-import os
 import operator
+import os
 import platform
 
 import pytest

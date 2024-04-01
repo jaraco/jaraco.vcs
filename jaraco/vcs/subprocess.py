@@ -1,8 +1,7 @@
 import os
 import subprocess
 
-from . import base
-from . import cmd
+from . import base, cmd
 
 
 class Subprocess:

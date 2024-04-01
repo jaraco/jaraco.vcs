@@ -3,10 +3,10 @@ Base classes for invoking a Python script from within
 the current Python process.
 """
 
-import sys
-import io
 import collections
 import contextlib
+import io
+import sys
 
 SavedIO = collections.namedtuple('SavedIO', 'stdout stderr')
 

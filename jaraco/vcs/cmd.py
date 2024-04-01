@@ -1,11 +1,10 @@
+import collections
+import itertools
+import operator
 import os.path
 import re
-import operator
-import itertools
-import collections
 
 import packaging
-
 
 TaggedRevision = collections.namedtuple('TaggedRevision', 'tag revision')
 

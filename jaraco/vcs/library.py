@@ -1,8 +1,6 @@
 import sys
 
-from . import base
-from . import cmd
-from . import reentry
+from . import base, cmd, reentry
 
 
 class Mercurial(cmd.Mercurial, base.Repo):

@@ -3,13 +3,14 @@ This project implements several repo managers, each of which provides
 an interface to source code repository functionality.
 """
 
+import itertools
 import os.path
 import posixpath
-import itertools
+
+from more_itertools import one
 
 import jaraco.versioning as versioning
 from jaraco.classes.ancestry import iter_subclasses
-from more_itertools import one
 
 
 class Repo(versioning.VersionManagement):

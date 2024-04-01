@@ -1,8 +1,8 @@
 import pathlib
 
 import pytest
-import jaraco.path
 
+import jaraco.path
 from jaraco import vcs
 
 

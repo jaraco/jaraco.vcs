@@ -3,8 +3,7 @@ import os
 import pytest
 
 from jaraco import vcs
-from jaraco.vcs import cmd
-from jaraco.vcs import subprocess
+from jaraco.vcs import cmd, subprocess
 
 
 def test_subprocess_manager_invalid_when_exe_missing():

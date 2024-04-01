@@ -6,8 +6,7 @@ True
 """
 
 from .base import Repo
-from .subprocess import Mercurial, Git
-
+from .subprocess import Git, Mercurial
 
 __all__ = ['Repo', 'repo', 'Mercurial', 'Git']
 
