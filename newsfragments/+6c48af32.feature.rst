@@ -1,1 +1,0 @@
-Added .get_timestamp method for retrieving the timestamp of a given revision.

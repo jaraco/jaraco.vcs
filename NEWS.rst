@@ -1,3 +1,12 @@
+v2.1.0
+======
+
+Features
+--------
+
+- Added .get_timestamp method for retrieving the timestamp of a given revision.
+
+
 v2.0.0
 ======
 
