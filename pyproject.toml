@@ -23,6 +23,7 @@ dependencies = [
 	"jaraco.classes",
 	"more_itertools",
 	"jaraco.versioning",
+	"python-dateutil",
 ]
 dynamic = ["version"]
 
@@ -42,6 +43,7 @@ testing = [
 	# local
 	"pygments",
 	"jaraco.path",
+	"types-python-dateutil",
 ]
 docs = [
 	# upstream

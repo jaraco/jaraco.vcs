@@ -7,6 +7,7 @@ import itertools
 import os.path
 import posixpath
 
+import dateutil.parser
 from more_itertools import one
 
 import jaraco.versioning as versioning
@@ -120,3 +121,6 @@ class Repo(versioning.VersionManagement):
 
     def sub_paths(self):
         raise NotImplementedError()
+
+    def get_timestamp(self, rev):
+        return dateutil.parser.parse(self._get_timestamp_str(rev))

@@ -1,3 +1,4 @@
+import datetime
 import operator
 import os
 import platform
@@ -155,3 +156,11 @@ class TestTags:
         self._setup_branchy_tags()
         (tag,) = self.mgr.get_ancestral_tags(3)
         assert tag.tag == '1.0'
+
+
+@pytest.mark.usefixtures("hg_repo")
+class TestRevisionTimestamp:
+    def test_tagged_rev_timestamp(self):
+        mgr = vcs.Mercurial('.')
+        mgr._invoke('tag', '1.0')
+        assert mgr.get_timestamp('1.0').date() == datetime.date.today()

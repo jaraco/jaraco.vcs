@@ -144,6 +144,9 @@ class Mercurial(Command):
         except Exception:
             return ()
 
+    def _get_timestamp_str(self, rev):
+        return self._invoke('log', '-l', '1', '--template', '{date|isodate}', '-r', rev)
+
 
 class Git(Command):
     exe = 'git'
@@ -205,3 +208,6 @@ class Git(Command):
     def sub_paths(self):
         lines = self._invoke('submodules', 'status').splitlines()
         return (line.split()[1] for line in lines)
+
+    def _get_timestamp_str(self, rev):
+        return self._invoke('log', '-1', '--format=%ai', rev)

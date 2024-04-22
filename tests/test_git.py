@@ -1,3 +1,4 @@
+import datetime
 import os
 
 import pytest
@@ -41,3 +42,11 @@ class TestParseVersion:
     def test_trailing_mess(self):
         val = cmd.Git._parse_version('git version 1.9.3 (Mac OS X)')
         assert val == '1.9.3'
+
+
+@pytest.mark.usefixtures("git_repo")
+class TestRevisionTimestamp:
+    def test_tagged_rev_timestamp(self):
+        mgr = vcs.Git('.')
+        mgr._invoke('tag', '-am', 'tagging 1.0', '1.0')
+        assert mgr.get_timestamp('1.0').date() == datetime.date.today()
