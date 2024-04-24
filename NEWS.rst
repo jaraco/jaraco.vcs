@@ -1,3 +1,12 @@
+v2.2.0
+======
+
+Features
+--------
+
+- Remove check on minimum git version.
+
+
 v2.1.0
 ======
 
