@@ -4,8 +4,6 @@ import operator
 import os.path
 import re
 
-import packaging
-
 TaggedRevision = collections.namedtuple('TaggedRevision', 'tag revision')
 
 
@@ -153,14 +151,7 @@ class Git(Command):
     version_pattern = r'git version (\d+\.\d+[^ ]*)'
 
     def is_valid(self):
-        return super().is_valid() and self.version_suitable()
-
-    def version_suitable(self):
-        req_ver = packaging.version.Version('1.7.10')
-        act_ver = packaging.version.Version(
-            self.version().replace('.windows', '+windows')
-        )
-        return act_ver >= req_ver
+        return super().is_valid()
 
     def find_root(self):
         try:
