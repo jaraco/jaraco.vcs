@@ -45,6 +45,7 @@ def git_repo(temp_work_dir):
     mgr._invoke('init')
     mgr._invoke('config', 'user.email', 'vip@example.com')
     mgr._invoke('config', 'user.name', 'Important User')
+    mgr._invoke('config', 'commit.gpgSign', 'false')
     jaraco.path.build(source_tree)
     mgr._invoke('add', '.')
     mgr._invoke('commit', '-m', 'committed')
