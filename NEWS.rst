@@ -1,3 +1,12 @@
+v2.3.0
+======
+
+Features
+--------
+
+- Added Git.age method.
+
+
 v2.2.0
 ======
 
