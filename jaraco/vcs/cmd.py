@@ -222,4 +222,6 @@ class Git(Command):
         )
         first_line = proc.stdout.readline().strip()
         proc.terminate()
+        proc.wait()
+        proc.stdout.close()
         return utc.now() - dateutil.parser.parse(first_line)
