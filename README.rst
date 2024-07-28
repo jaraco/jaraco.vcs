@@ -26,7 +26,7 @@ Mercurial and Git version control systems (VCS).
 
 The classes provided are designed to use subprocess invocation to
 leverage the command-line interfaces of the VCS tools ``hg`` and ``git``. An
-in-process RepoManager for Mercurial exists but has been disabled due to
+in-process Repo for Mercurial exists but has been disabled due to
 issues that arise when run in certain environments (namely setuptools
 sandboxing).
 
@@ -46,7 +46,7 @@ To use this feature, the project must follow the following assumptions:
   `packaging <https://pypi.org/project/packaging>`_. Any tags
   that don't match this scheme will be ignored.
 
-Thereafter, use the RepoManager.get_current_version to
+Thereafter, use the Repo.get_current_version to
 determine the version of the local code. If the current revision is tagged
 with a valid version, that version will be used. Otherwise, the tags in
 the repo will be searched, the latest release will be found, and the

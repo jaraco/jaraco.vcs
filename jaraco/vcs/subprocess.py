@@ -36,7 +36,7 @@ class Mercurial(Subprocess, cmd.Mercurial, base.Repo):
 
 class Git(Subprocess, cmd.Git, base.Repo):
     """
-    A RepoManager implemented by calling into the 'git' command-line
+    A Repo implemented by calling into the 'git' command-line
     as a subprocess.
     """
 

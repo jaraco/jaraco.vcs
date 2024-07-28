@@ -7,7 +7,7 @@ from jaraco import vcs
 
 def test_existing_only():
     """
-    Test the static method RepoManager.existing_only.
+    Test the static method Repo.existing_only.
 
     Presumably, '/' is never an hg repo; at least for testing
     purposes, that's a reasonable assumption.
@@ -22,9 +22,9 @@ def test_existing_only():
     'get_valid_managers',
     classmethod(lambda cls, location: iter(())),
 )
-def test_no_valid_managers():
+def test_no_valid_implementations():
     """
-    When no valid managers can be found, a StopIteration is raised providing
+    When no valid implementations can be found, a StopIteration is raised providing
     a nice message.
     """
     with pytest.raises(StopIteration) as err:

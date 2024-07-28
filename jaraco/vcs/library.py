@@ -5,7 +5,7 @@ from . import base, cmd, reentry
 
 class Mercurial(cmd.Mercurial, base.Repo):
     """
-    A RepoManager implemented by invoking the hg command in-process.
+    A Repo implemented by invoking the hg command in-process.
     """
 
     def _invoke(self, *params):

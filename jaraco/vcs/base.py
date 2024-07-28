@@ -1,11 +1,15 @@
 """
-This project implements several repo managers, each of which provides
+This project implements several repo implementations, each of which provides
 an interface to source code repository functionality.
 """
+
+from __future__ import annotations
 
 import itertools
 import os.path
 import posixpath
+
+from typing import Iterable
 
 import dateutil.parser
 from more_itertools import one
@@ -25,7 +29,7 @@ class Repo(versioning.VersionManagement):
         self.setup()
 
     def is_valid(self):
-        "Return True if this is a valid manager for this location."
+        "Return True if this instance is a valid for this location."
         return True
 
     def setup(self):
@@ -34,15 +38,15 @@ class Repo(versioning.VersionManagement):
     @classmethod
     def get_valid_managers(cls, location):
         """
-        Get the valid RepoManagers for this location.
+        Get the valid Repo implementations for this location.
         """
 
         def by_priority_attr(c):
             return getattr(c, 'priority', 0)
 
         classes = sorted(iter_subclasses(cls), key=by_priority_attr, reverse=True)
-        all_managers = (c(location) for c in classes)
-        return (mgr for mgr in all_managers if mgr.is_valid())
+        instances = (c(location) for c in classes)
+        return (inst for inst in instances if inst.is_valid())
 
     @staticmethod
     def detect(location='.'):
@@ -53,11 +57,11 @@ class Repo(versioning.VersionManagement):
             raise
 
     @staticmethod
-    def existing_only(managers):
+    def existing_only(instances: Iterable[Repo]):
         """
-        Return only those managers that refer to an existing repo
+        Return only those instances that refer to an existing repo
         """
-        return (mgr for mgr in managers if mgr.find_root())
+        return (inst for inst in instances if inst.find_root())
 
     def __repr__(self):
         return '{self.__class__.__name__}({self.location})'.format(**vars())

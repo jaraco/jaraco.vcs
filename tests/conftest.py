@@ -28,25 +28,25 @@ source_tree = dict(
 
 @pytest.fixture
 def hg_repo(temp_work_dir):
-    mgr = vcs.Mercurial()
-    _ensure_present(mgr)
-    mgr._invoke('init', '.')
+    repo = vcs.Mercurial()
+    _ensure_present(repo)
+    repo._invoke('init', '.')
     jaraco.path.build(source_tree)
-    mgr._invoke('addremove')
-    mgr._invoke('ci', '-m', 'committed')
+    repo._invoke('addremove')
+    repo._invoke('ci', '-m', 'committed')
     pathlib.Path('bar/baz').write_text('content', encoding='utf-8')
-    mgr._invoke('ci', '-m', 'added content')
+    repo._invoke('ci', '-m', 'added content')
 
 
 @pytest.fixture
 def git_repo(temp_work_dir):
-    mgr = vcs.Git()
-    _ensure_present(mgr)
-    mgr._invoke('init')
-    mgr._invoke('config', 'user.email', 'vip@example.com')
-    mgr._invoke('config', 'user.name', 'Important User')
+    repo = vcs.Git()
+    _ensure_present(repo)
+    repo._invoke('init')
+    repo._invoke('config', 'user.email', 'vip@example.com')
+    repo._invoke('config', 'user.name', 'Important User')
     jaraco.path.build(source_tree)
-    mgr._invoke('add', '.')
-    mgr._invoke('commit', '-m', 'committed')
+    repo._invoke('add', '.')
+    repo._invoke('commit', '-m', 'committed')
     pathlib.Path('bar/baz').write_text('content', encoding='utf-8')
-    mgr._invoke('commit', '-am', 'added content')
+    repo._invoke('commit', '-am', 'added content')
