@@ -4,9 +4,9 @@ import operator
 import os.path
 import re
 import subprocess
-import datetime
 
 import dateutil.parser
+from tempora import utc
 
 
 TaggedRevision = collections.namedtuple('TaggedRevision', 'tag revision')
@@ -222,4 +222,4 @@ class Git(Command):
         )
         first_line = proc.stdout.readline().strip()
         proc.terminate()
-        return datetime.datetime.now(datetime.UTC) - dateutil.parser.parse(first_line)
+        return utc.now() - dateutil.parser.parse(first_line)
