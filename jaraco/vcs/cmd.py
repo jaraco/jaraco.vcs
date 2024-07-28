@@ -3,6 +3,11 @@ import itertools
 import operator
 import os.path
 import re
+import subprocess
+import datetime
+
+import dateutil.parser
+
 
 TaggedRevision = collections.namedtuple('TaggedRevision', 'tag revision')
 
@@ -202,3 +207,19 @@ class Git(Command):
 
     def _get_timestamp_str(self, rev):
         return self._invoke('log', '-1', '--format=%ai', rev)
+
+    def age(self):
+        """
+        >>> repo = getfixture('git_repo')
+        >>> repo.age()
+        datetime.timedelta(...)
+        """
+        proc = subprocess.Popen(
+            ['git', 'log', '--reverse', '--pretty=%ad', '--date', 'iso'],
+            stdout=subprocess.PIPE,
+            text=True,
+            encoding='utf-8',
+        )
+        first_line = proc.stdout.readline().strip()
+        proc.terminate()
+        return datetime.datetime.now(datetime.UTC) - dateutil.parser.parse(first_line)

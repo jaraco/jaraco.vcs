@@ -36,6 +36,7 @@ def hg_repo(temp_work_dir):
     repo._invoke('ci', '-m', 'committed')
     pathlib.Path('bar/baz').write_text('content', encoding='utf-8')
     repo._invoke('ci', '-m', 'added content')
+    return repo
 
 
 @pytest.fixture
@@ -50,3 +51,4 @@ def git_repo(temp_work_dir):
     repo._invoke('commit', '-m', 'committed')
     pathlib.Path('bar/baz').write_text('content', encoding='utf-8')
     repo._invoke('commit', '-am', 'added content')
+    return repo

@@ -128,3 +128,9 @@ class Repo(versioning.VersionManagement):
 
     def get_timestamp(self, rev):
         return dateutil.parser.parse(self._get_timestamp_str(rev))
+
+    def age(self):
+        """
+        Return the age of the repo.
+        """
+        raise NotImplementedError()
