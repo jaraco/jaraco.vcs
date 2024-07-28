@@ -45,6 +45,7 @@ test = [
 	"pygments",
 	"jaraco.path",
 	"types-python-dateutil",
+	"pytest-home",
 ]
 doc = [
 	# upstream

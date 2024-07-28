@@ -6,6 +6,10 @@ import jaraco.path
 from jaraco import vcs
 
 
+# isolate the tests from a developer's VCS config
+pytestmark = pytest.mark.usefixtures('tmp_home_dir')
+
+
 def _ensure_present(mgr):
     try:
         mgr.version()
