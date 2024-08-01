@@ -54,6 +54,5 @@ class TestRevisionTimestamp:
 
 class TestIsolation:
     def test_commits_not_signed(self, git_repo):
-        repo = vcs.Git('.')
-        output = repo._invoke('log', '--show-signature')
+        output = git_repo._invoke('log', '--show-signature')
         assert 'Signature made' not in output
