@@ -6,8 +6,9 @@ import jaraco.path
 from jaraco import vcs
 
 
-# isolate the tests from a developer's VCS config
-pytestmark = pytest.mark.usefixtures('tmp_home_dir')
+@pytest.fixture(autouse=True)
+def _isolate_home(tmp_home_dir):
+    """Isolate the tests from a developer's VCS config."""
 
 
 def _ensure_present(mgr):
