@@ -50,3 +50,10 @@ class TestRevisionTimestamp:
         mgr = vcs.Git('.')
         mgr._invoke('tag', '-am', 'tagging 1.0', '1.0')
         assert mgr.get_timestamp('1.0').date() == datetime.date.today()
+
+
+class TestIsolation:
+    def test_commits_not_signed(self, git_repo):
+        repo = vcs.Git('.')
+        output = repo._invoke('log', '--show-signature')
+        assert 'Signature made' not in output
