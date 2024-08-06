@@ -1,4 +1,7 @@
-import pytest
+try:
+    import pytest
+except ImportError as err:
+    raise ImportError("`jaraco.vcs.fixtures` requires pytest to be installed.") from err
 
 from .. import vcs
 
