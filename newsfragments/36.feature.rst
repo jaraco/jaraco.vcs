@@ -1,1 +1,0 @@
-Presented hg_repo and git_repo as fixtures.

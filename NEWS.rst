@@ -1,3 +1,12 @@
+v2.4.0
+======
+
+Features
+--------
+
+- Presented hg_repo and git_repo as fixtures. (#36)
+
+
 v2.3.1
 ======
 
