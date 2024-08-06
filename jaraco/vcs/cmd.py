@@ -1,3 +1,4 @@
+import abc
 import collections
 import itertools
 import operator
@@ -6,13 +7,17 @@ import re
 import subprocess
 
 import dateutil.parser
+import jaraco.path
 from tempora import utc
 
 
 TaggedRevision = collections.namedtuple('TaggedRevision', 'tag revision')
 
 
-class Command:
+class Command(metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def _invoke(self, *args): ...
+
     def is_valid(self):
         try:
             # Check if both command and repo are valid
@@ -150,6 +155,11 @@ class Mercurial(Command):
     def _get_timestamp_str(self, rev):
         return self._invoke('log', '-l', '1', '--template', '{date|isodate}', '-r', rev)
 
+    def commit_tree(self, spec, message: str = 'committed'):
+        jaraco.path.build(spec)
+        self._invoke('addremove')
+        self._invoke('commit', '-m', message)
+
 
 class Git(Command):
     exe = 'git'
@@ -225,3 +235,8 @@ class Git(Command):
         proc.wait()
         proc.stdout.close()
         return utc.now() - dateutil.parser.parse(first_line)
+
+    def commit_tree(self, spec, message: str = 'committed'):
+        jaraco.path.build(spec)
+        self._invoke('add', '.')
+        self._invoke('commit', '-m', message)

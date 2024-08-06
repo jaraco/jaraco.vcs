@@ -1,9 +1,4 @@
-import pathlib
-
 import pytest
-
-import jaraco.path
-from jaraco import vcs
 
 
 @pytest.fixture(autouse=True)
@@ -11,49 +6,31 @@ def _isolate_home(tmp_home_dir):
     """Isolate the tests from a developer's VCS config."""
 
 
-def _ensure_present(mgr):
-    try:
-        mgr.version()
-    except Exception:
-        pytest.skip()
-
-
-@pytest.fixture
-def temp_work_dir(tmp_path, monkeypatch):
-    monkeypatch.chdir(tmp_path)
-    return tmp_path
-
-
-source_tree = dict(
+rev1 = dict(
     bar=dict(
         baz="",
     ),
 )
 
 
+rev2 = dict(
+    bar=dict(
+        baz="content",
+    ),
+)
+
+
 @pytest.fixture
-def hg_repo(temp_work_dir):
-    repo = vcs.Mercurial()
-    _ensure_present(repo)
-    repo._invoke('init', '.')
-    jaraco.path.build(source_tree)
-    repo._invoke('addremove')
-    repo._invoke('ci', '-m', 'committed')
-    pathlib.Path('bar/baz').write_text('content', encoding='utf-8')
-    repo._invoke('ci', '-m', 'added content')
+def hg_repo(hg_repo):
+    repo = hg_repo
+    repo.commit_tree(rev1, 'committed')
+    repo.commit_tree(rev2, 'added content')
     return repo
 
 
 @pytest.fixture
-def git_repo(temp_work_dir):
-    repo = vcs.Git()
-    _ensure_present(repo)
-    repo._invoke('init')
-    repo._invoke('config', 'user.email', 'vip@example.com')
-    repo._invoke('config', 'user.name', 'Important User')
-    jaraco.path.build(source_tree)
-    repo._invoke('add', '.')
-    repo._invoke('commit', '-m', 'committed')
-    pathlib.Path('bar/baz').write_text('content', encoding='utf-8')
-    repo._invoke('commit', '-am', 'added content')
+def git_repo(git_repo):
+    repo = git_repo
+    repo.commit_tree(rev1, 'committed')
+    repo.commit_tree(rev2, 'added content')
     return repo
