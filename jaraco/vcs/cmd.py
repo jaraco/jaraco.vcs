@@ -1,3 +1,4 @@
+import abc
 import collections
 import itertools
 import operator
@@ -13,7 +14,10 @@ from tempora import utc
 TaggedRevision = collections.namedtuple('TaggedRevision', 'tag revision')
 
 
-class Command:
+class Command(metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def _invoke(self, *args): ...
+
     def is_valid(self):
         try:
             # Check if both command and repo are valid
