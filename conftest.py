@@ -1,7 +1,5 @@
 import pytest
 
-import jaraco.path
-
 
 @pytest.fixture(autouse=True)
 def _isolate_home(tmp_home_dir):
@@ -25,20 +23,14 @@ rev2 = dict(
 @pytest.fixture
 def hg_repo(hg_repo):
     repo = hg_repo
-    jaraco.path.build(rev1)
-    repo._invoke('addremove')
-    repo._invoke('ci', '-m', 'committed')
-    jaraco.path.build(rev2)
-    repo._invoke('ci', '-m', 'added content')
+    repo.commit_tree(rev1, 'committed')
+    repo.commit_tree(rev2, 'added content')
     return repo
 
 
 @pytest.fixture
 def git_repo(git_repo):
     repo = git_repo
-    jaraco.path.build(rev1)
-    repo._invoke('add', '.')
-    repo._invoke('commit', '-m', 'committed')
-    jaraco.path.build(rev2)
-    repo._invoke('commit', '-am', 'added content')
+    repo.commit_tree(rev1, 'committed')
+    repo.commit_tree(rev2, 'added content')
     return repo

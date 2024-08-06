@@ -25,6 +25,7 @@ dependencies = [
 	"jaraco.versioning",
 	"python-dateutil",
 	"tempora",
+	"jaraco.path",
 ]
 dynamic = ["version"]
 
@@ -43,7 +44,6 @@ test = [
 
 	# local
 	"pygments",
-	"jaraco.path",
 	"types-python-dateutil",
 	"pytest-home",
 ]

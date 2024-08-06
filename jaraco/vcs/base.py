@@ -134,3 +134,9 @@ class Repo(versioning.VersionManagement):
         Return the age of the repo.
         """
         raise NotImplementedError()
+
+    def commit_tree(self, spec, msg="committed"):
+        """
+        Apply the tree in spec and commit.
+        """
+        raise NotImplementedError()

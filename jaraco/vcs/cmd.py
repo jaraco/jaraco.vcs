@@ -6,6 +6,7 @@ import re
 import subprocess
 
 import dateutil.parser
+import jaraco.path
 from tempora import utc
 
 
@@ -150,6 +151,11 @@ class Mercurial(Command):
     def _get_timestamp_str(self, rev):
         return self._invoke('log', '-l', '1', '--template', '{date|isodate}', '-r', rev)
 
+    def commit_tree(self, spec, message: str = 'committed'):
+        jaraco.path.build(spec)
+        self._invoke('addremove')
+        self._invoke('commit', '-m', message)
+
 
 class Git(Command):
     exe = 'git'
@@ -225,3 +231,8 @@ class Git(Command):
         proc.wait()
         proc.stdout.close()
         return utc.now() - dateutil.parser.parse(first_line)
+
+    def commit_tree(self, spec, message: str = 'committed'):
+        jaraco.path.build(spec)
+        self._invoke('add', '.')
+        self._invoke('commit', '-m', message)
