@@ -1,5 +1,3 @@
-import pathlib
-
 import pytest
 
 import jaraco.path
@@ -11,9 +9,9 @@ def _isolate_home(tmp_home_dir):
     """Isolate the tests from a developer's VCS config."""
 
 
-def _ensure_present(mgr):
+def _ensure_present(repo):
     try:
-        mgr.version()
+        repo.version()
     except Exception:
         pytest.skip()
 
@@ -24,9 +22,16 @@ def temp_work_dir(tmp_path, monkeypatch):
     return tmp_path
 
 
-source_tree = dict(
+rev1 = dict(
     bar=dict(
         baz="",
+    ),
+)
+
+
+rev2 = dict(
+    bar=dict(
+        baz="content",
     ),
 )
 
@@ -36,10 +41,10 @@ def hg_repo(temp_work_dir):
     repo = vcs.Mercurial()
     _ensure_present(repo)
     repo._invoke('init', '.')
-    jaraco.path.build(source_tree)
+    jaraco.path.build(rev1)
     repo._invoke('addremove')
     repo._invoke('ci', '-m', 'committed')
-    pathlib.Path('bar/baz').write_text('content', encoding='utf-8')
+    jaraco.path.build(rev2)
     repo._invoke('ci', '-m', 'added content')
     return repo
 
@@ -51,9 +56,9 @@ def git_repo(temp_work_dir):
     repo._invoke('init')
     repo._invoke('config', 'user.email', 'vip@example.com')
     repo._invoke('config', 'user.name', 'Important User')
-    jaraco.path.build(source_tree)
+    jaraco.path.build(rev1)
     repo._invoke('add', '.')
     repo._invoke('commit', '-m', 'committed')
-    pathlib.Path('bar/baz').write_text('content', encoding='utf-8')
+    jaraco.path.build(rev2)
     repo._invoke('commit', '-am', 'added content')
     return repo
