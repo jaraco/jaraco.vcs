@@ -1,25 +1,11 @@
 import pytest
 
 import jaraco.path
-from jaraco import vcs
 
 
 @pytest.fixture(autouse=True)
 def _isolate_home(tmp_home_dir):
     """Isolate the tests from a developer's VCS config."""
-
-
-def _ensure_present(repo):
-    try:
-        repo.version()
-    except Exception:
-        pytest.skip()
-
-
-@pytest.fixture
-def temp_work_dir(tmp_path, monkeypatch):
-    monkeypatch.chdir(tmp_path)
-    return tmp_path
 
 
 rev1 = dict(
@@ -37,10 +23,8 @@ rev2 = dict(
 
 
 @pytest.fixture
-def hg_repo(temp_work_dir):
-    repo = vcs.Mercurial()
-    _ensure_present(repo)
-    repo._invoke('init', '.')
+def hg_repo(hg_repo):
+    repo = hg_repo
     jaraco.path.build(rev1)
     repo._invoke('addremove')
     repo._invoke('ci', '-m', 'committed')
@@ -50,12 +34,8 @@ def hg_repo(temp_work_dir):
 
 
 @pytest.fixture
-def git_repo(temp_work_dir):
-    repo = vcs.Git()
-    _ensure_present(repo)
-    repo._invoke('init')
-    repo._invoke('config', 'user.email', 'vip@example.com')
-    repo._invoke('config', 'user.name', 'Important User')
+def git_repo(git_repo):
+    repo = git_repo
     jaraco.path.build(rev1)
     repo._invoke('add', '.')
     repo._invoke('commit', '-m', 'committed')
