@@ -140,3 +140,9 @@ class Repo(versioning.VersionManagement):
         Apply the tree in spec and commit.
         """
         raise NotImplementedError()
+
+    def describe_version(self):
+        """
+        Return a string representing a version of the current state.
+        """
+        raise NotImplementedError()

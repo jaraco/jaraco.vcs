@@ -5,6 +5,7 @@ import operator
 import os.path
 import re
 import subprocess
+import types
 
 import dateutil.parser
 import jaraco.path
@@ -240,3 +241,63 @@ class Git(Command):
         jaraco.path.build(spec)
         self._invoke('add', '.')
         self._invoke('commit', '-m', message)
+
+    def head_date(self):
+        out = self._invoke(
+            '-c',
+            'log.showSignature=false',
+            'log',
+            '-n',
+            '1',
+            'HEAD',
+            '--format=%cI',
+        )
+        return dateutil.parser.parse(out)
+
+    def describe_version(self):
+        """
+        >>> repo = getfixture('git_repo')
+        >>> _ = repo._invoke('tag', 'v1.0.0')
+        >>> desc = repo.describe_version()
+        >>> list(vars(desc))
+        ['date', 'tag', 'distance', 'node', 'dirty']
+        >>> desc.tag
+        'v1.0.0'
+        >>> desc.node
+        'g...'
+        >>> desc.distance
+        0
+        >>> desc.dirty
+        False
+        >>> repo.commit_tree({'bar': {'baz': 'new content'}})
+        >>> desc = repo.describe_version()
+        >>> desc.distance
+        1
+        >>> desc.dirty
+        False
+        >>> jaraco.path.build({'bar': {'baz': 'pending'}})
+        >>> desc = repo.describe_version()
+        >>> desc.distance
+        1
+        >>> desc.dirty
+        True
+        """
+        output = self._invoke(
+            'describe',
+            '--dirty',
+            '--tags',
+            '--long',
+            '--match',
+            '*[0-9]*',
+        )
+        match = re.match(
+            r'(?P<tag>.*?)-'
+            r'(?P<distance>\d+)-'
+            r'(?P<node>g[0-9A-Fa-f]+)'
+            r'(-(?P<dirty>dirty))?',
+            output,
+        )
+        desc = types.SimpleNamespace(date=self.head_date(), **match.groupdict())
+        desc.distance = int(desc.distance)
+        desc.dirty = bool(desc.dirty)
+        return desc
