@@ -80,7 +80,3 @@ type = [
 
 [project.entry-points]
 pytest11 = {"jaraco.vcs.fixtures" = "jaraco.vcs.fixtures"}
-
-
-[tool.pytest-enabler.mypy]
-# Disabled due to jaraco/skeleton#143
