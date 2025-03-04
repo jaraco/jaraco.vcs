@@ -1,18 +1,21 @@
 import abc
-import collections
 import itertools
 import operator
 import os.path
 import re
 import subprocess
 import types
+import typing
 
 import dateutil.parser
 from tempora import utc
 
 import jaraco.path
 
-TaggedRevision = collections.namedtuple('TaggedRevision', 'tag revision')
+
+class TaggedRevision(typing.NamedTuple):
+    tag: str
+    revision: str
 
 
 class Command(metaclass=abc.ABCMeta):
