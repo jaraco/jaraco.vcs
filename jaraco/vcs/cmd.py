@@ -8,9 +8,9 @@ import subprocess
 import types
 
 import dateutil.parser
-import jaraco.path
 from tempora import utc
 
+import jaraco.path
 
 TaggedRevision = collections.namedtuple('TaggedRevision', 'tag revision')
 

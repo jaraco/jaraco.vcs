@@ -8,8 +8,7 @@ from __future__ import annotations
 import itertools
 import os.path
 import posixpath
-
-from typing import Iterable
+from collections.abc import Iterable
 
 import dateutil.parser
 from more_itertools import one
